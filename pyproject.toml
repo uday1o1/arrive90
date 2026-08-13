@@ -39,11 +39,12 @@ packages = [
   "packages/features/src/arrive90_features",
   "packages/outcomes/src/arrive90_outcomes",
   "packages/models/src/arrive90_models",
+  "packages/decision/src/arrive90_decision",
 ]
 
 [tool.pytest.ini_options]
-addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov-report=term-missing --cov-fail-under=90"
-testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests"]
+addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov=arrive90_decision --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests", "packages/decision/tests"]
 
 [tool.coverage.run]
 branch = true
@@ -70,6 +71,8 @@ files = [
   "packages/models/tests",
   "packages/routing/src",
   "packages/routing/tests",
+  "packages/decision/src",
+  "packages/decision/tests",
   "scripts",
   "tools",
 ]
@@ -88,3 +91,4 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "PERF", "RUF", "S", "SIM", "UP", "
 "packages/outcomes/tests/**" = ["S101"]
 "packages/models/tests/**" = ["S101"]
 "packages/routing/tests/**" = ["S101"]
+"packages/decision/tests/**" = ["S101"]
