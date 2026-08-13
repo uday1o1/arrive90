@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test check audit-source gate
+.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -42,6 +42,9 @@ audit-source:
 		--source-commit "$(shell git -C "$(LAMP_ROOT)" rev-parse HEAD)" \
 		--reported-command "make audit-source with external immutable inputs" \
 		--output artifacts/reports/gates/milestone-0.json
+
+milestone1-evidence:
+	$(UV) run python scripts/report_milestone_1.py
 
 gate:
 	@test -n "$(MILESTONE)" || (echo "MILESTONE is required" >&2; exit 2)

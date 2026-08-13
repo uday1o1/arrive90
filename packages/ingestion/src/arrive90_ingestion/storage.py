@@ -51,7 +51,7 @@ class ImmutableAttemptStore:
                 );
                 CREATE TABLE IF NOT EXISTS fetch_attempts (
                     attempt_id TEXT PRIMARY KEY,
-                    parent_attempt_id TEXT,
+                    parent_attempt_id TEXT REFERENCES fetch_attempts(attempt_id),
                     agency_id TEXT NOT NULL,
                     feed_type TEXT NOT NULL,
                     source_object TEXT NOT NULL,
@@ -117,6 +117,14 @@ class ImmutableAttemptStore:
                 "SELECT 1 FROM fetch_attempts WHERE attempt_id = ?", (attempt.attempt_id,)
             ).fetchone():
                 raise sqlite3.IntegrityError("attempt_id is immutable and already exists")
+            if (
+                attempt.parent_attempt_id is not None
+                and not connection.execute(
+                    "SELECT 1 FROM fetch_attempts WHERE attempt_id = ?",
+                    (attempt.parent_attempt_id,),
+                ).fetchone()
+            ):
+                raise ValueError("retry parent attempt does not exist")
             if body is not None:
                 digest = hashlib.sha256(body).hexdigest()
                 if attempt.blob_sha256 != digest:

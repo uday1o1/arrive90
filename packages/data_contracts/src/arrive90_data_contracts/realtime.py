@@ -125,6 +125,16 @@ class HistoricalSourceObject:
         require_utc(self.downloaded_at_utc, "downloaded_at_utc")
         if self.published_or_listed_at_utc is not None:
             require_utc(self.published_or_listed_at_utc, "published_or_listed_at_utc")
+            if self.published_or_listed_at_utc > self.downloaded_at_utc:
+                raise ValueError("source cannot be downloaded before it is published or listed")
+        if len(self.blob_sha256) != 64 or any(
+            character not in "0123456789abcdef" for character in self.blob_sha256
+        ):
+            raise ValueError("blob_sha256 must be lowercase hexadecimal SHA-256")
+        if len(self.schema_fingerprint) != 64 or any(
+            character not in "0123456789abcdef" for character in self.schema_fingerprint
+        ):
+            raise ValueError("schema_fingerprint must be lowercase hexadecimal SHA-256")
 
 
 @dataclass(frozen=True)

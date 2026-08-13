@@ -19,6 +19,17 @@ class ArchiveLimits:
     maximum_expanded_bytes: int = 8 * 1024 * 1024 * 1024
     maximum_expansion_ratio: float = 64.0
 
+    def __post_init__(self) -> None:
+        if (
+            min(
+                self.maximum_compressed_bytes,
+                self.maximum_expanded_bytes,
+                self.maximum_expansion_ratio,
+            )
+            <= 0
+        ):
+            raise ValueError("archive limits must be positive")
+
 
 @dataclass(frozen=True)
 class ExtractedMember:

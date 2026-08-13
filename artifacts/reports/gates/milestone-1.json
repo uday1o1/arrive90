@@ -1,0 +1,28 @@
+{
+  "acceptance_version": "v1",
+  "acceptance_version_hash": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+  "checks": {
+    "alert_revision_history_implemented": true,
+    "archive_limits_frozen": true,
+    "collector_limits_bounded": true,
+    "evidence_provenance_normalization_implemented": true,
+    "immutable_historical_storage_implemented": true,
+    "milestone_0_accepted": false,
+    "primitive_vehicle_position_source_available": false,
+    "schedule_archive_cli_implemented": true,
+    "temporal_view_implemented": true
+  },
+  "command": "make check && make milestone1-evidence",
+  "failing_checks": [
+    "milestone_0_accepted",
+    "primitive_vehicle_position_source_available"
+  ],
+  "input_manifest_hashes": {
+    "acceptance_charter": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+    "implementation": "98fec1cc0569cc6ede700e8c3972b85d31a46fb672a0e57772122791021796f4",
+    "milestone_0_report": "39f3380569798bbd37b86199e000c458e23b08ce6e24584465e598bebd22a5c1",
+    "tests": "13d70d7f35173b259d6a8dc9b679fec8075646616e4eab4239237a8420b74ce2"
+  },
+  "milestone": 1,
+  "status": "INSUFFICIENT_EVIDENCE"
+}

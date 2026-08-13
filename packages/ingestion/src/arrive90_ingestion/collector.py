@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import time
+from collections import Counter
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 
@@ -44,6 +45,28 @@ class CollectorLimits:
             raise ValueError("hard stale cutoff cannot precede fresh cutoff")
 
 
+class CollectorMetrics:
+    """Bounded low-cardinality counters for collector outcomes."""
+
+    def __init__(self) -> None:
+        self._counts: Counter[str] = Counter()
+
+    def observe(self, attempt: FetchAttempt) -> None:
+        self._counts["attempts_total"] += 1
+        for namespace, value in (
+            ("transport", attempt.transport_status),
+            ("parse", attempt.parse_status),
+            ("semantic", attempt.semantic_status),
+            ("freshness", attempt.freshness_status),
+        ):
+            self._counts[f"{namespace}.{value.value}"] += 1
+        if attempt.failure_code is not None:
+            self._counts[f"failure.{attempt.failure_code}"] += 1
+
+    def snapshot(self) -> dict[str, int]:
+        return dict(sorted(self._counts.items()))
+
+
 class Collector:
     """Classify and persist one GTFS Realtime fetch without hiding failures."""
 
@@ -54,11 +77,13 @@ class Collector:
         limits: CollectorLimits | None = None,
         parser_version: str = "gtfs-realtime-bindings-2.1.0",
         schema_version: str = "feed-attempt-v1",
+        metrics: CollectorMetrics | None = None,
     ) -> None:
         self.store = store
         self.limits = limits or CollectorLimits()
         self.parser_version = parser_version
         self.schema_version = schema_version
+        self.metrics = metrics or CollectorMetrics()
 
     @staticmethod
     def _timestamp(value: int | None) -> datetime | None:
@@ -193,5 +218,7 @@ class Collector:
                 failure_code="QUOTA_EXCEEDED",
             )
             self.store.record(quota_attempt, None, content_type)
+            self.metrics.observe(quota_attempt)
             return quota_attempt
+        self.metrics.observe(attempt)
         return attempt

@@ -68,3 +68,8 @@ def test_archive_size_ratio_and_fresh_root_limits(tmp_path: Path) -> None:
     not_directory.write_text("data", encoding="utf-8")
     with pytest.raises(ArchiveRejectedError, match="fresh directory"):
         extract_zip(archive, not_directory)
+
+
+def test_archive_limits_must_be_positive() -> None:
+    with pytest.raises(ValueError, match="positive"):
+        ArchiveLimits(maximum_expanded_bytes=0)

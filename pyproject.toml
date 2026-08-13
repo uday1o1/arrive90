@@ -18,6 +18,7 @@ dependencies = [
 
 [project.scripts]
 arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
+arrive90-ingest-schedule = "arrive90_ingestion.schedule:main"
 
 [dependency-groups]
 dev = [

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import sqlite3
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -89,3 +90,17 @@ def test_store_rejects_nonpositive_quotas_and_records_bodyless_attempt(tmp_path:
     store = ImmutableAttemptStore(tmp_path / "store", daily_quota_bytes=1, total_quota_bytes=1)
     assert store.record(_attempt("missing", None), None, "type") is None
     assert store.attempts()[0]["blob_sha256"] is None
+
+
+def test_retry_lineage_requires_and_retains_parent_attempt(tmp_path: Path) -> None:
+    store = ImmutableAttemptStore(tmp_path / "store", daily_quota_bytes=100, total_quota_bytes=100)
+    retry = replace(_attempt("retry", b"body"), parent_attempt_id="first")
+    with pytest.raises(ValueError, match="parent attempt"):
+        store.record(retry, b"body", "type")
+    store.record(_attempt("first", None), None, "type")
+    store.record(retry, b"body", "type")
+    rows = store.attempts()
+    assert [(row["attempt_id"], row["parent_attempt_id"]) for row in rows] == [
+        ("first", None),
+        ("retry", "first"),
+    ]

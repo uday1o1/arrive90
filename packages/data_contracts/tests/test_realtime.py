@@ -44,7 +44,7 @@ def test_fetch_attempt_validates_optional_timestamps_and_digest() -> None:
         200,
         "b" * 64,
         "parser",
-        "schema",
+        "d" * 64,
         0,
         TransportStatus.SUCCEEDED,
         ParseStatus.VALID,
@@ -68,7 +68,7 @@ def test_historical_source_and_coverage_window_validate_time_contracts() -> None
         NOW,
         NOW + timedelta(days=1),
         "c" * 64,
-        "schema",
+        "d" * 64,
         "parser",
     )
     assert source.source_kind is SourceKind.LAMP_SUBWAY
@@ -76,6 +76,17 @@ def test_historical_source_and_coverage_window_validate_time_contracts() -> None
         HistoricalSourceObject(
             **{**source.__dict__, "published_or_listed_at_utc": NOW.replace(tzinfo=None)}
         )
+    with pytest.raises(ValueError, match="downloaded before"):
+        HistoricalSourceObject(
+            **{
+                **source.__dict__,
+                "published_or_listed_at_utc": NOW + timedelta(days=2),
+            }
+        )
+    with pytest.raises(ValueError, match="blob_sha256"):
+        HistoricalSourceObject(**{**source.__dict__, "blob_sha256": "short"})
+    with pytest.raises(ValueError, match="schema_fingerprint"):
+        HistoricalSourceObject(**{**source.__dict__, "schema_fingerprint": "short"})
     window = ObservationCoverageWindow(
         "HISTORICAL_LAMP",
         "Red",

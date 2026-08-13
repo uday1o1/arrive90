@@ -13,7 +13,7 @@ from arrive90_data_contracts.realtime import (
     SemanticStatus,
     TransportStatus,
 )
-from arrive90_ingestion.collector import Collector, CollectorLimits
+from arrive90_ingestion.collector import Collector, CollectorLimits, CollectorMetrics
 from arrive90_ingestion.storage import ImmutableAttemptStore
 from google.transit import gtfs_realtime_pb2
 
@@ -148,3 +148,21 @@ def test_collector_limit_contract_rejects_invalid_values() -> None:
         CollectorLimits(maximum_entities=0)
     with pytest.raises(ValueError, match="cannot precede"):
         CollectorLimits(fresh_seconds=100, hard_stale_seconds=99)
+
+
+def test_collector_metrics_are_low_cardinality_and_explicit(tmp_path: Path) -> None:
+    metrics = CollectorMetrics()
+    collector = Collector(_store(tmp_path), metrics=metrics)
+    _ingest(collector, "valid", _feed())
+    _ingest(collector, "malformed", b"not protobuf")
+    assert metrics.snapshot() == {
+        "attempts_total": 2,
+        "failure.PROTOBUF_DECODE_ERROR": 1,
+        "freshness.FRESH": 1,
+        "freshness.UNKNOWN": 1,
+        "parse.MALFORMED": 1,
+        "parse.VALID": 1,
+        "semantic.QUARANTINED": 1,
+        "semantic.VALID": 1,
+        "transport.SUCCEEDED": 2,
+    }
