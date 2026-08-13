@@ -1,0 +1,14 @@
+{
+  "aft_distributions_tested": [
+    "normal",
+    "logistic",
+    "extreme"
+  ],
+  "cpu_only": true,
+  "default_prediction_equals_exp_raw_margin": true,
+  "interval_labels_tested": true,
+  "right_censoring_tested": true,
+  "scope": "SYNTHETIC_AFT_MECHANICS",
+  "status": "PASSED",
+  "xgboost_version": "3.3.0"
+}
