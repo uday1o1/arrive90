@@ -1,0 +1,36 @@
+{
+  "acceptance_version": "v1",
+  "acceptance_version_hash": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+  "checks": {
+    "automatic_censoring_bounds_implemented": true,
+    "baseline_framework_implemented": true,
+    "feature_outcome_import_boundary_enforced": true,
+    "full_candidate_resolution_gate_passed": false,
+    "historical_v1_has_no_trip_update_prediction": true,
+    "interval_and_right_censored_aft_paths_implemented": true,
+    "milestone_2_accepted": false,
+    "primary_outcome_semantic_frozen": false,
+    "required_baselines_fitted_on_frozen_training_population": false,
+    "synthetic_feature_parity_and_leakage_tests_passed": true,
+    "synthetic_virtual_rider_oracle_tests_passed": true,
+    "virtual_rider_outcome_resolver_implemented": true
+  },
+  "command": "make check && make milestone3-evidence",
+  "failing_checks": [
+    "full_candidate_resolution_gate_passed",
+    "milestone_2_accepted",
+    "primary_outcome_semantic_frozen",
+    "required_baselines_fitted_on_frozen_training_population"
+  ],
+  "input_manifest_hashes": {
+    "acceptance_charter": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+    "feature_registry": "3f07fd04e8ee949dd541990e0a5aa3a1ff1a9b32a0e7545f99e55316c531602a",
+    "feature_schema_config": "392fccaa87b016038b94acd1dd4fd521b3c1a4d78e985f9879a1d8c4312fb7d3",
+    "features_implementation": "89c79fb9b0c1af448132b388616974e77d5e9b68b4b8760682ddcd18e84a669d",
+    "milestone_2_report": "3114683bd1e271ecc3d741d316d25f8f527b64f4476335e2e26bbae358b1e613",
+    "outcomes_implementation": "9ef27ae345be137e3b6fdedf83e82544b920c506a6f80577478db176e22310f3",
+    "tests": "a1f723aae3dba4a67979c05236918662815e85bd4392484659c44d0b471f989f"
+  },
+  "milestone": 3,
+  "status": "INSUFFICIENT_EVIDENCE"
+}

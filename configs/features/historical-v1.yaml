@@ -1,0 +1,24 @@
+feature_schema_version: historical_v1
+status: SCHEDULE_ONLY_PENDING_SOURCE_GATE
+allowed_operational_features: []
+forbidden_feature_families:
+  - TRIP_UPDATE_PREDICTION
+  - FUTURE_REALIZED_HEADWAY
+  - FUTURE_ALERT
+  - FINAL_DESTINATION_OUTCOME
+  - POST_JOURNEY_TRIP_MATCH
+  - LAMP_FINAL_STOP_COUNT
+  - NEXT_STOP_DERIVED_DEPARTURE
+schedule_features:
+  - route_ids
+  - direction_ids
+  - origin_station_id
+  - destination_station_id
+  - transfer_station_id
+  - scheduled_duration_seconds
+  - scheduled_leg_duration_seconds
+  - scheduled_transfer_buffer_seconds
+  - time_of_day_sin
+  - time_of_day_cos
+  - day_of_week_sin
+  - day_of_week_cos
