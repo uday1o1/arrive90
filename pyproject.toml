@@ -11,6 +11,7 @@ requires-python = "==3.12.*"
 license = { file = "LICENSE" }
 authors = [{ name = "Uday Arora" }]
 dependencies = [
+  "gtfs-realtime-bindings==2.1.0",
   "pyarrow>=21.0.0,<22",
   "pyyaml>=6.0.2,<7",
 ]
@@ -28,11 +29,14 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["packages/data_contracts/src/arrive90_data_contracts"]
+packages = [
+  "packages/data_contracts/src/arrive90_data_contracts",
+  "packages/ingestion/src/arrive90_ingestion",
+]
 
 [tool.pytest.ini_options]
-addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov-report=term-missing --cov-fail-under=90"
-testpaths = ["packages/data_contracts/tests"]
+addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests"]
 
 [tool.coverage.run]
 branch = true
@@ -46,7 +50,13 @@ exclude_also = [
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["packages/data_contracts/src", "packages/data_contracts/tests", "scripts"]
+files = [
+  "packages/data_contracts/src",
+  "packages/data_contracts/tests",
+  "packages/ingestion/src",
+  "packages/ingestion/tests",
+  "scripts",
+]
 
 [tool.ruff]
 target-version = "py312"
@@ -57,3 +67,4 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "PERF", "RUF", "S", "SIM", "UP", "
 
 [tool.ruff.lint.per-file-ignores]
 "packages/data_contracts/tests/**" = ["S101"]
+"packages/ingestion/tests/**" = ["S101"]
