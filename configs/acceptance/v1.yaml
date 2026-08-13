@@ -1,0 +1,66 @@
+acceptance_version: v1
+charter_status: UNFROZEN_SOURCE_GATE_FAILED
+planning_snapshot: 2026-08-13
+timezone: America/New_York
+historical_interval:
+  proposed_start_date: 2025-01-01
+  proposed_end_date: 2025-12-31
+  contiguous_service_dates_required: true
+  individual_outcome_exclusions_forbidden: true
+query_generation:
+  public_seed: arrive90-v1-public-query-seed
+  readiness_horizons_minutes: [0, 5, 10, 15]
+  query_time_local_start: "06:00:00"
+  query_time_local_end: "23:00:00"
+  query_time_step_minutes: 30
+  deadline_slack_min_minutes: 5
+  deadline_slack_max_minutes: 180
+  deadline_step_minutes: 5
+  observation_horizon_minutes: 210
+initial_request:
+  cutoff_clock_owner: SERVER
+  ready_past_tolerance_seconds: 120
+  learned_ready_horizon_max_minutes: 15
+  accepted_ready_horizon_max_hours: 24
+  deadline_normalization: FLOOR_TO_FIVE_MINUTE_GRID
+scope:
+  agency_id: mbta
+  maximum_transfers: 1
+  supported_lines: []
+  supported_stations: []
+  supported_transfer_stations: []
+  scope_frozen: false
+primary_outcome:
+  selected_semantic: null
+  permitted_semantics:
+    - VP_STOP_OBSERVATION_INTERVAL
+    - CONSERVATIVE_STATION_DEPARTURE_INTERVAL
+  boarding_evidence_required: OBSERVED_STOP_PRESENCE_AFTER_READY
+  downstream_move_is_boarding_evidence: false
+  first_leg_access_margin_seconds: 0
+gates:
+  audit_candidate_resolution_rate_overall_min: 0.90
+  audit_candidate_resolution_rate_slice_min: 0.80
+  audit_censoring_rate_overall_max: 0.10
+  direct_interval_width_seconds_max: 120
+  conservative_interval_width_seconds_max: 300
+  arrival_interval_width_coverage_overall_min: 0.90
+  arrival_interval_width_coverage_slice_min: 0.80
+  causal_feature_support_overall_min: 0.80
+  causal_feature_support_slice_min: 0.60
+  candidate_recall_overall_min: 0.99
+  candidate_recall_slice_min: 0.95
+blocked_evidence:
+  - PUBLIC_RAIL_STOP_TIMESTAMP_COALESCES_VEHICLE_POSITION_AND_TRIP_UPDATE
+  - PUBLIC_RAIL_EXPORT_OMITS_VP_STOP_TIMESTAMP_PROVENANCE
+  - PRIMARY_BOARDING_EVIDENCE_CANNOT_BE_IDENTIFIED
+performance_reference:
+  machine: colima-linux-arm64
+  cpu_count: 4
+  memory_bytes: 8307167232
+  storage_mode: container-overlayfs
+  status: PROVISIONAL_UNMEASURED
+prospective_protocol:
+  shakeout_service_days: 28
+  shadow_service_days_min: 56
+  ci_half_width_max: 0.03

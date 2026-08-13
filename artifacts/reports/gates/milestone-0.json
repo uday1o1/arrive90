@@ -1,0 +1,74 @@
+{
+  "acceptance_version": "v1",
+  "acceptance_version_hash": "11c30f2cb2c14189c8746fcb79c5ce9ca77dc01cb751d62e5f9b0322ef85777d",
+  "blocking_prerequisite": "Historical rail Vehicle Position STOPPED_AT primitives must be separately identifiable from Trip Update predictions with defensible availability lineage.",
+  "checks": {
+    "boarding_evidence_discriminator_available": false,
+    "daily_stop_timestamp_coalescence_documented": true,
+    "direct_vehicle_position_stop_provenance_available": false,
+    "primary_boarding_evidence_identifiable": false,
+    "primary_outcome_semantic_frozen": false,
+    "public_parquet_schema_inspected": true,
+    "source_index_contract_valid": true,
+    "supported_scope_frozen": false,
+    "transformation_coalescence_verified": true,
+    "vehicle_position_move_evidence_available": true
+  },
+  "command": "make audit-source with external immutable inputs",
+  "failing_checks": [
+    "direct_vehicle_position_stop_provenance_available",
+    "primary_boarding_evidence_identifiable",
+    "supported_scope_frozen",
+    "primary_outcome_semantic_frozen"
+  ],
+  "index_summary": {
+    "duplicate_service_dates": 0,
+    "first_service_date": "2019-09-15",
+    "last_service_date": "2026-08-13",
+    "missing_fields": [],
+    "row_count": 2525
+  },
+  "input_manifest_hashes": {
+    "acceptance_charter": "11c30f2cb2c14189c8746fcb79c5ce9ca77dc01cb751d62e5f9b0322ef85777d",
+    "lamp_data_dictionary": "dda3909c3acddf21a8ce11b5652cc521c3e9b87349ef3b7a9d1c4740f5d028cb",
+    "lamp_index": "c1458cd555911275f875e964ae008e0ff13f3d27b483231a2a7b9a102b6ee11a",
+    "lamp_transformation_source": "89af2d68417ced3f0db71ab119fe318b9f7be1bfdebfd086b8f79cdfe512a9ca",
+    "massdot_license": "6962a9dd3abac0ce700af47da0136739615af621fee21a4ef8a8cf693b540a95",
+    "representative_parquet": "86f5c9bd9c40e16a393d0242b302162505bea2a7cd4aaa11557e330d0436a412"
+  },
+  "milestone": 0,
+  "representative_parquet": {
+    "schema_fields": [
+      "stop_sequence",
+      "stop_id",
+      "parent_station",
+      "move_timestamp",
+      "stop_timestamp",
+      "travel_time_seconds",
+      "dwell_time_seconds",
+      "headway_trunk_seconds",
+      "headway_branch_seconds",
+      "service_date",
+      "route_id",
+      "direction_id",
+      "start_time",
+      "vehicle_id",
+      "branch_route_id",
+      "trunk_route_id",
+      "stop_count",
+      "trip_id",
+      "vehicle_label",
+      "vehicle_consist",
+      "direction",
+      "direction_destination",
+      "scheduled_arrival_time",
+      "scheduled_departure_time",
+      "scheduled_travel_time",
+      "scheduled_headway_branch",
+      "scheduled_headway_trunk"
+    ],
+    "schema_fingerprint": "baf7f021f10ea64fb0673192656626bfd12da94792b2cad99af80c6f88a93222"
+  },
+  "source_commit": "6b30a81b3e9dfedbf2b6bbb4abcd2d8bdd5289c5",
+  "status": "FAILED"
+}
