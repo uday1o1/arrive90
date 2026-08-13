@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence gate
+.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence milestone2-evidence build-otp-graph gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -45,6 +45,14 @@ audit-source:
 
 milestone1-evidence:
 	$(UV) run python scripts/report_milestone_1.py
+
+milestone2-evidence:
+	$(UV) run python scripts/report_milestone_2.py
+
+build-otp-graph:
+	@test -n "$(GTFS)" || (echo "GTFS is required" >&2; exit 2)
+	@test -n "$(OUTPUT)" || (echo "OUTPUT is required" >&2; exit 2)
+	$(UV) run python tools/build_otp_graph.py --gtfs "$(GTFS)" --output "$(OUTPUT)"
 
 gate:
 	@test -n "$(MILESTONE)" || (echo "MILESTONE is required" >&2; exit 2)

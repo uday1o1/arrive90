@@ -1,0 +1,13 @@
+{
+  "architecture": "linux/arm64",
+  "build_config_sha256": "561794f5369b79f7a897abf0ffac489b496b2893ff4800a6977133a433f88f38",
+  "graph_sha256": "7d4987c8a22b9ad2de1271b690e6c6852840398b3023c00f72476236b2dc4a5a",
+  "image": "docker.io/opentripplanner/opentripplanner@sha256:a7eac7da397faa9ec9dee407d4204895d24df4981500662fa6793aae0e71fd8f",
+  "observed_transit_patterns": 2,
+  "observed_transit_stops": 2,
+  "otp_commit": "9babe45ffc9327933129f705c648137ecd96cdbe",
+  "otp_version": "2.9.0",
+  "router_config_sha256": "30691ff29abc529ec0ffb0a5eef04408c014e8b5bc3d03fb12ee8c04213cd237",
+  "scope": "SYNTHETIC_CONTAINER_BUILD_SMOKE",
+  "status": "PASSED"
+}

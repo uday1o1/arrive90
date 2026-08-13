@@ -1,0 +1,8 @@
+version: connectivity-v1
+agency_timezone: America/New_York
+maximum_transfers: 1
+departure_window_minutes: 90
+maximum_normalized_alternatives: 16
+transfer_walk_rules: []
+unsupported_station_connectivity: []
+freeze_status: UNFROZEN_SOURCE_GATE_FAILED

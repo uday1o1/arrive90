@@ -19,6 +19,7 @@ dependencies = [
 [project.scripts]
 arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
 arrive90-ingest-schedule = "arrive90_ingestion.schedule:main"
+arrive90-generate-query-population = "arrive90_routing.population:main"
 
 [dependency-groups]
 dev = [
@@ -33,11 +34,12 @@ dev = [
 packages = [
   "packages/data_contracts/src/arrive90_data_contracts",
   "packages/ingestion/src/arrive90_ingestion",
+  "packages/routing/src/arrive90_routing",
 ]
 
 [tool.pytest.ini_options]
-addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov-report=term-missing --cov-fail-under=90"
-testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests"]
+addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests"]
 
 [tool.coverage.run]
 branch = true
@@ -56,7 +58,10 @@ files = [
   "packages/data_contracts/tests",
   "packages/ingestion/src",
   "packages/ingestion/tests",
+  "packages/routing/src",
+  "packages/routing/tests",
   "scripts",
+  "tools",
 ]
 
 [tool.ruff]
@@ -69,3 +74,4 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "PERF", "RUF", "S", "SIM", "UP", "
 [tool.ruff.lint.per-file-ignores]
 "packages/data_contracts/tests/**" = ["S101"]
 "packages/ingestion/tests/**" = ["S101"]
+"packages/routing/tests/**" = ["S101"]
