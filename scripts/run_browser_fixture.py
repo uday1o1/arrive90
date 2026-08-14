@@ -28,9 +28,6 @@ def main() -> int:
         active_decision_key_version="browser-fixture",
         trip_keys=(("browser-fixture", b"t" * 32),),
         active_trip_key_version="browser-fixture",
-        search_limit_per_minute=1_000,
-        trip_creation_limit_per_hour=1_000,
-        state_limit_per_minute=1_000,
     )
     backend = BrowserFixtureBackend()
     app = create_app(

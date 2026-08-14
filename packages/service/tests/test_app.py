@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import sqlite3
 import uuid
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import pytest
 from arrive90_data_contracts.candidates import CandidateItinerary, TransitLeg
 from arrive90_decision.contracts import (
     CandidateScore,
@@ -498,7 +500,11 @@ def test_host_forwarded_transport_and_body_controls(tmp_path: Path) -> None:
         headers={"Origin": ORIGIN, "Content-Type": "application/json"},
     )
     assert oversized.status_code == 413
-    nonloopback = replace(_config(), loopback_only=False)
+    nonloopback = replace(
+        _config(),
+        loopback_only=False,
+        allowed_origins=frozenset({"https://testserver"}),
+    )
     remote_client, _remote_backend, remote_store = _client(tmp_path, config=nonloopback)
     assert remote_client.get("/v1/system/status").status_code == 400
     store.close()
@@ -519,4 +525,71 @@ def test_backend_cannot_change_server_cutoff(tmp_path: Path) -> None:
         assert "server-owned" in str(error)
     else:
         raise AssertionError("backend cutoff mutation must fail")
+    store.close()
+
+
+def test_sse_database_fault_releases_stream_slot_and_recovers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    client, _backend, store = _client(tmp_path)
+    search = _search(client).json()
+    created = client.post(
+        "/v1/trips",
+        json={
+            "decision_id": search["decision_id"],
+            "selected_itinerary_id": search["recommended_itinerary"]["itinerary_id"],
+        },
+        headers={"Origin": ORIGIN},
+    ).json()
+    headers = {"Authorization": f"Bearer {created['trip_bearer']}"}
+    events_after = store.events_after
+
+    def fail(*_args: object, **_kwargs: object) -> tuple[dict[str, object], ...]:
+        raise sqlite3.OperationalError("seeded SSE database failure")
+
+    monkeypatch.setattr(store, "events_after", fail)
+    failed = client.get(f"/v1/trips/{created['trip_id']}/events", headers=headers)
+    assert failed.status_code == 503
+    assert failed.json()["reason"] == "STATE_STORE_UNAVAILABLE"
+    monkeypatch.setattr(store, "events_after", events_after)
+    recovered = client.get(f"/v1/trips/{created['trip_id']}/events", headers=headers)
+    assert recovered.status_code == 200
+    assert "event: TRIP_CREATED" in recovered.text
+    store.close()
+
+
+def test_unauthorized_state_flood_cannot_consume_authorized_trip_budget(tmp_path: Path) -> None:
+    config = _config(state_limit_per_minute=1)
+    client, _backend, store = _client(tmp_path, config=config)
+    search = _search(client).json()
+    created = client.post(
+        "/v1/trips",
+        json={
+            "decision_id": search["decision_id"],
+            "selected_itinerary_id": search["recommended_itinerary"]["itinerary_id"],
+        },
+        headers={"Origin": ORIGIN},
+    ).json()
+    mutation = {
+        "idempotency_key": str(uuid.uuid4()),
+        "expected_state_version": 0,
+        "next_state": "ON_FIRST_LEG",
+        "boarded_itinerary_or_route_pattern_id": "first-pattern",
+    }
+    for _index in range(3):
+        rejected = client.post(
+            f"/v1/trips/{created['trip_id']}/state",
+            json=mutation,
+            headers={"Authorization": f"Bearer {'x' * 43}", "Origin": ORIGIN},
+        )
+        assert rejected.status_code == 401
+    authorized = client.post(
+        f"/v1/trips/{created['trip_id']}/state",
+        json=mutation,
+        headers={
+            "Authorization": f"Bearer {created['trip_bearer']}",
+            "Origin": ORIGIN,
+        },
+    )
+    assert authorized.status_code == 200
     store.close()

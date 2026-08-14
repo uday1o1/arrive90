@@ -6,7 +6,9 @@ from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from enum import StrEnum
+from ipaddress import ip_address
 from typing import Protocol
+from urllib.parse import urlsplit
 
 from arrive90_data_contracts.candidates import CandidateItinerary
 from arrive90_data_contracts.realtime import require_utc
@@ -110,6 +112,24 @@ class RecoveryBackend(Protocol):
     def recovery(self, request: RecoveryRequest) -> RecoveryMaterials: ...
 
 
+class ServiceDependencyError(RuntimeError):
+    """A typed dependency failure with a public constant reason code."""
+
+    reason_code = "DEPENDENCY_UNAVAILABLE"
+
+
+class SourceUnavailableError(ServiceDependencyError):
+    reason_code = "SOURCE_UNAVAILABLE"
+
+
+class ModelUnavailableError(ServiceDependencyError):
+    reason_code = "MODEL_UNAVAILABLE"
+
+
+class RouterUnavailableError(ServiceDependencyError):
+    reason_code = "ROUTER_UNAVAILABLE"
+
+
 @dataclass(frozen=True)
 class ServiceConfig:
     allowed_hosts: frozenset[str]
@@ -129,10 +149,35 @@ class ServiceConfig:
     search_limit_per_minute: int = 30
     trip_creation_limit_per_hour: int = 10
     state_limit_per_minute: int = 60
+    maximum_limiter_keys: int = 10_000
+    cleanup_interval_seconds: int = 60
+    maximum_clock_regression_seconds: int = 1
 
     def __post_init__(self) -> None:
         if not self.allowed_hosts or not self.allowed_origins:
             raise ValueError("exact Host and Origin allow-lists are required")
+        if any(
+            not host or "*" in host or "/" in host or "," in host for host in self.allowed_hosts
+        ):
+            raise ValueError("Host allow-list entries must be exact authority values")
+        for origin in self.allowed_origins:
+            parsed = urlsplit(origin)
+            if (
+                "*" in origin
+                or parsed.scheme not in {"http", "https"}
+                or not parsed.netloc
+                or parsed.path not in {"", "/"}
+                or parsed.query
+                or parsed.fragment
+            ):
+                raise ValueError("Origin allow-list entries must be exact HTTP origins")
+            if not self.loopback_only and parsed.scheme != "https":
+                raise ValueError("non-loopback browser origins must use HTTPS")
+        try:
+            for address in self.trusted_proxy_addresses:
+                ip_address(address)
+        except ValueError as error:
+            raise ValueError("trusted proxy entries must be exact IP addresses") from error
         self._validate_keyring(self.decision_keys, self.active_decision_key_version, "decision")
         self._validate_keyring(self.trip_keys, self.active_trip_key_version, "trip")
         bounds = (
@@ -145,14 +190,34 @@ class ServiceConfig:
             self.search_limit_per_minute,
             self.trip_creation_limit_per_hour,
             self.state_limit_per_minute,
+            self.maximum_limiter_keys,
+            self.cleanup_interval_seconds,
         )
         if any(value <= 0 for value in bounds):
             raise ValueError("service resource bounds must be positive")
+        upper_bounds = (
+            (self.maximum_body_bytes, 32 * 1024),
+            (self.decision_ttl_seconds, 10 * 60),
+            (self.trip_ttl_seconds, 6 * 60 * 60),
+            (self.maximum_sse_events, 100),
+            (self.maximum_sse_bytes, 64 * 1024),
+            (self.maximum_sse_age_seconds, 10 * 60),
+            (self.search_limit_per_minute, 30),
+            (self.trip_creation_limit_per_hour, 10),
+            (self.state_limit_per_minute, 60),
+            (self.maximum_limiter_keys, 10_000),
+            (self.cleanup_interval_seconds, 60),
+            (self.maximum_clock_regression_seconds, 5),
+        )
+        if self.maximum_clock_regression_seconds < 0 or any(
+            value > maximum for value, maximum in upper_bounds
+        ):
+            raise ValueError("service resource bounds cannot exceed the frozen V1 maxima")
 
     @staticmethod
     def _validate_keyring(keys: tuple[tuple[str, bytes], ...], active: str, label: str) -> None:
         keyring = dict(keys)
-        if len(keyring) != len(keys) or active not in keyring:
+        if len(keyring) != len(keys) or active not in keyring or len(keyring) > 2:
             raise ValueError(f"{label} keyring is invalid")
         if any(len(secret) < 32 for secret in keyring.values()):
             raise ValueError(f"{label} HMAC keys must contain at least 256 bits")

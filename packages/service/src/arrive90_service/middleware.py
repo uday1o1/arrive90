@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import ipaddress
+import threading
 from collections.abc import Callable
+from contextlib import suppress
 from datetime import UTC, datetime
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from arrive90_service.contracts import ServiceConfig
+from arrive90_service.observability import AuditSink, access_event
 
 Clock = Callable[[], datetime]
 
@@ -39,10 +43,20 @@ async def _reject(
 
 
 class BoundaryMiddleware:
-    def __init__(self, app: ASGIApp, *, config: ServiceConfig, clock: Clock) -> None:
+    def __init__(
+        self,
+        app: ASGIApp,
+        *,
+        config: ServiceConfig,
+        clock: Clock,
+        audit_sink: AuditSink | None = None,
+    ) -> None:
         self._app = app
         self._config = config
         self._clock = clock
+        self._audit_sink = audit_sink
+        self._clock_lock = threading.Lock()
+        self._last_cutoff: datetime | None = None
 
     @property
     def security_headers(self) -> tuple[tuple[bytes, bytes], ...]:
@@ -80,6 +94,17 @@ class BoundaryMiddleware:
         scheme = scope.get("scheme", "http")
         if peer in self._config.trusted_proxy_addresses:
             scheme = headers.get("x-forwarded-proto", scheme)
+            forwarded_for = headers.get("x-forwarded-for")
+            if forwarded_for is not None:
+                try:
+                    if "," in forwarded_for:
+                        raise ValueError
+                    scope.setdefault("state", {})["client_identity"] = str(
+                        ipaddress.ip_address(forwarded_for)
+                    )
+                except ValueError:
+                    await _reject(send, 400, security_headers=self.security_headers)
+                    return
         if not self._config.loopback_only and scheme != "https":
             await _reject(send, 400, security_headers=self.security_headers)
             return
@@ -108,7 +133,20 @@ class BoundaryMiddleware:
                 return
             if not message.get("more_body", False):
                 break
-        scope.setdefault("state", {})["initial_query_cutoff_utc"] = self._clock()
+        cutoff = self._clock()
+        if cutoff.tzinfo is None or cutoff.utcoffset() != UTC.utcoffset(cutoff):
+            await _reject(send, 503, security_headers=self.security_headers)
+            return
+        with self._clock_lock:
+            if (
+                self._last_cutoff is not None
+                and (cutoff - self._last_cutoff).total_seconds()
+                < -self._config.maximum_clock_regression_seconds
+            ):
+                await _reject(send, 503, security_headers=self.security_headers)
+                return
+            self._last_cutoff = max(cutoff, self._last_cutoff or cutoff)
+        scope.setdefault("state", {})["initial_query_cutoff_utc"] = cutoff
         message_index = 0
 
         async def replay_receive() -> Message:
@@ -131,6 +169,16 @@ class BoundaryMiddleware:
                     response_headers.append((b"access-control-allow-origin", origin.encode()))
                     response_headers.append((b"vary", b"Origin"))
                 message["headers"] = response_headers
+                if self._audit_sink is not None:
+                    # The allow-listed sink cannot affect rider-facing availability.
+                    with suppress(Exception):
+                        self._audit_sink(
+                            access_event(
+                                method=str(scope.get("method", "OTHER")),
+                                path=str(scope.get("path", "")),
+                                status_code=int(message["status"]),
+                            )
+                        )
             await send(message)
 
         await self._app(scope, replay_receive, secured_send)

@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
+import sqlite3
 import threading
 import time
 import uuid
-from collections.abc import Callable, Iterator
+from collections.abc import AsyncIterator, Callable, Iterator
+from contextlib import asynccontextmanager, suppress
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -26,9 +29,11 @@ from arrive90_service.contracts import (
     RecoveryBackend,
     RecoveryRequest,
     ServiceConfig,
+    ServiceDependencyError,
 )
 from arrive90_service.middleware import BoundaryMiddleware, Clock, utc_clock
 from arrive90_service.normalization import normalize_initial_request
+from arrive90_service.observability import AuditSink
 from arrive90_service.rate_limit import FixedWindowLimiter
 from arrive90_service.store import (
     AuthorizationError,
@@ -126,6 +131,9 @@ def _slot(
 
 
 def _client_key(request: Request) -> str:
+    trusted_identity = getattr(request.state, "client_identity", None)
+    if isinstance(trusted_identity, str):
+        return trusted_identity
     client = request.client
     return client.host if client is not None else "unknown"
 
@@ -157,16 +165,42 @@ def create_app(
     recovery_backend: RecoveryBackend | None = None,
     clock: Clock = utc_clock,
     epoch_clock: Callable[[], float] = time.time,
+    audit_sink: AuditSink | None = None,
 ) -> FastAPI:
+    @asynccontextmanager
+    async def lifespan(_application: FastAPI) -> AsyncIterator[None]:
+        async def delete_expired_state() -> None:
+            while True:
+                await asyncio.sleep(config.cleanup_interval_seconds)
+                try:
+                    store.cleanup(now=epoch_clock())
+                except sqlite3.Error:
+                    # A request-level database fault remains visible as a stable 503.
+                    continue
+
+        cleanup_task = asyncio.create_task(delete_expired_state())
+        try:
+            yield
+        finally:
+            cleanup_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await cleanup_task
+
     app = FastAPI(
         title="Arrive90 API",
         version="1.0.0-local",
         docs_url=None,
         redoc_url=None,
         openapi_url="/v1/openapi.json",
+        lifespan=lifespan,
     )
-    app.add_middleware(BoundaryMiddleware, config=config, clock=clock)
-    limiter = FixedWindowLimiter()
+    app.add_middleware(
+        BoundaryMiddleware,
+        config=config,
+        clock=clock,
+        audit_sink=audit_sink,
+    )
+    limiter = FixedWindowLimiter(maximum_keys=config.maximum_limiter_keys)
     active_streams: set[str] = set()
     active_streams_lock = threading.Lock()
     supported_stations = frozenset(station.station_id for station in backend.stations())
@@ -187,6 +221,22 @@ def create_app(
             headers=_NO_STORE,
         )
 
+    @app.exception_handler(ServiceDependencyError)
+    async def dependency_failure(_request: Request, error: ServiceDependencyError) -> JSONResponse:
+        return JSONResponse(
+            {"detail": "service temporarily unavailable", "reason": error.reason_code},
+            status_code=503,
+            headers=_NO_STORE,
+        )
+
+    @app.exception_handler(sqlite3.Error)
+    async def database_failure(_request: Request, _error: sqlite3.Error) -> JSONResponse:
+        return JSONResponse(
+            {"detail": "service temporarily unavailable", "reason": "STATE_STORE_UNAVAILABLE"},
+            status_code=503,
+            headers=_NO_STORE,
+        )
+
     @app.get("/v1/stations")
     def stations() -> dict[str, Any]:
         return {
@@ -198,7 +248,10 @@ def create_app(
 
     @app.get("/v1/system/status")
     def system_status() -> dict[str, str]:
-        return {"release_mode": "LOOPBACK_LOCAL", "status": "READY"}
+        return {
+            "release_mode": "LOOPBACK_LOCAL" if config.loopback_only else "RELEASE_BOUNDARY",
+            "status": "READY",
+        }
 
     @app.get("/v1/models/active")
     def active_models() -> dict[str, str]:
@@ -448,6 +501,10 @@ def create_app(
         _origin_allowed(request, config)
         bearer = _authorization_header(authorization)
         now = epoch_clock()
+        try:
+            store.authorize_trip(trip_id, bearer, now=now)
+        except AuthorizationError as error:
+            raise HTTPException(401, _AUTH_FAILURE["detail"]) from error
         if not limiter.allow(
             "trip-state",
             trip_id,
@@ -605,15 +662,20 @@ def create_app(
             if trip_id in active_streams:
                 raise HTTPException(429, "one active stream is allowed per trip")
             active_streams.add(trip_id)
+        try:
+            retained = store.events_after(
+                trip_id,
+                bearer,
+                last_sequence=last_event_id or 0,
+                now=epoch_clock(),
+            )
+        except Exception:
+            with active_streams_lock:
+                active_streams.discard(trip_id)
+            raise
 
         def stream() -> Iterator[bytes]:
             try:
-                retained = store.events_after(
-                    trip_id,
-                    bearer,
-                    last_sequence=last_event_id or 0,
-                    now=epoch_clock(),
-                )
                 for event in retained:
                     data = json.dumps(event, sort_keys=True, separators=(",", ":"))
                     event_text = (
