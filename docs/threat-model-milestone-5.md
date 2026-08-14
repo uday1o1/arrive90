@@ -1,5 +1,8 @@
 # Milestone 5 local API threat model
 
+This design record is superseded for release analysis by [security.md](security.md).
+It remains the local API threat model that was frozen for Milestone 5.
+
 ## Scope
 
 This threat model covers the loopback-first Arrive90 API, its browser client, SQLite state, decision capabilities, trip bearers, and authenticated server-sent event stream.
@@ -79,6 +82,7 @@ Operating-system compromise, browser extension compromise, malicious dependency 
 
 The default executable binds only to loopback and prints a local-development warning.
 
-A non-loopback release remains prohibited until the later hardening milestone adds deployment topology review, secret rotation operations, backup and restore procedures, fault injection, dependency auditing, and measured load evidence.
+A non-loopback release remains prohibited.
+Milestone 9 now implements deployment topology review, bounded key rotation, backup and restore, fault injection, dependency and container scans, and measured local load evidence, but the release gate cannot pass while the prior empirical milestones remain unaccepted.
 
 No critical or high-severity finding remains open for the implemented loopback-only API boundary when all Milestone 5 security fixtures pass.

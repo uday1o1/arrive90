@@ -26,3 +26,12 @@ The document labels its terms as updated on 2009-11-13 and reserves MassDOT's ri
 
 The license may change without notice.
 Release verification must re-download, hash, and review the current terms.
+
+## Software dependency inventory
+
+The deterministic lockfile audit is retained at [artifacts/reports/qualification/licenses-v1.json](artifacts/reports/qualification/licenses-v1.json).
+It resolves license metadata for every one of the 40 Python lock packages and all four Node lock packages, records Node integrity values, and binds the project license, data-license document, and lockfiles by SHA-256.
+
+The release-candidate container also includes operating-system components under their respective licenses.
+The Trivy qualification records the detected license findings and exact container image but does not replace the upstream license texts or notices.
+No container image, package, model, or external artifact has been published by this project.

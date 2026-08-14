@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -82,14 +83,17 @@ COMMANDS = (
 def _run(
     command: tuple[str, ...], *, cwd: Path, env: dict[str, str]
 ) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(  # noqa: S603 - commands are a fixed repository-owned allow-list
-        command,
-        cwd=cwd,
-        env=env,
-        check=False,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        return subprocess.run(  # noqa: S603 - fixed repository-owned allow-list
+            command,
+            cwd=cwd,
+            env=env,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as error:
+        return subprocess.CompletedProcess(command, 127, "", str(error))
 
 
 def _version(command: tuple[str, ...], *, cwd: Path, env: dict[str, str]) -> str:
@@ -148,6 +152,7 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
         env = dict(os.environ)
         env["UV_CACHE_DIR"] = str(clone / ".cache" / "uv")
         failing_command: str | None = None
+        observations: dict[str, Any] = {}
         for name, command in COMMANDS:
             completed = _run(command, cwd=clone, env=env)
             results.append(
@@ -156,8 +161,24 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
             if completed.returncode != 0:
                 failing_command = name
                 break
-        status = _run(("git", "status", "--porcelain"), cwd=clone, env=env)
-        head = _version(("git", "rev-parse", "HEAD"), cwd=clone, env=env)
+            if name == "local_and_browser_checks":
+                passed_counts = [
+                    int(value) for value in re.findall(r"(\d+) passed", completed.stdout)
+                ]
+                coverage = re.search(r"Total coverage: ([0-9.]+)%", completed.stdout)
+                observations["browser_tests_passed"] = passed_counts[-1] if passed_counts else None
+                observations["python_coverage_percent"] = (
+                    float(coverage.group(1)) if coverage else None
+                )
+                observations["python_tests_passed"] = passed_counts[0] if passed_counts else None
+        status = _run((GIT, "status", "--porcelain"), cwd=clone, env=env)
+        head = _version((GIT, "rev-parse", "HEAD"), cwd=clone, env=env)
+        for name in ("security", "licenses", "reliability", "repository-audit"):
+            report_path = clone / "artifacts" / "runtime" / f"clean-checkout-{name}.json"
+            if report_path.is_file():
+                observations[f"{name}_status"] = json.loads(
+                    report_path.read_text(encoding="utf-8")
+                ).get("status")
         checks = {
             "all_documented_commands_passed": failing_command is None,
             "exact_commit_checked_out": head == commit,
@@ -180,6 +201,7 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
                 "uv": _version(("uv", "--version"), cwd=clone, env=env),
             },
             "failing_command": failing_command,
+            "observations": observations,
             "repository": repository,
             "results": results,
             "status": "PASSED" if all(checks.values()) else "FAILED",

@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -153,6 +153,13 @@ reliability-evidence:
 repository-audit:
 	$(UV_RUN) python scripts/audit_repository.py \
 		--output artifacts/reports/qualification/repository-audit-v1.json
+
+public-claims-evidence:
+	$(UV_RUN) python scripts/build_public_claims.py \
+		--output artifacts/reports/qualification/public-claims-v1.json
+
+milestone9-evidence:
+	$(UV_RUN) python scripts/report_milestone_9.py
 
 clean-checkout:
 	@test -n "$(REPOSITORY)" || (echo "REPOSITORY is required" >&2; exit 2)

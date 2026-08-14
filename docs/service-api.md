@@ -97,4 +97,5 @@ The API enforces exact Host and Origin allow-lists, a 32 KiB body limit, trusted
 
 Authorization and validation failures do not echo request bodies, station values, timestamps, itinerary values, capabilities, or bearers.
 
-See [threat-model-milestone-5.md](threat-model-milestone-5.md) for assets, trust boundaries, abuse cases, controls, and residual local-only risk.
+See [security.md](security.md) for the intended topology, assets, trust boundaries, controls, scan evidence, and release boundary.
+See [threat-model-milestone-5.md](threat-model-milestone-5.md) for the original local API design record.

@@ -29,7 +29,7 @@
     "lockfile": "40c0dd592f439a69b6a502862a53723d758eddae3abc68924027b2c47f7b448f",
     "milestone_4_report": "77dd35fc5f23dcbed26b5c1a7b3c321fe9d36a28cb18599c8adb8bf5b0b5e617",
     "tests": "1c6599b599245fa86c5f464b9f520a16708df7a62f7285b4c3ee57be88235f61",
-    "threat_model": "3cfeccae30811c20dd14b6aae93c4dd8d89c87849fc83b568d5a8f099ca392a5"
+    "threat_model": "ee4dfa8f2ffa31c7cf7132e5acd4b6e64e2c622916ba72bbc40d39e4e025b113"
   },
   "milestone": 5,
   "missing_prerequisite": "An accepted Milestone 0 primitive Vehicle Position source and the resulting frozen chronological model, calibration, support, and final-test evidence are required.",

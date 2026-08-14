@@ -34,6 +34,7 @@ FORBIDDEN_TRACKED_PATTERNS = (
     ),
 )
 STALE_MARKER = re.compile(r"\b(?:FIXME|PLACEHOLDER|TBD|TODO)\b", re.IGNORECASE)
+MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 AUDITED_TEXT_PREFIXES = (
     "README.md",
     "benchmarks/",
@@ -69,15 +70,27 @@ def build_report() -> dict[str, Any]:
         if any(pattern.search(path) for pattern in FORBIDDEN_TRACKED_PATTERNS)
     ]
     stale_markers: list[dict[str, Any]] = []
+    broken_local_links: list[dict[str, str]] = []
     for relative in tracked:
+        if relative == "scripts/audit_repository.py":
+            continue
         if not relative.endswith((".css", ".html", ".js", ".md", ".py", ".toml", ".yaml", ".yml")):
             continue
         if not relative.startswith(AUDITED_TEXT_PREFIXES):
             continue
         path = ROOT / relative
-        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        content = path.read_text(encoding="utf-8")
+        for line_number, line in enumerate(content.splitlines(), start=1):
             if STALE_MARKER.search(line):
                 stale_markers.append({"line": line_number, "path": relative})
+        if relative.endswith(".md"):
+            for match in MARKDOWN_LINK.finditer(content):
+                target = match.group(1).strip().split("#", maxsplit=1)[0]
+                if not target or "://" in target or target.startswith("mailto:"):
+                    continue
+                resolved = (path.parent / target).resolve()
+                if not resolved.exists():
+                    broken_local_links.append({"path": relative, "target": target})
     security_path = ROOT / "artifacts/reports/qualification/milestone-9-security.json"
     licenses_path = ROOT / "artifacts/reports/qualification/licenses-v1.json"
     security = json.loads(security_path.read_text(encoding="utf-8"))
@@ -87,6 +100,7 @@ def build_report() -> dict[str, Any]:
         "all_required_public_documents_tracked": not missing_documents,
         "generated_or_sensitive_artifacts_not_tracked": not forbidden_tracked,
         "license_and_attribution_audit_passed": licenses.get("status") == "PASSED",
+        "local_markdown_links_resolve": not broken_local_links,
         "publication_still_requires_user_authorization": (
             "publication_requires_explicit_user_authorization: true" in release_policy
         ),
@@ -96,6 +110,8 @@ def build_report() -> dict[str, Any]:
     }
     return {
         "checks": checks,
+        "broken_local_links": broken_local_links,
+        "commit": _git("rev-parse", "HEAD").strip(),
         "failing_checks": sorted(key for key, value in checks.items() if not value),
         "forbidden_tracked_paths": forbidden_tracked,
         "missing_documents": missing_documents,

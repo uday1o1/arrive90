@@ -22,7 +22,7 @@
     "packages/service/tests/test_security_qualification.py ..                 [ 86%]",
     "packages/service/tests/test_store.py .....                               [100%]",
     "",
-    "============================== 36 passed in 2.67s =============================="
+    "============================== 36 passed in 3.01s =============================="
   ],
   "test_source_sha256": "29184463cce28e3f92cbcaa07e867648733f32e8abab58cfa13f7169fc21aa07"
 }
