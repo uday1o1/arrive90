@@ -1,0 +1,74 @@
+acceptance_version: travel-time-v1
+build_plan_sha256: 393b92bc7cd5174faf78d1073c19311fa11e6a9a9d8cd21c4db2b878a46d0e4a
+build_plan_commit: 6609bc64a4539d6c705d4ee387742bd9ca53c987
+timezone: America/New_York
+gate_state_key: state
+gate_states: [NOT_STARTED, IN_PROGRESS, ACCEPTED, BLOCKED, FAILED]
+scope:
+  agency: MBTA
+  proposed_route_ids: [Red, Orange, Blue]
+  required_retained_line_count: 2
+  service_date_start: 2024-01-01
+  service_date_end: 2024-12-31
+target:
+  anchor_status: STOPPED_AT
+  destination_offset_min: 1
+  destination_offset_max: 8
+  scheduled_remaining_seconds_max: 1800
+  model_horizon_seconds: 3600
+  probability_horizons_seconds: [300, 600, 900, 1200, 1800, 2700, 3600]
+episode:
+  gap_seconds: 600
+  sensitivity_gap_seconds: [300, 900]
+  split_on_stop_sequence_regression: true
+  same_timestamp_multiple_sequences: AMBIGUOUS_STOP_SEQUENCE
+schedule:
+  require_unique_active_version: true
+  require_publication_no_later_than_cutoff: true
+  require_exact_trip_route_direction_start_platform_sequence: true
+intervals:
+  width_seconds_max: 180
+  zero_lower_state: LEFT_CENSORED
+  over_width_state: OVER_WIDTH_INTERVAL
+  over_width_fitting_eligible: false
+splits:
+  training: [2024-01-01, 2024-07-31]
+  model_validation: [2024-08-01, 2024-09-30]
+  calibration: [2024-10-01, 2024-10-31]
+  final_test: [2024-11-01, 2024-12-31]
+peak_slice:
+  timezone: America/New_York
+  iso_weekdays: [1, 2, 3, 4, 5]
+  intervals:
+    - {start_inclusive: "07:00:00", end_exclusive: "10:00:00"}
+    - {start_inclusive: "16:00:00", end_exclusive: "19:00:00"}
+  holidays_override: false
+one_day_gate:
+  required_routes: [Red, Orange, Blue]
+  identity_availability_overall_min: 0.99
+  identity_availability_per_line_min: 0.98
+  multi_stop_episode_rate_per_line_min: 0.70
+  finite_examples_per_line_min: 500
+  finite_interval_width_coverage_per_line_min: 0.90
+  finite_interval_width_seconds_max: 180
+full_year_gate:
+  exact_schedule_match_overall_min: 0.95
+  exact_schedule_match_line_direction_min: 0.90
+  likelihood_support_overall_min: 0.90
+  likelihood_support_slice_min: 0.80
+  interval_width_coverage_overall_min: 0.90
+  interval_width_coverage_slice_min: 0.80
+  trip_episodes_per_line_min: 1000
+  service_dates_per_nontraining_split_min: 25
+  likelihood_examples_per_line_direction_peak_slice_min: 500
+  distinct_anchors_per_line_direction_peak_slice_min: 250
+  right_censored_examples_per_nontraining_split_min: 100
+sampling:
+  anchors_per_service_date_route_direction_max: 300
+  hash: HMAC_SHA256
+  seed: arrive90-travel-time-v1-anchor-sample
+  analysis_weight: BASE_WEIGHT_DIVIDED_BY_INCLUSION_PROBABILITY
+artifacts:
+  promoted_bundle_size_bytes_max: 10485760
+  bulk_data_tracked: false
+  demo_requires_network: false

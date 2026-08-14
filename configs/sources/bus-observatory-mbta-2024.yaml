@@ -1,0 +1,25 @@
+profile_version: bus-observatory-mbta-2024-v1
+acceptance_version: travel-time-v1
+inventory_url: https://busobservatory-lake.s3.amazonaws.com/index/data-inventory.json
+inventory_snapshot_sha256: e918dd7d2e91da6735456f0de4f4107be9876984effd51f5aa9114d3807a4ade
+feed_id: mbta_all
+first_boundary_date: 2023-12-31
+first_core_date: 2024-01-01
+last_core_date: 2024-12-31
+last_boundary_date: 2025-01-01
+expected_core_object_count: 366
+expected_boundary_object_count: 2
+expected_total_object_count: 368
+sample:
+  inventory_date: 2024-05-15
+  url: https://busobservatory-lake.s3.amazonaws.com/feeds/mbta_all/COMPACTED_mbta_all_2024-05-15_13:42:26.parquet
+  size_bytes: 23432007
+  sha256: e91537e12d7cb68fd06d467e70e33a8cda02c682102098a1ce9baad7692eac73
+  row_count: 610834
+  whole_object_min_local: "2024-05-14 13:30:54"
+  whole_object_max_local: "2024-05-15 13:40:36"
+  retained_heavy_rail_max_local: "2024-05-15 13:40:34"
+license:
+  identifier: CC-BY-NC-4.0
+  attribution: Jacobs Urban Tech Hub at Cornell Tech
+  project_use: NONCOMMERCIAL_PORTFOLIO

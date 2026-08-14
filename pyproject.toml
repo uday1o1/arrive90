@@ -20,6 +20,7 @@ dependencies = [
 ]
 
 [project.scripts]
+arrive90 = "arrive90_ingestion.cli:main"
 arrive90-api = "arrive90_service.cli:main"
 arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
 arrive90-discover-rapid-transit-source = "arrive90_ingestion.rapid_transit_archive:main"

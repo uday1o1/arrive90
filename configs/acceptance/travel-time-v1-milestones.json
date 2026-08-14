@@ -1,0 +1,14 @@
+{
+  "acceptance_version": "travel-time-v1",
+  "build_plan_commit": "6609bc64a4539d6c705d4ee387742bd9ca53c987",
+  "milestones": [
+    {"milestone": 0, "state": "IN_PROGRESS"},
+    {"milestone": 1, "state": "NOT_STARTED"},
+    {"milestone": 2, "state": "NOT_STARTED"},
+    {"milestone": 3, "state": "NOT_STARTED"},
+    {"milestone": 4, "state": "NOT_STARTED"},
+    {"milestone": 5, "state": "NOT_STARTED"},
+    {"milestone": 6, "state": "NOT_STARTED"},
+    {"milestone": 7, "state": "NOT_STARTED"}
+  ]
+}

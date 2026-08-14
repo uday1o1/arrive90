@@ -1,0 +1,21 @@
+profile_version: mbta-gtfs-archive-2024-v1
+acceptance_version: travel-time-v1
+url: https://performancedata.mbta.com/lamp/gtfs_archive/2024/GTFS_ARCHIVE.db.gz
+response_profile:
+  content_length_bytes: 150725341
+  etag: 1b0ca9ccff025f116939faadefccaafd-18
+  last_modified_utc: "2025-01-01T12:04:22Z"
+format:
+  compression: gzip
+  payload: sqlite3
+  read_only: true
+version_selection:
+  table: feed_info
+  active_start_column: gtfs_active_date
+  active_end_column: gtfs_end_date
+  version_column: feed_version
+  active_interval_end_inclusive: true
+  require_unique_active_version: true
+  require_publication_no_later_than_cutoff: true
+license:
+  attribution: Massachusetts Bay Transportation Authority and MassDOT
