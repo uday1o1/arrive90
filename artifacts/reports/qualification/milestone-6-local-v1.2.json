@@ -1,0 +1,20 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "coverage_meets_repository_floor": true,
+    "format_lint_and_strict_typing_pass": true,
+    "make_check_passes": true,
+    "python_suite_passes": true
+  },
+  "failing_checks": [],
+  "observations": {
+    "coverage_percent": 90.04,
+    "format_passed": true,
+    "lint_passed": true,
+    "mypy_passed": true,
+    "python_tests_passed": 499,
+    "return_code": 0
+  },
+  "status": "PASSED",
+  "version": "milestone-6-local-quality-v1"
+}

@@ -134,6 +134,7 @@ milestone5-evidence:
 	$(UV_RUN) python scripts/report_milestone_5.py
 
 qualify-milestone6: benchmark-milestone6 qualify-milestone6-robustness
+	$(UV_RUN) python scripts/qualify_milestone_6_local.py
 	$(UV_RUN) python scripts/reproduce_full_year.py
 
 qualify-milestone6-robustness:

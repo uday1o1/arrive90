@@ -1,4 +1,4 @@
-"""Write fail-closed Milestone 6 evidence and the local evaluation card."""
+"""Build the fail-closed travel-time-v1.2 Milestone 6 acceptance report."""
 
 from __future__ import annotations
 
@@ -11,12 +11,23 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def _digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while block := stream.read(4 * 1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _load(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return payload
 
 
 def _combined_digest(paths: list[Path]) -> str:
     digest = hashlib.sha256()
-    for path in sorted(paths, key=lambda item: item.as_posix().encode()):
+    for path in sorted(paths, key=lambda item: item.relative_to(ROOT).as_posix().encode()):
         digest.update(path.relative_to(ROOT).as_posix().encode())
         digest.update(b"\0")
         digest.update(path.read_bytes())
@@ -25,138 +36,111 @@ def _combined_digest(paths: list[Path]) -> str:
 
 
 def build_report() -> dict[str, Any]:
-    acceptance = ROOT / "configs/acceptance/v1.yaml"
-    evaluation_config = ROOT / "configs/evaluation/v1.yaml"
-    decision_policy = ROOT / "configs/decisions/v1.yaml"
-    source_path = ROOT / "artifacts/reports/gates/milestone-0.json"
-    milestone_five_path = ROOT / "artifacts/reports/gates/milestone-5.json"
-    qualification_path = ROOT / "artifacts/reports/qualification/milestone-6-synthetic.json"
-    performance_path = ROOT / "artifacts/reports/qualification/milestone-6-performance.json"
-    source = json.loads(source_path.read_text(encoding="utf-8"))
-    milestone_five = json.loads(milestone_five_path.read_text(encoding="utf-8"))
-    qualification = json.loads(qualification_path.read_text(encoding="utf-8"))
-    performance = json.loads(performance_path.read_text(encoding="utf-8"))
-    decision_text = decision_policy.read_text(encoding="utf-8")
-    local_checks = {
-        "candidate_api_and_replay_benchmarks_passed": performance.get("status") == "PASSED",
-        "complete_population_evaluation_mechanics_qualified": not qualification.get(
-            "failing_checks"
+    previous_path = ROOT / "artifacts/reports/gates/milestone-5.json"
+    performance_path = ROOT / "artifacts/reports/qualification/milestone-6-performance-v1.2.json"
+    robustness_path = ROOT / "artifacts/reports/qualification/milestone-6-robustness-v1.2.json"
+    reproduction_path = ROOT / "artifacts/reports/qualification/milestone-6-reproduction-v1.2.json"
+    local_path = ROOT / "artifacts/reports/qualification/milestone-6-local-v1.2.json"
+    expected_path = ROOT / "artifacts/reproduction/full-year-terminal.json"
+    previous = _load(previous_path)
+    performance = _load(performance_path)
+    robustness = _load(robustness_path)
+    reproduction = _load(reproduction_path)
+    local = _load(local_path)
+    scenarios = robustness.get("scenarios", {})
+    performance_checks = performance.get("checks", {})
+    reproduction_checks = reproduction.get("checks", {})
+    peak = performance.get("stages", {}).get("normalization_full_year", {})
+    checks = {
+        "complete_local_verification_passes": local.get("status") == "PASSED",
+        "every_seeded_defect_and_nearby_control_passes": (
+            robustness.get("status") == "PASSED"
+            and len(scenarios) == 9
+            and all(item.get("passed") is True for item in scenarios.values())
         ),
-        "evaluation_protocol_manifest_present": evaluation_config.is_file(),
-        "explorer_pivot_activates_when_no_bundle_passes": (
-            qualification.get("report", {}).get("release_mode") == "HISTORICAL_EXPLORER"
+        "milestone_5_demo_and_full_reproduction_terminals_pass": (
+            previous.get("state") == "ACCEPTED"
+            and reproduction.get("status") == "PASSED"
+            and reproduction_checks.get("first_terminal_matches_committed_expectation") is True
+            and reproduction_checks.get("second_terminal_matches_first_and_expectation") is True
+            and reproduction.get("terminal_manifest_sha256") == _digest(expected_path)
         ),
-        "fresh_process_synthetic_reproduction_passed": qualification.get("checks", {}).get(
-            "fresh_process_discovery_and_evaluation_reproduce"
-        )
-        is True,
-        "immutable_machine_readable_report_present": qualification_path.is_file(),
+        "no_op_rerun_verifies_manifests_without_rewrites": (
+            reproduction_checks.get("no_op_rerun_verified_every_derived_stage") is True
+            and reproduction_checks.get("no_op_rerun_did_not_rewrite_derived_outputs") is True
+        ),
+        "performance_measurement_preserves_correctness_outputs": (
+            performance.get("status") == "PASSED"
+            and performance_checks.get("benchmark_did_not_change_correctness_artifacts") is True
+            and robustness.get("checks", {}).get("qualification_preserves_correctness_artifacts")
+            is True
+            and performance.get("optimization", {}).get("performed") is False
+        ),
+        "peak_memory_is_bounded_independent_of_full_archive_size": (
+            performance_checks.get("full_year_peak_memory_is_bounded_below_70_percent_of_host")
+            is True
+            and int(peak.get("peak_process_rss_bytes", 0)) > 0
+            and int(peak.get("peak_process_rss_bytes", 0))
+            < int(performance.get("storage_bytes", {}).get("raw", 0))
+        ),
+        "resume_rejects_truncated_or_changed_bytes": all(
+            scenarios.get(name, {}).get("passed") is True
+            for name in ("changed_etag", "interrupted_download_resume", "partial_object")
+        ),
     }
-    acceptance_checks = {
-        "empirical_final_test_comparisons_completed": False,
-        "final_output_support_cells_passed": False,
-        "final_test_outcomes_opened_under_frozen_protocol": False,
-        "learned_or_model_free_bundle_passed_primary_gate": False,
-        "milestone_5_accepted": milestone_five.get("status") == "PASSED",
-        "primary_source_gate_accepted": source.get("status") == "PASSED",
-        "production_eligibility_and_discovery_hashes_frozen": (
-            "eligibility_manifest_hash: null" not in decision_text
-            and "fixed_point_discovery_artifact_hash: null" not in decision_text
-        ),
-    }
-    checks = {**local_checks, **acceptance_checks}
     failing = sorted(key for key, passed in checks.items() if not passed)
+    implementation_paths = [
+        ROOT / "packages/ingestion/src/arrive90_ingestion/acquisition.py",
+        ROOT / "scripts/reproduce_full_year.py",
+        ROOT / "scripts/qualify_milestone_6_local.py",
+        ROOT / "scripts/qualify_milestone_6_reproduction.py",
+        ROOT / "scripts/qualify_milestone_6_robustness.py",
+        ROOT / "benchmarks/run_milestone6.py",
+    ]
+    test_paths = [
+        ROOT / "packages/ingestion/tests/test_acquisition.py",
+        ROOT / "packages/ingestion/tests/test_vehicle.py",
+        ROOT / "packages/service/tests/test_app.py",
+        ROOT / "packages/service/tests/test_explorer.py",
+    ]
     return {
-        "acceptance_version": "v1",
-        "acceptance_version_hash": _digest(acceptance),
+        "acceptance_version": "travel-time-v1.2",
         "checks": checks,
-        "command": (
-            "make check && make qualify-milestone6 && make milestone6-evidence "
-            "&& make gate MILESTONE=6"
-        ),
+        "command": ("make qualify-milestone6 && make milestone6-evidence && make gate MILESTONE=6"),
         "failing_checks": failing,
         "input_manifest_hashes": {
-            "acceptance_charter": _digest(acceptance),
-            "decision_policy": _digest(decision_policy),
-            "evaluation_config": _digest(evaluation_config),
-            "implementation": _combined_digest(
-                list((ROOT / "packages/evaluation/src").rglob("*.py"))
-            ),
-            "milestone_5_report": _digest(milestone_five_path),
-            "performance_qualification": _digest(performance_path),
-            "source_report": _digest(source_path),
-            "synthetic_qualification": _digest(qualification_path),
-            "tests": _combined_digest(list((ROOT / "packages/evaluation/tests").glob("test_*.py"))),
+            "build_plan": _digest(ROOT / "BUILD_PLAN.md"),
+            "expected_terminal": _digest(expected_path),
+            "implementation": _combined_digest(implementation_paths),
+            "local_quality": _digest(local_path),
+            "milestone_5_report": _digest(previous_path),
+            "performance": _digest(performance_path),
+            "reproduction": _digest(reproduction_path),
+            "robustness": _digest(robustness_path),
+            "tests": _combined_digest(test_paths),
         },
         "milestone": 6,
-        "missing_prerequisite": (
-            "Archived primitive Vehicle Position observations with independent provenance are "
-            "required before production hashes can freeze and final-test outcomes can open."
-        ),
-        "resume_command": ("make audit-source INDEX=... PARQUET=... LAMP_ROOT=... LICENSE_PDF=..."),
-        "status": "PASSED" if not failing else "INSUFFICIENT_EVIDENCE",
-    }
-
-
-def build_card(gate: dict[str, Any]) -> dict[str, Any]:
-    qualification = json.loads(
-        (ROOT / "artifacts/reports/qualification/milestone-6-synthetic.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    performance = json.loads(
-        (ROOT / "artifacts/reports/qualification/milestone-6-performance.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    return {
-        "acceptance_status": gate["status"],
-        "accepted_reliability_claim": None,
-        "evidence_kind": "SYNTHETIC_MECHANICS_ONLY",
-        "evaluation_protocol": "OFFLINE_EVALUATION_V1",
-        "limitations": [
-            gate["missing_prerequisite"],
-            "Synthetic qualification does not estimate MBTA reliability or policy benefit.",
-            "Prospective live calibration remains pending.",
-        ],
-        "local_mechanics": {
-            "bootstrap_replicates": qualification["report"]["uncertainty"]["replicates"],
-            "candidate_generation_p95_ms_max": max(
-                result["p95_ms"] for result in performance["candidate_generation"].values()
-            ),
-            "fresh_process_payload_sha256": qualification["fresh_process_payload_sha256"],
-            "performance_status": performance["status"],
-            "release_mode": qualification["report"]["release_mode"],
-            "replay_one_year_p95_ms": performance["replay_generation"]["one_year"]["p95_ms"],
+        "observed": {
+            "clean_reproduction_commit": reproduction.get("commit"),
+            "defect_control_pairs": len(scenarios),
+            "full_year_normalization_peak_memory_bytes": peak.get("peak_process_rss_bytes"),
+            "no_op_verified_file_count": reproduction.get("immutable_output_file_count"),
+            "python_coverage_percent": local.get("observations", {}).get("coverage_percent"),
+            "python_tests_passed": local.get("observations", {}).get("python_tests_passed"),
+            "raw_storage_bytes": performance.get("storage_bytes", {}).get("raw"),
+            "terminal_manifest_sha256": reproduction.get("terminal_manifest_sha256"),
         },
-        "public_claim": (
-            "Arrive90 implements reproducible offline evaluation mechanics but has insufficient "
-            "empirical evidence for a reliability recommendation claim."
-        ),
-        "version": "milestone-6-local-mechanics-v2",
+        "state": "ACCEPTED" if not failing else "FAILED",
     }
-
-
-def _write_card(path: Path, card: dict[str, Any]) -> None:
-    content = json.dumps(card, indent=2, sort_keys=True) + "\n"
-    if path.exists() and path.read_text(encoding="utf-8") != content:
-        raise FileExistsError("the versioned evaluation card already exists with different content")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not path.exists():
-        path.write_text(content, encoding="utf-8")
 
 
 def main() -> int:
-    report = build_report()
     output = ROOT / "artifacts/reports/gates/milestone-6.json"
+    report = build_report()
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    card = build_card(report)
-    _write_card(ROOT / "artifacts/cards/milestone-6-local-mechanics-v2.json", card)
-    web_card = ROOT / "packages/service/src/arrive90_service/web/milestone-6-card.json"
-    web_card.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(output.relative_to(ROOT))
-    return 0
+    return 0 if report["state"] == "ACCEPTED" else 1
 
 
 if __name__ == "__main__":

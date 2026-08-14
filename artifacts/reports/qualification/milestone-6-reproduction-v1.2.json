@@ -1,0 +1,32 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "clean_checkout_remained_clean": true,
+    "first_pass_rebuilt_every_derived_stage": true,
+    "first_terminal_matches_committed_expectation": true,
+    "no_op_rerun_did_not_rewrite_derived_outputs": true,
+    "no_op_rerun_verified_every_derived_stage": true,
+    "second_terminal_matches_first_and_expectation": true
+  },
+  "commit": "85824356cd433b2054f21c62e55d476ca5155ce4",
+  "failing_checks": [],
+  "first_actions": {
+    "acquisition": "VERIFIED_IMMUTABLE_LOCK",
+    "episode_and_dataset_generation": "REBUILT",
+    "frozen_evaluation_rebuild": "REBUILT",
+    "normalization": "REBUILT",
+    "training": "REBUILT"
+  },
+  "immutable_output_file_count": 4827,
+  "rebuild_root_kind": "ignored external runtime",
+  "second_actions": {
+    "acquisition": "VERIFIED_IMMUTABLE_LOCK",
+    "episode_and_dataset_generation": "VERIFIED_NOOP",
+    "frozen_evaluation_rebuild": "VERIFIED_NOOP",
+    "normalization": "VERIFIED_NOOP",
+    "training": "VERIFIED_NOOP"
+  },
+  "status": "PASSED",
+  "terminal_manifest_sha256": "0a01c5f96561e9925eef2f419d670dd11e76e666aedf0b0003ae5ba605ecf3c1",
+  "version": "milestone-6-clean-reproduction-v1"
+}

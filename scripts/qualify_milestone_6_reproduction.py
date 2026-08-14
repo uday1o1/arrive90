@@ -173,7 +173,7 @@ def qualify(args: argparse.Namespace) -> dict[str, Any]:
         "failing_checks": sorted(key for key, passed in checks.items() if not passed),
         "first_actions": first_actions,
         "immutable_output_file_count": len(first_snapshot),
-        "rebuild_root": str(rebuild_root),
+        "rebuild_root_kind": "ignored external runtime",
         "second_actions": second_actions,
         "status": "PASSED" if all(checks.values()) else "FAILED",
         "terminal_manifest_sha256": expected_hash,

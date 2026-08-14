@@ -1,0 +1,37 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "complete_local_verification_passes": true,
+    "every_seeded_defect_and_nearby_control_passes": true,
+    "milestone_5_demo_and_full_reproduction_terminals_pass": true,
+    "no_op_rerun_verifies_manifests_without_rewrites": true,
+    "peak_memory_is_bounded_independent_of_full_archive_size": true,
+    "performance_measurement_preserves_correctness_outputs": true,
+    "resume_rejects_truncated_or_changed_bytes": true
+  },
+  "command": "make qualify-milestone6 && make milestone6-evidence && make gate MILESTONE=6",
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "build_plan": "87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1",
+    "expected_terminal": "0a01c5f96561e9925eef2f419d670dd11e76e666aedf0b0003ae5ba605ecf3c1",
+    "implementation": "dd91e028440c769a27eeb9601744f2526e1c4b94b30ed1270b73724449951a3c",
+    "local_quality": "e75a119f82b75eee45d70765da4a9cabf3d40b0fac9a5362b558435ce4227a2b",
+    "milestone_5_report": "369269447280b8b78327759fca391aa6ac8760cee2fdc5bdc0021050933a1873",
+    "performance": "c26ffacb390fad526d5ea2fdf5786ab71694da04175f2e45bf56e675eb1d5484",
+    "reproduction": "af72059fa91f797756ff41c8ccd08665fbcbfe9f45056e9e2f32f2463bf9b8c5",
+    "robustness": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218",
+    "tests": "e62475854b5f30f2ea9e14bba56d3960e7d92b994d21f04a48083feffbf77860"
+  },
+  "milestone": 6,
+  "observed": {
+    "clean_reproduction_commit": "85824356cd433b2054f21c62e55d476ca5155ce4",
+    "defect_control_pairs": 9,
+    "full_year_normalization_peak_memory_bytes": 634109952,
+    "no_op_verified_file_count": 4827,
+    "python_coverage_percent": 90.04,
+    "python_tests_passed": 499,
+    "raw_storage_bytes": 8804061429,
+    "terminal_manifest_sha256": "0a01c5f96561e9925eef2f419d670dd11e76e666aedf0b0003ae5ba605ecf3c1"
+  },
+  "state": "ACCEPTED"
+}

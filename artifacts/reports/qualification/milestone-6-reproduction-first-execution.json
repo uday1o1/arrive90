@@ -1,0 +1,12 @@
+{
+  "actions": {
+    "acquisition": "VERIFIED_IMMUTABLE_LOCK",
+    "episode_and_dataset_generation": "REBUILT",
+    "frozen_evaluation_rebuild": "REBUILT",
+    "normalization": "REBUILT",
+    "training": "REBUILT"
+  },
+  "all_stages_rebuilt_or_verified": true,
+  "terminal_manifest_sha256": "0a01c5f96561e9925eef2f419d670dd11e76e666aedf0b0003ae5ba605ecf3c1",
+  "version": "full-year-reproduction-execution-v1"
+}
