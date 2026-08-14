@@ -72,6 +72,35 @@ def _source_download(args: argparse.Namespace) -> int:
     return 0
 
 
+def _data_qualify_day(args: argparse.Namespace) -> int:
+    from arrive90_evaluation.travel_time_qualification import qualify_day
+
+    result = qualify_day(
+        args.date,
+        raw_root=args.raw_root,
+        bus_profile_path=args.bus_profile,
+        schedule_profile_path=args.schedule_profile,
+        acquisition_lock_path=args.acquisition_lock,
+        acceptance_charter_path=args.acceptance_charter,
+        runtime_root=args.runtime_root,
+    )
+    print(
+        json.dumps(
+            {
+                "checks_passed": result.checks_passed,
+                "example_manifest_path": str(result.example_manifest_path),
+                "example_manifest_sha256": result.example_manifest_sha256,
+                "normalized_manifest_path": str(result.normalized_manifest_path),
+                "normalized_manifest_sha256": result.normalized_manifest_sha256,
+                "run_summary_path": str(result.run_summary_path),
+                "run_summary_sha256": result.run_summary_sha256,
+            },
+            sort_keys=True,
+        )
+    )
+    return 0 if result.checks_passed else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the frozen Milestone 0 CLI surface."""
 
@@ -105,6 +134,26 @@ def build_parser() -> argparse.ArgumentParser:
     download.add_argument("--acquisition-lock", type=Path, default=DEFAULT_ACQUISITION_LOCK)
     download.set_defaults(handler=_source_download)
 
+    data = commands.add_parser("data")
+    data_commands = data.add_subparsers(dest="data_command", required=True)
+    qualify_day = data_commands.add_parser("qualify-day")
+    qualify_day.add_argument("--date", type=date.fromisoformat, required=True)
+    qualify_day.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
+    qualify_day.add_argument("--bus-profile", type=Path, default=DEFAULT_BUS_PROFILE)
+    qualify_day.add_argument("--schedule-profile", type=Path, default=DEFAULT_SCHEDULE_PROFILE)
+    qualify_day.add_argument("--acquisition-lock", type=Path, default=DEFAULT_ACQUISITION_LOCK)
+    qualify_day.add_argument(
+        "--acceptance-charter",
+        type=Path,
+        default=Path("configs/acceptance/travel-time-v1.1.yaml"),
+    )
+    qualify_day.add_argument(
+        "--runtime-root",
+        type=Path,
+        default=Path("artifacts/runtime/milestone-0"),
+    )
+    qualify_day.set_defaults(handler=_data_qualify_day)
+
     gate = commands.add_parser("gate")
     gate.add_argument("--milestone", required=True, type=int)
     gate.add_argument("--report-root", type=Path, default=Path("artifacts/reports/gates"))
@@ -123,7 +172,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         handler = args.handler
         return int(handler(args))
-    except (InventoryError, OSError) as error:
+    except (InventoryError, OSError, ValueError) as error:
         print(f"arrive90: {error}", file=sys.stderr)
         return 1
 
