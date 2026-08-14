@@ -1,7 +1,8 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence qualify-milestone6 qualify-milestone7 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
+UV_RUN := $(UV) run --no-sync
 
 sync:
 	$(UV) sync --frozen
@@ -10,20 +11,20 @@ lock-check:
 	$(UV) lock --check
 
 format:
-	$(UV) run ruff format .
-	$(UV) run ruff check --fix .
+	$(UV_RUN) ruff format .
+	$(UV_RUN) ruff check --fix .
 
 format-check:
-	$(UV) run ruff format --check .
+	$(UV_RUN) ruff format --check .
 
 lint:
-	$(UV) run ruff check .
+	$(UV_RUN) ruff check .
 
 typecheck:
-	$(UV) run mypy
+	$(UV_RUN) mypy
 
 test:
-	$(UV) run pytest
+	$(UV_RUN) pytest
 
 browser-install:
 	npm ci
@@ -46,7 +47,7 @@ audit-source:
 	@test -n "$(PARQUET)" || (echo "PARQUET is required" >&2; exit 2)
 	@test -n "$(LAMP_ROOT)" || (echo "LAMP_ROOT is required" >&2; exit 2)
 	@test -n "$(LICENSE_PDF)" || (echo "LICENSE_PDF is required" >&2; exit 2)
-	$(UV) run arrive90-source-audit \
+	$(UV_RUN) arrive90-source-audit \
 		--index "$(INDEX)" \
 		--parquet "$(PARQUET)" \
 		--data-dictionary "$(LAMP_ROOT)/Data_Dictionary.md" \
@@ -58,31 +59,37 @@ audit-source:
 		--output artifacts/reports/gates/milestone-0.json
 
 milestone1-evidence:
-	$(UV) run python scripts/report_milestone_1.py
+	$(UV_RUN) python scripts/report_milestone_1.py
 
 milestone2-evidence:
-	$(UV) run python scripts/report_milestone_2.py
+	$(UV_RUN) python scripts/report_milestone_2.py
 
 milestone3-evidence:
-	$(UV) run python scripts/report_milestone_3.py
+	$(UV_RUN) python scripts/report_milestone_3.py
 
 milestone4-evidence:
-	$(UV) run python scripts/report_milestone_4.py
+	$(UV_RUN) python scripts/report_milestone_4.py
 
 milestone5-evidence:
-	$(UV) run python scripts/report_milestone_5.py
+	$(UV_RUN) python scripts/report_milestone_5.py
 
 qualify-milestone6:
-	$(UV) run python scripts/qualify_milestone_6.py --output artifacts/reports/qualification/milestone-6-synthetic.json
+	$(UV_RUN) python scripts/qualify_milestone_6.py --output artifacts/reports/qualification/milestone-6-synthetic.json
 
 milestone6-evidence:
-	$(UV) run python scripts/report_milestone_6.py
+	$(UV_RUN) python scripts/report_milestone_6.py
 
 qualify-milestone7:
-	$(UV) run python scripts/qualify_milestone_7.py --input artifacts/runtime/playwright-results.json --output artifacts/reports/qualification/milestone-7-browser.json
+	$(UV_RUN) python scripts/qualify_milestone_7.py --input artifacts/runtime/playwright-results.json --output artifacts/reports/qualification/milestone-7-browser.json
 
 milestone7-evidence:
-	$(UV) run python scripts/report_milestone_7.py
+	$(UV_RUN) python scripts/report_milestone_7.py
+
+qualify-milestone8:
+	$(UV_RUN) python scripts/qualify_milestone_8.py
+
+milestone8-evidence:
+	$(UV_RUN) python scripts/report_milestone_8.py
 
 benchmark-milestone5:
 	docker build --file benchmarks/milestone5.Dockerfile --tag arrive90/milestone5-benchmark:v1 .
@@ -95,8 +102,8 @@ benchmark-milestone6:
 build-otp-graph:
 	@test -n "$(GTFS)" || (echo "GTFS is required" >&2; exit 2)
 	@test -n "$(OUTPUT)" || (echo "OUTPUT is required" >&2; exit 2)
-	$(UV) run python tools/build_otp_graph.py --gtfs "$(GTFS)" --output "$(OUTPUT)"
+	$(UV_RUN) python tools/build_otp_graph.py --gtfs "$(GTFS)" --output "$(OUTPUT)"
 
 gate:
 	@test -n "$(MILESTONE)" || (echo "MILESTONE is required" >&2; exit 2)
-	$(UV) run python scripts/gate.py "$(MILESTONE)"
+	$(UV_RUN) python scripts/gate.py "$(MILESTONE)"

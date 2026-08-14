@@ -9,7 +9,7 @@ Arrive90 does not use MassDOT or MBTA logos or trademarks.
 
 ## Current evidence status
 
-Locally executable implementation work now reaches the Milestone 7 rider interface.
+Locally executable implementation work now reaches the Milestone 8 prospective shadow protocol.
 Acceptance remains at the Milestone 0 source-feasibility gate.
 The current public historical subway export does not preserve the source identity of its coalesced stop timestamp, so it cannot yet support the plan's required direct Vehicle Position boarding evidence.
 No arrival probability or reliability claim is accepted while that gate is failing.
@@ -55,6 +55,13 @@ make browser-test
 
 The browser suite starts a separate synthetic fixture on loopback and exercises direct, transfer, recovery, stale, absent, sparse-support, unsupported-target, future-ready, normalization, keyboard, and no-map paths against the real API and session store.
 Use `make check-all` to run both the Python CI-equivalent suite and Chromium workflows.
+
+## Prospective evidence
+
+The repository provides a create-only operational workflow for the 28-service-day collector shakeout and fixed 56-service-day shadow panel.
+Run `make qualify-milestone8` to exercise its actual manifest, lineage, maturity, uncertainty, and failure-denominator mechanics on explicitly synthetic fixtures.
+This qualification is not live MBTA evidence and cannot pass Milestone 8 by itself.
+See [docs/prospective-shadow.md](docs/prospective-shadow.md) for the exact freeze, collection, maturity, and resume procedure.
 
 See [BUILD_PLAN.md](BUILD_PLAN.md) for the complete project authority and [docs/source-feasibility.md](docs/source-feasibility.md) for the current source audit.
 See [docs/offline-evaluation.md](docs/offline-evaluation.md) for the frozen evaluation mechanics, [docs/comprehension-protocol.md](docs/comprehension-protocol.md) for the external usability gate, and [docs/replay-demonstration.md](docs/replay-demonstration.md) for the demonstration evidence boundary.
