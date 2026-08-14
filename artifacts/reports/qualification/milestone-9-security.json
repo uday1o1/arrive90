@@ -31,7 +31,7 @@
       "secrets": [],
       "vulnerabilities": []
     },
-    "report_sha256": "d74dcaaac84920cbff8da5ecae9fcebedfc62235d4eb9bfa58ef69f4e7bb50e1"
+    "report_sha256": "542b11948c113851cdfd49cf7f06fe995e8ca078e62eb3558573251a96439327"
   },
   "scanner": {
     "database": {

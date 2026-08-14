@@ -12,6 +12,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[1]
 GIT: str = shutil.which("git") or ""
 if not GIT:
     raise RuntimeError("git is required for clean-checkout qualification")
@@ -102,7 +103,11 @@ def _version(command: tuple[str, ...], *, cwd: Path, env: dict[str, str]) -> str
 
 
 def qualify(*, repository: str, commit: str) -> dict[str, Any]:
-    with tempfile.TemporaryDirectory(prefix="arrive90-clean-checkout-") as temporary:
+    # Docker Desktop and Colima share the project filesystem, but do not necessarily
+    # share the operating system's default temporary directory with the daemon.
+    with tempfile.TemporaryDirectory(
+        prefix="arrive90-clean-checkout-", dir=ROOT.parent
+    ) as temporary:
         clone = Path(temporary) / "repository"
         clone_process = subprocess.run(  # noqa: S603 - fixed git clone operation
             [GIT, "clone", "--no-checkout", repository, str(clone)],
@@ -155,9 +160,14 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
         observations: dict[str, Any] = {}
         for name, command in COMMANDS:
             completed = _run(command, cwd=clone, env=env)
-            results.append(
-                {"command": " ".join(command), "name": name, "status": completed.returncode}
-            )
+            result: dict[str, Any] = {
+                "command": " ".join(command),
+                "name": name,
+                "status": completed.returncode,
+            }
+            if completed.returncode != 0:
+                result["stderr_tail"] = completed.stderr[-2_000:]
+            results.append(result)
             if completed.returncode != 0:
                 failing_command = name
                 break
