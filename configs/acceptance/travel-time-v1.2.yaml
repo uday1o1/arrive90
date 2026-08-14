@@ -1,6 +1,6 @@
 acceptance_version: travel-time-v1.2
 artifact_family: travel-time-v1
-build_plan_sha256: 00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1
+build_plan_sha256: 87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1
 build_plan_baseline_commit: e35e9e521be720de9ef7c2a9eb32b27fe9c1efa1
 timezone: America/New_York
 source_timestamp:

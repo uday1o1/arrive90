@@ -1,0 +1,1238 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "coordinates": {
+    "70038|2024-11-01": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-03": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-03",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-06": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-09": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-17": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-19": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-19",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-20": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-20",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-11-30": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-01": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-11": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-14": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-17": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-25": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70038|2024-12-30": {
+      "latitude": 42.361365,
+      "longitude": -71.062037,
+      "origin_stop_id": "70038",
+      "service_date": "2024-12-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70039|2024-11-15": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70039",
+      "service_date": "2024-11-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70039|2024-12-04": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70039",
+      "service_date": "2024-12-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-03": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-03",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-11": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-13": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-13",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-14": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-18": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-23": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-24": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-11-25": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-11-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-06": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-08": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-08",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-11": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-13": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-13",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-14": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-20": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-20",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-28": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-28",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70040|2024-12-31": {
+      "latitude": 42.359705,
+      "longitude": -71.059215,
+      "origin_stop_id": "70040",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70041|2024-11-19": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70041",
+      "service_date": "2024-11-19",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70041|2024-11-25": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70041",
+      "service_date": "2024-11-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70041|2024-12-04": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70041",
+      "service_date": "2024-12-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70041|2024-12-10": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70041",
+      "service_date": "2024-12-10",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70041|2024-12-22": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70041",
+      "service_date": "2024-12-22",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-11-07": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-11-07",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-11-09": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-11-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-11-15": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-11-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-11-17": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-11-24": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-11-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-12-06": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-12-18": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-12-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70042|2024-12-26": {
+      "latitude": 42.358978,
+      "longitude": -71.057598,
+      "origin_stop_id": "70042",
+      "service_date": "2024-12-26",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-11-18": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-11-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-11-24": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-11-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-11-25": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-11-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-11-30": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-12-01": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-12-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-12-16": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-12-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70043|2024-12-27": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70043",
+      "service_date": "2024-12-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-11-17": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-11-21": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-11-21",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-12-06": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-12-08": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-12-08",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-12-26": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-12-26",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70044|2024-12-31": {
+      "latitude": 42.359784,
+      "longitude": -71.051652,
+      "origin_stop_id": "70044",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-11-03": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-11-03",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-11-06": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-11-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-11-14": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-11-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-12-09": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-12-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-12-12": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-12-12",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70045|2024-12-29": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70045",
+      "service_date": "2024-12-29",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-11-01": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-11-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-11-10": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-11-10",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-11-24": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-11-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-11-30": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-11": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-12": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-12",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-14": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-16": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-18": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-21": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-21",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-24": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-30": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70046|2024-12-31": {
+      "latitude": 42.369119,
+      "longitude": -71.03953,
+      "origin_stop_id": "70046",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-11-11": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-11-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-11-21": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-11-21",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-11-23": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-11-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-11-26": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-11-26",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-12-06": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-12-12": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-12-12",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-12-22": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-12-22",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-12-26": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-12-26",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70047|2024-12-29": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70047",
+      "service_date": "2024-12-29",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-11-03": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-11-03",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-11-10": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-11-10",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-11-16": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-11-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-12-02": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-12-02",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-12-09": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-12-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-12-16": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-12-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-12-19": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-12-19",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70048|2024-12-22": {
+      "latitude": 42.374262,
+      "longitude": -71.030395,
+      "origin_stop_id": "70048",
+      "service_date": "2024-12-22",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70049|2024-12-14": {
+      "latitude": 42.37974,
+      "longitude": -71.022818,
+      "origin_stop_id": "70049",
+      "service_date": "2024-12-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70049|2024-12-23": {
+      "latitude": 42.37974,
+      "longitude": -71.022818,
+      "origin_stop_id": "70049",
+      "service_date": "2024-12-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70049|2024-12-27": {
+      "latitude": 42.37974,
+      "longitude": -71.022818,
+      "origin_stop_id": "70049",
+      "service_date": "2024-12-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70049|2024-12-31": {
+      "latitude": 42.37974,
+      "longitude": -71.022818,
+      "origin_stop_id": "70049",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-11-01": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-11-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-11-05": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-11-05",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-11-07": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-11-07",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-11-08": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-11-08",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-12-06": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70050|2024-12-17": {
+      "latitude": 42.379671,
+      "longitude": -71.022783,
+      "origin_stop_id": "70050",
+      "service_date": "2024-12-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-11-09": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-11-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-11-11": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-11-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-11-14": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-11-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-11-23": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-11-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-12-08": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-12-08",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-12-10": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-12-10",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-12-13": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-12-13",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-12-25": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-12-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70051|2024-12-31": {
+      "latitude": 42.386909,
+      "longitude": -71.004809,
+      "origin_stop_id": "70051",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70052|2024-11-16": {
+      "latitude": 42.386842,
+      "longitude": -71.004767,
+      "origin_stop_id": "70052",
+      "service_date": "2024-11-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70052|2024-11-27": {
+      "latitude": 42.386842,
+      "longitude": -71.004767,
+      "origin_stop_id": "70052",
+      "service_date": "2024-11-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70052|2024-12-04": {
+      "latitude": 42.386842,
+      "longitude": -71.004767,
+      "origin_stop_id": "70052",
+      "service_date": "2024-12-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70052|2024-12-16": {
+      "latitude": 42.386842,
+      "longitude": -71.004767,
+      "origin_stop_id": "70052",
+      "service_date": "2024-12-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-02": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-02",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-11": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-15": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-17": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-18": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-20": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-20",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-29": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-29",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-11-30": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-02": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-02",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-07": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-07",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-15": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-24": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-24",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-25": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-27": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-28": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-28",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70053|2024-12-30": {
+      "latitude": 42.390422,
+      "longitude": -70.997323,
+      "origin_stop_id": "70053",
+      "service_date": "2024-12-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-11-04": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-11-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-11-22": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-11-22",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-11-30": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-12-13": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-12-13",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-12-17": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-12-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-12-28": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-12-28",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70054|2024-12-30": {
+      "latitude": 42.39061,
+      "longitude": -70.99703,
+      "origin_stop_id": "70054",
+      "service_date": "2024-12-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-11-05": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-11-05",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-11-17": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-11-23": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-11-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-11-30": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-11-30",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-12-01": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-12-01",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-12-12": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-12-12",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-12-14": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-12-14",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-12-16": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-12-16",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70055|2024-12-20": {
+      "latitude": 42.397219,
+      "longitude": -70.992647,
+      "origin_stop_id": "70055",
+      "service_date": "2024-12-20",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-04": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-11": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-11",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-13": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-13",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-15": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-20": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-20",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-11-25": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-11-25",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-12-04": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-12-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-12-23": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-12-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70057|2024-12-27": {
+      "latitude": 42.40776,
+      "longitude": -70.992586,
+      "origin_stop_id": "70057",
+      "service_date": "2024-12-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70058|2024-11-18": {
+      "latitude": 42.407874,
+      "longitude": -70.992497,
+      "origin_stop_id": "70058",
+      "service_date": "2024-11-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-04": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-04",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-06": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-17": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-17",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-18": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-18",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-21": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-21",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-23": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-26": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-26",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-28": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-28",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-11-29": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-11-29",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-02": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-02",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-06": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-06",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-08": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-08",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-09": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-09",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-15": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-15",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-23": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-23",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-27": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-27",
+      "source": "official MBTA GTFS schedule archive"
+    },
+    "70059|2024-12-31": {
+      "latitude": 42.413514,
+      "longitude": -70.991714,
+      "origin_stop_id": "70059",
+      "service_date": "2024-12-31",
+      "source": "official MBTA GTFS schedule archive"
+    }
+  },
+  "version": "travel-time-public-station-coordinates-v1"
+}

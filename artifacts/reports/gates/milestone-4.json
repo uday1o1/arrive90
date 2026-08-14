@@ -1,0 +1,252 @@
+{
+  "acceptance_charter_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_models_use_identical_rows_and_analysis_weights": true,
+    "all_predeclared_metrics_slices_and_denominators_are_present": true,
+    "bootstrap_uses_exactly_2000_complete_service_day_blocks": true,
+    "calibration_and_reliability_tables_cover_every_model_and_horizon": true,
+    "committed_demo_bundle_is_exact_and_within_budget": true,
+    "evaluation_protocol_binds_current_code_models_metrics_and_slices": true,
+    "final_prediction_artifact_is_content_verified_and_identifier_hashed": true,
+    "final_report_rebuild_is_byte_identical": true,
+    "interval_censoring_missing_and_quarantine_mass_is_reported": true,
+    "make_check_passed": true,
+    "negative_results_and_frozen_ablations_remain_visible": true,
+    "point_diagnostics_expose_eligible_and_excluded_censored_weight": true,
+    "public_claims_are_hash_bound_to_valid_report_pointers": true,
+    "recovery_is_bounded_and_failed_attempt_produced_no_evaluation_output": true,
+    "replay_fixture_is_outcome_blind_selected_redacted_and_bounded": true
+  },
+  "command": "make qualify-milestone4 && make gate MILESTONE=4",
+  "environment": {
+    "implementation_commit": "bc55fcaa693bbccac9283cfe6c4aeae5341ce44c",
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "acceptance_charter": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+    "build_plan": "87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1",
+    "claim_registry": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4",
+    "evaluation_config": "d9897c6dd39d4e1d868a77cdb6505aab86b5fd92417284c545ab2db5d59dc6c9",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "prediction_file": "ee6669a3765c8702f5bce415fab9f894447c89319b913dfb06a47b14ca45782e",
+    "prediction_manifest": "3ec3722ee11425306cb8b83b1a2fa66a21ddc8eee58cb62fee4041c383f7e458",
+    "protocol": "b6bb09e49a71ec0e72f49e6d3ad05820b1d6b40917b35d1daccbce1958d5d92e",
+    "replay_fixture": "0d869ab66d1a5026676f62b535795d4187ebcc0c1b445298908708ea9760d1b0",
+    "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
+  },
+  "milestone": 4,
+  "observed": {
+    "bootstrap_plan_sha256": "a72152584218cb92bdb7c92e241fa56efe913a10fcd8a8854c96ed0c17acc001",
+    "claim_count": 5,
+    "demo_bundle_bytes": 67213,
+    "failure_case_count": 20,
+    "final_report_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "model_interval_nll": {
+      "FULL-extreme-scale-1p0": 37.39544990797378,
+      "FULL-logistic-scale-1p0": 341.62376685117846,
+      "FULL-normal-scale-0p5": 1.6470473269094874,
+      "INTERCEPT_ONLY-normal": 2.981552585585046,
+      "NO_POSITION_OBSERVATION-normal": 1.6540732660951805,
+      "NO_PREFIX_HISTORY-normal": 1.6588146848127707,
+      "SCHEDULE_CALENDAR-normal": 1.6734912865675513
+    },
+    "point_diagnostics": {
+      "comparisons": {
+        "PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT": {
+          "common_rows": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          },
+          "mean_absolute_interval_distance_difference_seconds": {
+            "estimate": -4.8739884303249426,
+            "lower_95": -5.454905612737747,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": -4.306609382804121
+          },
+          "negative_favors_promoted": true
+        },
+        "PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE": {
+          "common_rows": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          },
+          "mean_absolute_interval_distance_difference_seconds": {
+            "estimate": -7.309836849344991,
+            "lower_95": -7.783085673756529,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": -6.87217618952257
+          },
+          "negative_favors_promoted": true
+        }
+      },
+      "models": {
+        "EMPIRICAL_MIDPOINT": {
+          "excluded_censored_or_unavailable": {
+            "analysis_weight": 29944.19875793651,
+            "distinct_anchor_count": 22403,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 42252
+          },
+          "mean_absolute_interval_distance_seconds": {
+            "estimate": 35.27940417266498,
+            "lower_95": 33.69425400654547,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 36.94881810359443
+          },
+          "median_absolute_interval_distance_seconds": {
+            "estimate": 3.0,
+            "lower_95": 2.0,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 4.0
+          },
+          "metric_eligible": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          }
+        },
+        "OFFICIAL_SCHEDULE": {
+          "excluded_censored_or_unavailable": {
+            "analysis_weight": 29944.19875793651,
+            "distinct_anchor_count": 22403,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 42252
+          },
+          "mean_absolute_interval_distance_seconds": {
+            "estimate": 37.71525259168502,
+            "lower_95": 36.0183706479255,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 39.53544993136095
+          },
+          "median_absolute_interval_distance_seconds": {
+            "estimate": 16.0,
+            "lower_95": 16.0,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 17.0
+          },
+          "metric_eligible": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          }
+        },
+        "PROMOTED_P50": {
+          "excluded_censored_or_unavailable": {
+            "analysis_weight": 29944.19875793651,
+            "distinct_anchor_count": 22403,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 42252
+          },
+          "mean_absolute_interval_distance_seconds": {
+            "estimate": 30.405415742340036,
+            "lower_95": 28.504613998900272,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 32.359142506956616
+          },
+          "median_absolute_interval_distance_seconds": {
+            "estimate": 5.345742311648451,
+            "lower_95": 4.8267756722316335,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 5.8291606318621705
+          },
+          "metric_eligible": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          }
+        }
+      }
+    },
+    "prediction_manifest_sha256": "3ec3722ee11425306cb8b83b1a2fa66a21ddc8eee58cb62fee4041c383f7e458",
+    "prediction_row_count": 199364,
+    "recovery_report_sha256": "c15b42b55de8a58254b7fda4b1026f957955861be521a35f093d79e4eeadc65f",
+    "replay_count": 200,
+    "retained_outcome_mass": {
+      "INTERVAL_RESOLVED": {
+        "analysis_weight": 126287.29812301588,
+        "distinct_anchor_count": 35657,
+        "distinct_service_day_count": 61,
+        "raw_row_count": 148297
+      },
+      "LEFT_CENSORED": {
+        "analysis_weight": 9717.921952380952,
+        "distinct_anchor_count": 7154,
+        "distinct_service_day_count": 61,
+        "raw_row_count": 7154
+      },
+      "MISSING_STOP_OBSERVATION": {
+        "analysis_weight": 28735.319325396824,
+        "distinct_anchor_count": 22119,
+        "distinct_service_day_count": 61,
+        "raw_row_count": 40499
+      },
+      "NO_FOLLOW_UP": {
+        "analysis_weight": 155.67999999999995,
+        "distinct_anchor_count": 34,
+        "distinct_service_day_count": 21,
+        "raw_row_count": 247
+      },
+      "OVER_WIDTH_INTERVAL": {
+        "analysis_weight": 1742.5811666666666,
+        "distinct_anchor_count": 1595,
+        "distinct_service_day_count": 61,
+        "raw_row_count": 1661
+      },
+      "RIGHT_CENSORED": {
+        "analysis_weight": 421.49557142857145,
+        "distinct_anchor_count": 170,
+        "distinct_service_day_count": 35,
+        "raw_row_count": 511
+      },
+      "SCHEDULE_UNMATCHED": {
+        "analysis_weight": 0.0,
+        "distinct_anchor_count": 0,
+        "distinct_service_day_count": 0,
+        "raw_row_count": 0
+      },
+      "SESSION_DISCONTINUITY": {
+        "analysis_weight": 631.7038611111111,
+        "distinct_anchor_count": 210,
+        "distinct_service_day_count": 45,
+        "raw_row_count": 995
+      }
+    }
+  },
+  "qualification_report_sha256": "be5450caf1ec4d587603d1babdf876ccd16cde94ac0c6523662832d550e2e270",
+  "state": "ACCEPTED"
+}

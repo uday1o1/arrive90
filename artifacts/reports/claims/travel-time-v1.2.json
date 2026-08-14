@@ -1,0 +1,99 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "claims": [
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "baseline": null,
+      "confidence_interval": {
+        "estimate": 1.6470473269094865,
+        "lower_95": 1.6068887334404376,
+        "quantile_method": "linear",
+        "replicates": 2000,
+        "seed": 902024,
+        "service_day_blocks": 61,
+        "upper_95": 1.6864535752651713
+      },
+      "metric": "calibrated interval negative log likelihood",
+      "model": "FULL-normal-scale-0p5",
+      "report_pointer": "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
+      "slice": "OVERALL",
+      "split": "FINAL_TEST",
+      "value": 1.6470473269094874
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "baseline": null,
+      "confidence_interval": {
+        "estimate": 0.02486600793812648,
+        "horizon_seconds": 900,
+        "lower_95": 0.023475654179002294,
+        "quantile_method": "linear",
+        "replicates": 2000,
+        "seed": 902024,
+        "service_day_blocks": 61,
+        "upper_95": 0.026328632212599155
+      },
+      "metric": "identified 15-minute Brier score",
+      "model": "FULL-normal-scale-0p5",
+      "report_pointer": "/models/FULL-normal-scale-0p5/horizons/2/brier_identified",
+      "slice": "OVERALL",
+      "split": "FINAL_TEST",
+      "value": 0.024866007938126485
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "baseline": "OFFICIAL_SCHEDULE",
+      "confidence_interval": {
+        "estimate": -7.309836849344991,
+        "lower_95": -7.783085673756529,
+        "quantile_method": "linear",
+        "replicates": 2000,
+        "seed": 902024,
+        "service_day_blocks": 61,
+        "upper_95": -6.87217618952257
+      },
+      "metric": "mean absolute interval-distance difference in seconds",
+      "model": "FULL-normal-scale-0p5",
+      "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE/mean_absolute_interval_distance_difference_seconds/estimate",
+      "slice": "COMMON_FINITE_UPPER_ROWS",
+      "split": "FINAL_TEST",
+      "value": -7.309836849344991
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "baseline": "EMPIRICAL_MIDPOINT",
+      "confidence_interval": {
+        "estimate": -4.8739884303249426,
+        "lower_95": -5.454905612737747,
+        "quantile_method": "linear",
+        "replicates": 2000,
+        "seed": 902024,
+        "service_day_blocks": 61,
+        "upper_95": -4.306609382804121
+      },
+      "metric": "mean absolute interval-distance difference in seconds",
+      "model": "FULL-normal-scale-0p5",
+      "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT/mean_absolute_interval_distance_difference_seconds/estimate",
+      "slice": "COMMON_FINITE_UPPER_ROWS",
+      "split": "FINAL_TEST",
+      "value": -4.8739884303249426
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "baseline": null,
+      "confidence_interval": null,
+      "metric": "p90 empirical coverage bounds",
+      "model": "FULL-normal-scale-0p5",
+      "report_pointer": "/models/FULL-normal-scale-0p5/quantiles/2",
+      "slice": "FINITE_UPPER_AND_RESOLVED_P90",
+      "split": "FINAL_TEST",
+      "value": {
+        "lower": 0.8135802870469423,
+        "upper": 0.9281367675659588
+      }
+    }
+  ],
+  "final_report_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+  "negative_results_retained": true,
+  "version": "travel-time-public-claims-v1"
+}

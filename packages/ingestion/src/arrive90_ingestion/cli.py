@@ -273,6 +273,58 @@ def _model_train(args: argparse.Namespace) -> int:
     return 0
 
 
+def _evaluate_final(args: argparse.Namespace) -> int:
+    from arrive90_evaluation.final_evaluation import run_final_evaluation
+
+    result = run_final_evaluation(
+        dataset_root=args.dataset_root,
+        normalized_root=args.normalized_root,
+        model_root=args.model_root,
+        config_path=args.config,
+        schedule_database=args.schedule_database,
+        runtime_root=args.runtime_root,
+        demo_root=args.demo_root,
+        final_report_path=args.final_report,
+        claim_registry_path=args.claim_registry,
+        milestone_three_gate_path=args.milestone_three_gate,
+    )
+    print(
+        json.dumps(
+            {
+                "claim_registry_path": str(result.claim_registry_path),
+                "claim_registry_sha256": result.claim_registry_sha256,
+                "final_report_path": str(result.final_report_path),
+                "final_report_sha256": result.final_report_sha256,
+                "prediction_manifest_path": str(result.prediction_artifact.manifest_path),
+                "prediction_manifest_sha256": result.prediction_artifact.manifest_sha256,
+                "protocol_path": str(result.protocol_path),
+                "protocol_sha256": result.protocol_sha256,
+                "replay_fixture_sha256": result.replay_fixture_sha256,
+                "runtime_report_path": str(result.runtime_report_path),
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def _evaluate_rebuild(args: argparse.Namespace) -> int:
+    from arrive90_evaluation.final_evaluation import rebuild_final_report
+
+    digest = rebuild_final_report(
+        prediction_manifest_path=args.prediction_manifest,
+        protocol_path=args.protocol,
+        existing_report_path=args.existing_report,
+        output_path=args.output,
+        dataset_root=args.dataset_root,
+        normalized_root=args.normalized_root,
+        model_root=args.model_root,
+        config_path=args.config,
+    )
+    print(json.dumps({"output_path": str(args.output), "sha256": digest}, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the public CLI surface."""
 
@@ -397,6 +449,55 @@ def build_parser() -> argparse.ArgumentParser:
     )
     train.add_argument("--runtime-root", type=Path, default=Path("artifacts/runtime/milestone-3"))
     train.set_defaults(handler=_model_train)
+
+    evaluate = commands.add_parser("evaluate")
+    evaluate_commands = evaluate.add_subparsers(dest="evaluate_command", required=True)
+    final = evaluate_commands.add_parser("final")
+    final.add_argument("--dataset-root", type=Path, default=Path("data/datasets/travel-time-v1"))
+    final.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
+    final.add_argument(
+        "--model-root", type=Path, default=Path("data/models/travel-time-v1/primary")
+    )
+    final.add_argument(
+        "--config", type=Path, default=Path("configs/evaluation/travel-time-v1.json")
+    )
+    final.add_argument(
+        "--schedule-database",
+        type=Path,
+        default=Path("data/raw/mbta-gtfs/2024/GTFS_ARCHIVE.db"),
+    )
+    final.add_argument("--runtime-root", type=Path, default=Path("artifacts/runtime/milestone-4"))
+    final.add_argument("--demo-root", type=Path, default=Path("artifacts/demo/travel-time-v1"))
+    final.add_argument(
+        "--final-report",
+        type=Path,
+        default=Path("artifacts/reports/final/travel-time-v1.2.json"),
+    )
+    final.add_argument(
+        "--claim-registry",
+        type=Path,
+        default=Path("artifacts/reports/claims/travel-time-v1.2.json"),
+    )
+    final.add_argument(
+        "--milestone-three-gate",
+        type=Path,
+        default=Path("artifacts/reports/gates/milestone-3.json"),
+    )
+    final.set_defaults(handler=_evaluate_final)
+    rebuild = evaluate_commands.add_parser("rebuild")
+    rebuild.add_argument("--prediction-manifest", type=Path, required=True)
+    rebuild.add_argument("--protocol", type=Path, required=True)
+    rebuild.add_argument("--existing-report", type=Path, required=True)
+    rebuild.add_argument("--output", type=Path, required=True)
+    rebuild.add_argument("--dataset-root", type=Path, default=Path("data/datasets/travel-time-v1"))
+    rebuild.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
+    rebuild.add_argument(
+        "--model-root", type=Path, default=Path("data/models/travel-time-v1/primary")
+    )
+    rebuild.add_argument(
+        "--config", type=Path, default=Path("configs/evaluation/travel-time-v1.json")
+    )
+    rebuild.set_defaults(handler=_evaluate_rebuild)
 
     gate = commands.add_parser("gate")
     gate.add_argument("--milestone", required=True, type=int)

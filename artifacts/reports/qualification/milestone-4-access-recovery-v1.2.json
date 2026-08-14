@@ -1,0 +1,16 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "code_correction": "encode non-finite bounds explicitly in the strict JSON row-hash payload while preserving numeric infinity in the prediction table",
+  "failed_access_ledger_sha256": "10bf340fcb145f5b0045579d7e125e17d3765fbfd62ea6999b3baffe97b162a3",
+  "failed_attempt_evaluation_outputs": [],
+  "failed_attempt_produced_evaluation_output": false,
+  "failed_protocol_sha256": "e0fce50629cc92813778993bd6876648f5d9fb6f71a35511ee77b499e72fad4e",
+  "metric_producing_attempt_count": 1,
+  "prediction_manifest_sha256": "3ec3722ee11425306cb8b83b1a2fa66a21ddc8eee58cb62fee4041c383f7e458",
+  "recovery_access_ledger_sha256": "1209f8e1dec946fec98be6c8ca1286b668a4e1462e02950750cda4fef105780a",
+  "recovery_attempt_count": 1,
+  "recovery_protocol_sha256": "b6bb09e49a71ec0e72f49e6d3ad05820b1d6b40917b35d1daccbce1958d5d92e",
+  "reported_failure": "Out of range float values are not JSON compliant: inf",
+  "reported_failure_phase": "OPEN_FINAL_OUTCOMES_ROW_DIGEST",
+  "version": "travel-time-final-access-recovery-v1"
+}

@@ -989,7 +989,9 @@ Acceptance gate:
 Deliverables:
 
 - Freeze evaluation code, model bundle, horizons, metrics, slices, bootstrap seed, and claim templates.
-- Open the 2024-11-01 through 2024-12-31 final-test outcomes once.
+- Open the 2024-11-01 through 2024-12-31 final-test outcomes in one metric-producing evaluation session.
+- If that session crashes before any frozen prediction file, metric, claim, or report is produced, permit one hash-bound recovery attempt only after recording the failed protocol, access ledger, failure phase, code correction, and absence of evaluation outputs.
+- Keep the failed and recovery access evidence, and never use the failed attempt for model, metric, slice, or claim selection.
 - Evaluate the promoted model and every required baseline on identical weighted examples.
 - Run exactly 2,000 complete-service-day bootstrap replicates.
 - Generate calibration tables, reliability curves, interval metrics, slice tables, drift analysis, comparisons for the already frozen ablation bundles, and representative failure cases.
@@ -1009,6 +1011,7 @@ Acceptance gate:
 - The committed demo bundle is byte-identical to the evaluated promoted bundle, and the replay fixture contains no raw vehicle identifier, vehicle label, trip identifier, coordinates, or source row.
 - The replay selection manifest proves split provenance and outcome-blind selection while retaining source-example hashes for local lineage verification.
 - A fresh report build reproduces all deterministic tables and hashes from the frozen prediction file.
+- If crash recovery was required, its manifest proves that the failed attempt produced no prediction or evaluation output and that exactly one recovery attempt produced the immutable prediction file.
 - `make check` and `make gate MILESTONE=4` pass.
 
 ### Milestone 5 - Local replay explorer and portfolio-ready core

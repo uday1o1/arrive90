@@ -1,0 +1,1624 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "candidate_rule": "final feature row whose promoted raw margin is unchanged after replacing raw vehicle coordinates with the active public GTFS origin-stop coordinate",
+  "entries": [
+    {
+      "hmac_sha256": "00001720c2cf3bb8dc22b37385f6ef19721ec193ad6c17db26c040173895f243",
+      "month": "2024-12",
+      "replay_id": "00001720c2cf3bb8dc22b373",
+      "service_date": "2024-12-01",
+      "source_example_sha256": "7d9aba8a14fee59b415165cbeab18f944057a96982d6f84116697731102357be",
+      "station_coordinate_key": "70038|2024-12-01"
+    },
+    {
+      "hmac_sha256": "0000a5f06c5f739d668b40df49c0c9c020b04b54e0ee7831e8f4e80307c3941f",
+      "month": "2024-12",
+      "replay_id": "0000a5f06c5f739d668b40df",
+      "service_date": "2024-12-22",
+      "source_example_sha256": "49ca5c03a5d3afed2a69e7850208fc83e8f1e4d472237b32099d9b7cc1350af0",
+      "station_coordinate_key": "70048|2024-12-22"
+    },
+    {
+      "hmac_sha256": "0000bcff567d30292c255f007784f914d7d7f4d62a82b9e7b0fd1ddb604899b6",
+      "month": "2024-12",
+      "replay_id": "0000bcff567d30292c255f00",
+      "service_date": "2024-12-13",
+      "source_example_sha256": "693bdc2d2de882d17c789cc9321b1b4e597208ce45a0639e025621950098aa13",
+      "station_coordinate_key": "70040|2024-12-13"
+    },
+    {
+      "hmac_sha256": "0000db3d35b9b349960f0c01e059a776312ef4167c1fe86e072d864d28d6a49b",
+      "month": "2024-11",
+      "replay_id": "0000db3d35b9b349960f0c01",
+      "service_date": "2024-11-15",
+      "source_example_sha256": "624e1a24e628668f9502cc3a649c5a6df9b24da9fe70792dcd901b32956a948c",
+      "station_coordinate_key": "70057|2024-11-15"
+    },
+    {
+      "hmac_sha256": "000127a8f76fd2974f5a21e8d2be898903010908028a7d2ecb2733cb2e5449fc",
+      "month": "2024-11",
+      "replay_id": "000127a8f76fd2974f5a21e8",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "d40843658784f24270df2d3addd6200d2bdc3ab0e2a195b619674bb9b23b2461",
+      "station_coordinate_key": "70059|2024-11-18"
+    },
+    {
+      "hmac_sha256": "00015bf8e41e78b694a4329227ab2b34563227cb6cfb982c72bc26e0f00f460e",
+      "month": "2024-12",
+      "replay_id": "00015bf8e41e78b694a43292",
+      "service_date": "2024-12-11",
+      "source_example_sha256": "6aad75fd875746dfdd4e3c1661da4bdcf8b121b393842fb865b43428f53c2201",
+      "station_coordinate_key": "70038|2024-12-11"
+    },
+    {
+      "hmac_sha256": "0001823ddc84441644ed273b5ebbe6cea69ff616a5b136bac182c7b2d3d25683",
+      "month": "2024-12",
+      "replay_id": "0001823ddc84441644ed273b",
+      "service_date": "2024-12-01",
+      "source_example_sha256": "1dba4bb18b63e4ccde59101ce63370bd5c413ecd4132972602edec7bbec52d1b",
+      "station_coordinate_key": "70043|2024-12-01"
+    },
+    {
+      "hmac_sha256": "0001d76d81f82dbab80925056d9945be0fb8bf2c39a6bf54023e434af235fb87",
+      "month": "2024-12",
+      "replay_id": "0001d76d81f82dbab8092505",
+      "service_date": "2024-12-13",
+      "source_example_sha256": "058adb4b18fc0a4e1dd643ca8d4ae9b7837c297cd071934217d601287941bc8f",
+      "station_coordinate_key": "70051|2024-12-13"
+    },
+    {
+      "hmac_sha256": "0001fb15a6e7d886e3479b0edd6140cd0abbd1f1848273598fa4004b4dc8dbd4",
+      "month": "2024-11",
+      "replay_id": "0001fb15a6e7d886e3479b0e",
+      "service_date": "2024-11-21",
+      "source_example_sha256": "f86dd11cd5a1aad637608ec78b67c87427f1543f03f5f6b8d449b8fb96e79613",
+      "station_coordinate_key": "70044|2024-11-21"
+    },
+    {
+      "hmac_sha256": "000249c04383b0e363800ce72e3b2e0e2a5559842c5cb31a1988b6ae3c12b576",
+      "month": "2024-12",
+      "replay_id": "000249c04383b0e363800ce7",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "54f5dded3e33770d90b508a03d5654635aebe0b88d15bd6806586cca19d455ac",
+      "station_coordinate_key": "70055|2024-12-14"
+    },
+    {
+      "hmac_sha256": "0002606ed24fd18f2f2962474ead9b9c23981b8c864aa9baf43751dc53df22b3",
+      "month": "2024-12",
+      "replay_id": "0002606ed24fd18f2f296247",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "63fb2f711777c1a651ecd7ba35b4a26eb49ea04ce61b9f6f5834c4c544f5e2d2",
+      "station_coordinate_key": "70049|2024-12-14"
+    },
+    {
+      "hmac_sha256": "0002721de7052e5cbb603507b582e2ac413bb8225835b2d9f7c94efaebee0879",
+      "month": "2024-11",
+      "replay_id": "0002721de7052e5cbb603507",
+      "service_date": "2024-11-26",
+      "source_example_sha256": "dd57764274aaaee04ad13ef7bef10b90c2699406371edab6089229b9ff664516",
+      "station_coordinate_key": "70059|2024-11-26"
+    },
+    {
+      "hmac_sha256": "00029121ec7ded82c1ff71d9b30ab8b5891c51ae1d18f3451e1f3e50f2e5ff21",
+      "month": "2024-12",
+      "replay_id": "00029121ec7ded82c1ff71d9",
+      "service_date": "2024-12-21",
+      "source_example_sha256": "78d133581241f584621ef43a73c09745c8af530f7f8d2b0afb14ef341f2af6f0",
+      "station_coordinate_key": "70046|2024-12-21"
+    },
+    {
+      "hmac_sha256": "0002fe71d342b4dc2443c845af6a45c5b40cfd971655640fb46107e5c56c37aa",
+      "month": "2024-12",
+      "replay_id": "0002fe71d342b4dc2443c845",
+      "service_date": "2024-12-12",
+      "source_example_sha256": "e7b8f0c1d582980152ca78f93c40f3071aeffcc94ca12ca674830e91ac5fdf91",
+      "station_coordinate_key": "70046|2024-12-12"
+    },
+    {
+      "hmac_sha256": "00035bf429f6b7729c9ef0d9aff4936044a6216d9b2322f2086afac815c91d75",
+      "month": "2024-11",
+      "replay_id": "00035bf429f6b7729c9ef0d9",
+      "service_date": "2024-11-29",
+      "source_example_sha256": "fb0da6ee86d126cf25dbfb478d8542d3861cdcd5f919e95100a07f439b2d4732",
+      "station_coordinate_key": "70053|2024-11-29"
+    },
+    {
+      "hmac_sha256": "00038aef9d3c18adfff4bed3ee00c9cb7f20f9bf7b936557d82efd34ddc4b542",
+      "month": "2024-11",
+      "replay_id": "00038aef9d3c18adfff4bed3",
+      "service_date": "2024-11-06",
+      "source_example_sha256": "f815e9c7e53280c93654b7baab0870281b0320a457ec1780e121fa55d11ff6ae",
+      "station_coordinate_key": "70038|2024-11-06"
+    },
+    {
+      "hmac_sha256": "00039bc8f86d4b392a5bd60005792091aae2f01bbd4d04b17f641944c90e0d0f",
+      "month": "2024-12",
+      "replay_id": "00039bc8f86d4b392a5bd600",
+      "service_date": "2024-12-13",
+      "source_example_sha256": "d316dc04628f3e4eed2e48e0043441451c586b3b10bbad2e729de4efcdc2cfab",
+      "station_coordinate_key": "70054|2024-12-13"
+    },
+    {
+      "hmac_sha256": "000424079fbdfcf97f1ee6a3952c512d864d5853e4471ea3bd09571eddfc442e",
+      "month": "2024-12",
+      "replay_id": "000424079fbdfcf97f1ee6a3",
+      "service_date": "2024-12-18",
+      "source_example_sha256": "6965c1af194aa2f48de8c5b07d709b4753b866ca8a8c6ad0b36da3a1a4c7bed3",
+      "station_coordinate_key": "70042|2024-12-18"
+    },
+    {
+      "hmac_sha256": "0005341bb7841c004e290945167f2b9dae0b21a97a10d56f95e1460cc19c24bc",
+      "month": "2024-11",
+      "replay_id": "0005341bb7841c004e290945",
+      "service_date": "2024-11-29",
+      "source_example_sha256": "176b0fc542d1c9a1a7ca1e40adbf1244072b594fef609b3baa3485408ac6e358",
+      "station_coordinate_key": "70053|2024-11-29"
+    },
+    {
+      "hmac_sha256": "0005f2ef7b50a4e956d30dcf3234404ee242800dddb204352e4e608a3defa6e0",
+      "month": "2024-12",
+      "replay_id": "0005f2ef7b50a4e956d30dcf",
+      "service_date": "2024-12-08",
+      "source_example_sha256": "b5bf06bedffcdfa1463b3e7efccaac5aff7861c7d69695054f88d8d07ec1cca4",
+      "station_coordinate_key": "70044|2024-12-08"
+    },
+    {
+      "hmac_sha256": "000700085e344d914c5ca3a0a0ea7c75643bc1d717cb557218259a4e41dfd888",
+      "month": "2024-12",
+      "replay_id": "000700085e344d914c5ca3a0",
+      "service_date": "2024-12-11",
+      "source_example_sha256": "53741cddd270ff8a559d1b41a6549a11c6d1cccdce96048e943b959898937ad5",
+      "station_coordinate_key": "70046|2024-12-11"
+    },
+    {
+      "hmac_sha256": "0007a0492dba6c685afff2d16951d2e4131999359ea15ace532c0698b21b5b99",
+      "month": "2024-11",
+      "replay_id": "0007a0492dba6c685afff2d1",
+      "service_date": "2024-11-26",
+      "source_example_sha256": "bf9d42559905e5edb600ba94afb29d4fc5c167aa6a1f55d44e5381d0c356176d",
+      "station_coordinate_key": "70047|2024-11-26"
+    },
+    {
+      "hmac_sha256": "0007eff17484a0c605525d13a4effaa1f83535d6f68a26652e764c705b0311d6",
+      "month": "2024-12",
+      "replay_id": "0007eff17484a0c605525d13",
+      "service_date": "2024-12-26",
+      "source_example_sha256": "ca26659fa760bc5c768a385c7243f45fd4b93eecb79e2faad025108bb92985bd",
+      "station_coordinate_key": "70047|2024-12-26"
+    },
+    {
+      "hmac_sha256": "000802dbab613e6d569c84b54e4f422398eb18c7fed2733bdcc540e277757d6b",
+      "month": "2024-12",
+      "replay_id": "000802dbab613e6d569c84b5",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "40eb42c7a13f091818f38827e1ffb8924816b36e21e9e45ba41be2e641cd96ef",
+      "station_coordinate_key": "70046|2024-12-31"
+    },
+    {
+      "hmac_sha256": "00081b6962be64961e856281e6c360569501912f67123708ec356954c888e953",
+      "month": "2024-11",
+      "replay_id": "00081b6962be64961e856281",
+      "service_date": "2024-11-21",
+      "source_example_sha256": "c1d2297c1c613b7118bb7efdbf0544ea8c27cc52019ce9d698f9cd2c5415aea3",
+      "station_coordinate_key": "70059|2024-11-21"
+    },
+    {
+      "hmac_sha256": "000978d48caac3dbfd67b6edfd6f1bdbc296cd2cdc54ca6ca3662192b810fe15",
+      "month": "2024-12",
+      "replay_id": "000978d48caac3dbfd67b6ed",
+      "service_date": "2024-12-27",
+      "source_example_sha256": "98bd58cf0e870e66a9eccbec408dda186475e45da68a10d90dcb406b07ce8445",
+      "station_coordinate_key": "70057|2024-12-27"
+    },
+    {
+      "hmac_sha256": "00098a4b253492b5800ddc8f1999a31421f41cbc4b0b18978fbe99e073433caa",
+      "month": "2024-12",
+      "replay_id": "00098a4b253492b5800ddc8f",
+      "service_date": "2024-12-11",
+      "source_example_sha256": "7222bb07884542ca1e1ef06e77840d3aa44cf5da51cfa194b7ad8e047063a88b",
+      "station_coordinate_key": "70038|2024-12-11"
+    },
+    {
+      "hmac_sha256": "000a0ba14add4004098152cce091ad9319159289ee6ab8bb15d4f6d95a8f569c",
+      "month": "2024-12",
+      "replay_id": "000a0ba14add4004098152cc",
+      "service_date": "2024-12-26",
+      "source_example_sha256": "1a936bf97e2fa1a2cca46005808872b2d37b0181f156d56ecac4244494f6e3df",
+      "station_coordinate_key": "70042|2024-12-26"
+    },
+    {
+      "hmac_sha256": "000a0fbaad6b19f37b38bc9ff68afc2e01cfe3defc98823a460af506a2acb898",
+      "month": "2024-11",
+      "replay_id": "000a0fbaad6b19f37b38bc9f",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "80e7723ae4eee0add81f65ed90626db6f61bb3dd5e4320a505111fdd840bb064",
+      "station_coordinate_key": "70058|2024-11-18"
+    },
+    {
+      "hmac_sha256": "000a4d05c138dffe1c1673de035ace6c7dccd3ede9101256a3d1cd239dcbfdb5",
+      "month": "2024-11",
+      "replay_id": "000a4d05c138dffe1c1673de",
+      "service_date": "2024-11-09",
+      "source_example_sha256": "c52c4654071631e9199a12443e5d15d358c6a33a0f6ca17b9cbd4a1c85a24afc",
+      "station_coordinate_key": "70051|2024-11-09"
+    },
+    {
+      "hmac_sha256": "000b0d88a776572bd64c36950ba27445679cf7898d429f6cd72253fc74902fee",
+      "month": "2024-11",
+      "replay_id": "000b0d88a776572bd64c3695",
+      "service_date": "2024-11-24",
+      "source_example_sha256": "498bec11859303f758cdf8dc7646bc49c7f83d64cddd2fdafb600907a393b106",
+      "station_coordinate_key": "70040|2024-11-24"
+    },
+    {
+      "hmac_sha256": "000b69f53fdd2e73aaa4c70194e87f1cfbcf98e8cf9feda69923268b9636f5d3",
+      "month": "2024-12",
+      "replay_id": "000b69f53fdd2e73aaa4c701",
+      "service_date": "2024-12-04",
+      "source_example_sha256": "9a08f02587b1b2794c7e90fd7ba4b75690415fee4fa972dfef609a45e60a0353",
+      "station_coordinate_key": "70057|2024-12-04"
+    },
+    {
+      "hmac_sha256": "000c401323d623d941418b83ccba4c9d86feccd9d4d135c3127d283d9aa645af",
+      "month": "2024-11",
+      "replay_id": "000c401323d623d941418b83",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "8f868ca0e06c6562d2217d37e0908bc4097266d90ae05b271aac57ba3c90e176",
+      "station_coordinate_key": "70043|2024-11-30"
+    },
+    {
+      "hmac_sha256": "000e302c56c88fc6d5629a739bc11d98075eab19e3370f2ed7322c3d4b7112e8",
+      "month": "2024-12",
+      "replay_id": "000e302c56c88fc6d5629a73",
+      "service_date": "2024-12-09",
+      "source_example_sha256": "ab7d2b2ad76bab03c5decdfe74c33d2194c6ee22975d70124d41fe84687414d3",
+      "station_coordinate_key": "70048|2024-12-09"
+    },
+    {
+      "hmac_sha256": "000fece0b077e9c5a1b511221ac6c0fed7991047969d1fc9438c63954d594055",
+      "month": "2024-12",
+      "replay_id": "000fece0b077e9c5a1b51122",
+      "service_date": "2024-12-17",
+      "source_example_sha256": "a3afd8a23fccb9ae5f21694b04b6e61cd39aa1710180b1b94ac08094153b69bb",
+      "station_coordinate_key": "70038|2024-12-17"
+    },
+    {
+      "hmac_sha256": "000ff546671f192d862f1aad55509cd4572160ee56c40d5bca86b508a23b8e3e",
+      "month": "2024-12",
+      "replay_id": "000ff546671f192d862f1aad",
+      "service_date": "2024-12-30",
+      "source_example_sha256": "ce50502718e912da54fe042a9b1e839a414985a989e253953d936e64ace766f8",
+      "station_coordinate_key": "70054|2024-12-30"
+    },
+    {
+      "hmac_sha256": "00101ac21aa18cee9a4d42ed81244d8af73509432c14f3e32c53d76ae4b7105f",
+      "month": "2024-11",
+      "replay_id": "00101ac21aa18cee9a4d42ed",
+      "service_date": "2024-11-06",
+      "source_example_sha256": "ab490de8b6189ef4477e83e3e53cc55d670ae6d3850df0f069e9b142b4a19137",
+      "station_coordinate_key": "70059|2024-11-06"
+    },
+    {
+      "hmac_sha256": "00109e355bc79edad526f5b4926cd7fc8e29ada7d63b0f0c10ee8151073cb0f5",
+      "month": "2024-11",
+      "replay_id": "00109e355bc79edad526f5b4",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "b39a24ca61047e4b767a49773a72f019eb405d703e037cd3890b98492a35f6b0",
+      "station_coordinate_key": "70053|2024-11-17"
+    },
+    {
+      "hmac_sha256": "0010ca60912e478dabb18488e8e0a17e24447633a4624939d0de9ab4ed72bff7",
+      "month": "2024-11",
+      "replay_id": "0010ca60912e478dabb18488",
+      "service_date": "2024-11-09",
+      "source_example_sha256": "15385ca4563d7fc345042ebbbdaaa4aafacb06dd55105ea62d4133c9e327be93",
+      "station_coordinate_key": "70038|2024-11-09"
+    },
+    {
+      "hmac_sha256": "0011019f55fa6d0f12a66316e744461539f8710eacfc380faf6fb8798dc970c2",
+      "month": "2024-12",
+      "replay_id": "0011019f55fa6d0f12a66316",
+      "service_date": "2024-12-01",
+      "source_example_sha256": "f8432cc46fa14b3aa7aa7986bad99a9741039f5d4e6e3618ccc222ce06b131cb",
+      "station_coordinate_key": "70055|2024-12-01"
+    },
+    {
+      "hmac_sha256": "00111e90130dfc6bc8e459003ab03f4c1e0c6d6132ec9bb2ee5a4b7ec0b9a566",
+      "month": "2024-12",
+      "replay_id": "00111e90130dfc6bc8e45900",
+      "service_date": "2024-12-29",
+      "source_example_sha256": "bb44c530b1f1c773fc3eaedd4216950351c4088b5a7f0a127c67386100dd112a",
+      "station_coordinate_key": "70047|2024-12-29"
+    },
+    {
+      "hmac_sha256": "001125a5918e0030ec209aedd6bc412a86d5d469e617c6a3d81ef39ec3b0326f",
+      "month": "2024-11",
+      "replay_id": "001125a5918e0030ec209aed",
+      "service_date": "2024-11-04",
+      "source_example_sha256": "07ffc3f79a22b54579abbce866db929cd3754614a9ecd66133a76a08f6bb277e",
+      "station_coordinate_key": "70054|2024-11-04"
+    },
+    {
+      "hmac_sha256": "00114a2e3d52a27007c87857cae9d74eea301b866d018862e73070f8e8fa876b",
+      "month": "2024-12",
+      "replay_id": "00114a2e3d52a27007c87857",
+      "service_date": "2024-12-22",
+      "source_example_sha256": "8563f846fd2788390767bd2d38d56f8b6b344f04e0dbc2b97a21df0bf53b436b",
+      "station_coordinate_key": "70041|2024-12-22"
+    },
+    {
+      "hmac_sha256": "001156de7725fac18dcdce0856f661b93a47f0a10b9e1dfecc4c374ceb95ee68",
+      "month": "2024-12",
+      "replay_id": "001156de7725fac18dcdce08",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "b6ce81ccd522118c6dae50da929447f816c4296acfd23e4be211706c9470b92d",
+      "station_coordinate_key": "70043|2024-12-16"
+    },
+    {
+      "hmac_sha256": "001188428bdfaceeada60a79441e9bda02b68e63206ecf17f5d6dfd173a3a8ea",
+      "month": "2024-12",
+      "replay_id": "001188428bdfaceeada60a79",
+      "service_date": "2024-12-25",
+      "source_example_sha256": "9d2864d8ffe80321991454043a675613910514c041fea8b2d01cef7094ce2a57",
+      "station_coordinate_key": "70038|2024-12-25"
+    },
+    {
+      "hmac_sha256": "0011b08663c73d8ff87c6ffab30527cef39236896400281c0f4e6bc3550cd03a",
+      "month": "2024-11",
+      "replay_id": "0011b08663c73d8ff87c6ffa",
+      "service_date": "2024-11-14",
+      "source_example_sha256": "d47c8bfa2d6c627a9593bb58b068f13321e8d857b432acb72ac49bf89cd9f6cd",
+      "station_coordinate_key": "70051|2024-11-14"
+    },
+    {
+      "hmac_sha256": "0011d5be44d713c59bb95368295764148fa210f377482d0955163578bf6ed1c2",
+      "month": "2024-11",
+      "replay_id": "0011d5be44d713c59bb95368",
+      "service_date": "2024-11-14",
+      "source_example_sha256": "5b3364a8892e406a9708b46aaf905cb7e2ad7fbe58deb0125636797ff293d9f0",
+      "station_coordinate_key": "70045|2024-11-14"
+    },
+    {
+      "hmac_sha256": "0012492ed77df6c0e3cea3795cc8167659efb5a64e347edee013ad8edcee3eae",
+      "month": "2024-12",
+      "replay_id": "0012492ed77df6c0e3cea379",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "241b2b804ecdd8a175acfe982a36153fbb14c59e8def383fe593ef794308cf84",
+      "station_coordinate_key": "70042|2024-12-06"
+    },
+    {
+      "hmac_sha256": "00126ac14510f21dc198da49e9d4f7564a282e34aefa1322042ea6732c90f041",
+      "month": "2024-11",
+      "replay_id": "00126ac14510f21dc198da49",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "ddca8d022c56d080756a74105c4ec584cbf83ceaf31388fe30327a230f5c966f",
+      "station_coordinate_key": "70059|2024-11-17"
+    },
+    {
+      "hmac_sha256": "0012b55098259cbeb317fbd82a63503df154767776e8e3cffeb7474ce0ae286f",
+      "month": "2024-12",
+      "replay_id": "0012b55098259cbeb317fbd8",
+      "service_date": "2024-12-08",
+      "source_example_sha256": "41180afe83af88906038c22256432bcff1f5022144462f5074d7270a8274c4f5",
+      "station_coordinate_key": "70059|2024-12-08"
+    },
+    {
+      "hmac_sha256": "0012b7fa1ce85a4094f557414f7730b851b43f0834a09d400e1d5181918bfd48",
+      "month": "2024-12",
+      "replay_id": "0012b7fa1ce85a4094f55741",
+      "service_date": "2024-12-04",
+      "source_example_sha256": "ef9af1b25da0aa1990bf480d91105c86f9fb3fb83d580ebafee5c3d24cf09ed0",
+      "station_coordinate_key": "70039|2024-12-04"
+    },
+    {
+      "hmac_sha256": "0013a3b8b07b5eb9dd817460a3b38ed4be3425b1d17be12fe97c400b7d3f0e06",
+      "month": "2024-11",
+      "replay_id": "0013a3b8b07b5eb9dd817460",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "bfd107d3b61157b0aa19924c5ef5bebdb78490c323eedcc98cc6184135ded0ec",
+      "station_coordinate_key": "70059|2024-11-18"
+    },
+    {
+      "hmac_sha256": "0013ac08d4c3ac3a047e4aa176b10db0ed01c4ba4e40457b54a167c27779917f",
+      "month": "2024-12",
+      "replay_id": "0013ac08d4c3ac3a047e4aa1",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "e4db6618fa2a3d90087edfd5ac9e6d605c2eb63639d15529ae68576c6a71a194",
+      "station_coordinate_key": "70055|2024-12-14"
+    },
+    {
+      "hmac_sha256": "001440303ab13c9128386d97b3a6dc324433b6c0b2e9be6c4af17240f401bc68",
+      "month": "2024-11",
+      "replay_id": "001440303ab13c9128386d97",
+      "service_date": "2024-11-05",
+      "source_example_sha256": "cc77219239f3fd7751097040f607255983413bbe715cbe0729d41cfa08e8950b",
+      "station_coordinate_key": "70050|2024-11-05"
+    },
+    {
+      "hmac_sha256": "00145b221aa16f1c6a78eade6674e5dd685e8cb599f72ef8a4a7a523bf6747de",
+      "month": "2024-11",
+      "replay_id": "00145b221aa16f1c6a78eade",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "3372795affbb4de37cb8400ccabb1f7c925969125f6a6e3507238b3386817432",
+      "station_coordinate_key": "70051|2024-11-23"
+    },
+    {
+      "hmac_sha256": "00146769217822c8e6e92b54fdfa21c7f69170593d9b4d0a1ec0e34f9babd164",
+      "month": "2024-11",
+      "replay_id": "00146769217822c8e6e92b54",
+      "service_date": "2024-11-03",
+      "source_example_sha256": "d343436c5f793011c6b43c5d28dd98200b806692a0dde5514a803fa5b5c05840",
+      "station_coordinate_key": "70048|2024-11-03"
+    },
+    {
+      "hmac_sha256": "0014f07df0bacbf23d4e4755a6af4769bb844434983b98b1d8fb49bfc7351a39",
+      "month": "2024-11",
+      "replay_id": "0014f07df0bacbf23d4e4755",
+      "service_date": "2024-11-13",
+      "source_example_sha256": "85bb23e7634e71ec4259bda0fd64d93118deb0f501cfd4ab7761feab06ff9830",
+      "station_coordinate_key": "70057|2024-11-13"
+    },
+    {
+      "hmac_sha256": "0015274c3443904c6c91fc0d34b24a58bb70957c5dfe62f26dc240e625af27e0",
+      "month": "2024-11",
+      "replay_id": "0015274c3443904c6c91fc0d",
+      "service_date": "2024-11-07",
+      "source_example_sha256": "25e00780d45e91b8bd0b839656af7927b15743acb97a1421c55e10053edf59cb",
+      "station_coordinate_key": "70042|2024-11-07"
+    },
+    {
+      "hmac_sha256": "0015774afb3d64f568b68eace9b8369bfb367068d84fcd1edc2f170ee574a44e",
+      "month": "2024-11",
+      "replay_id": "0015774afb3d64f568b68eac",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "7ada43de7506eec013b19dd5b60a9c41646cdd9e23c85ce7355ac6ce69e0cae3",
+      "station_coordinate_key": "70043|2024-11-18"
+    },
+    {
+      "hmac_sha256": "0015c5c363d225c00ada018f97cfcdf3faf2a1ac108a605a2a0508015a8d422c",
+      "month": "2024-11",
+      "replay_id": "0015c5c363d225c00ada018f",
+      "service_date": "2024-11-13",
+      "source_example_sha256": "987ea505b73028ce428aa16ea02799edefb2889692dead8826664cb9f0736e32",
+      "station_coordinate_key": "70040|2024-11-13"
+    },
+    {
+      "hmac_sha256": "0016bdc394034cc5f4e3a68c6da53b93942911e2e48f52536be8ff67281a5e83",
+      "month": "2024-12",
+      "replay_id": "0016bdc394034cc5f4e3a68c",
+      "service_date": "2024-12-27",
+      "source_example_sha256": "99e5ca8a731c846ce793053358a30b904c0386adbe5f35838b65d8f559a43db4",
+      "station_coordinate_key": "70043|2024-12-27"
+    },
+    {
+      "hmac_sha256": "0017276466473da13414269ebb0ae9c4475ccc81a36a185e4206657ad6c22493",
+      "month": "2024-12",
+      "replay_id": "0017276466473da13414269e",
+      "service_date": "2024-12-23",
+      "source_example_sha256": "17abe448a92563cd4c6c01d7d06d8b98933403e59388e5904eeefabcb7514805",
+      "station_coordinate_key": "70049|2024-12-23"
+    },
+    {
+      "hmac_sha256": "00175c30a00897601fedc4446ba0fb74343d345c68e041a9edfde513b817a0ed",
+      "month": "2024-11",
+      "replay_id": "00175c30a00897601fedc444",
+      "service_date": "2024-11-06",
+      "source_example_sha256": "70c7d9541f9734be1d9a3aa6dfb402c97694f58659b0ce408743b539a4598fa0",
+      "station_coordinate_key": "70038|2024-11-06"
+    },
+    {
+      "hmac_sha256": "00177c221f01f304c803dd01b5ad744bc82651ac5e84525618983d8320797ca1",
+      "month": "2024-11",
+      "replay_id": "00177c221f01f304c803dd01",
+      "service_date": "2024-11-07",
+      "source_example_sha256": "158f57f56e432d9530e17dae70092a91193e47b77e329fc4fa067ed6a1fcbff4",
+      "station_coordinate_key": "70050|2024-11-07"
+    },
+    {
+      "hmac_sha256": "0018e06d0e5a52e21ec270e2e851ba4bf8260cf6c24edb9393c11eaa0be126cf",
+      "month": "2024-12",
+      "replay_id": "0018e06d0e5a52e21ec270e2",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "1e70ecd7e181d6290ae89332b57dfca0b351088e2bba75ddc34def4c46dd1546",
+      "station_coordinate_key": "70050|2024-12-06"
+    },
+    {
+      "hmac_sha256": "0018ed2bd380e50a390e478970e01b05f0c8275169bcf8e5195f4b80cd68613b",
+      "month": "2024-12",
+      "replay_id": "0018ed2bd380e50a390e4789",
+      "service_date": "2024-12-28",
+      "source_example_sha256": "4e34a541b98f483e7ce8c2c53874aa8872a7ac7b3ce8becdcc5204a86edb1143",
+      "station_coordinate_key": "70040|2024-12-28"
+    },
+    {
+      "hmac_sha256": "0019bf0c015414eea648c1b0b3303bbe7051780a5ef6bc86b56dc3958918a027",
+      "month": "2024-11",
+      "replay_id": "0019bf0c015414eea648c1b0",
+      "service_date": "2024-11-11",
+      "source_example_sha256": "c81a0f7916a0ce6720a9329e9992457f795a077e55838989229a25e81ebc31cc",
+      "station_coordinate_key": "70053|2024-11-11"
+    },
+    {
+      "hmac_sha256": "0019e12fc4bbd6cb2f66638e79a14bb263fedb8c1b7b81f0b9bae19a0359759f",
+      "month": "2024-12",
+      "replay_id": "0019e12fc4bbd6cb2f66638e",
+      "service_date": "2024-12-08",
+      "source_example_sha256": "a98be1804a5a927b2c7e715cd0420eb60a553fe9872aea13dc01d1c8b7920143",
+      "station_coordinate_key": "70044|2024-12-08"
+    },
+    {
+      "hmac_sha256": "001a59327f0ec2904dc7afeae87c3e3c264ba4b0db49d1c582ecd1fee5c74a67",
+      "month": "2024-11",
+      "replay_id": "001a59327f0ec2904dc7afea",
+      "service_date": "2024-11-01",
+      "source_example_sha256": "578fe1c051ff757d359db42bff3f61c690678b874816dcc3497851012d85df59",
+      "station_coordinate_key": "70046|2024-11-01"
+    },
+    {
+      "hmac_sha256": "001abc73c46dea36c6ad95a1128d5c1aec85bb30e1bdc67c34ede83fa61ac932",
+      "month": "2024-11",
+      "replay_id": "001abc73c46dea36c6ad95a1",
+      "service_date": "2024-11-02",
+      "source_example_sha256": "d7271f0c73119679a57a68ef5eccba2e9897d94802e71057c890331f9df6de64",
+      "station_coordinate_key": "70053|2024-11-02"
+    },
+    {
+      "hmac_sha256": "001ac512b52091cd7ec8c9c4bc80e0b698e2a903b3ebc20889dcb02071289009",
+      "month": "2024-11",
+      "replay_id": "001ac512b52091cd7ec8c9c4",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "29a0fc8c4d71ad33b4f30d3177a5fb152f43566dbe0d082784085b486c911f7d",
+      "station_coordinate_key": "70038|2024-11-17"
+    },
+    {
+      "hmac_sha256": "001c914ed58bfb4718c2d4747e1d5bd214e878492a77973e2b247a8fb1e455d0",
+      "month": "2024-11",
+      "replay_id": "001c914ed58bfb4718c2d474",
+      "service_date": "2024-11-04",
+      "source_example_sha256": "224abd949e1f1f8725f184fe11e355d628abea5de12c23e0c3fdbe9cda6564da",
+      "station_coordinate_key": "70059|2024-11-04"
+    },
+    {
+      "hmac_sha256": "001cf207c0a74b25b8199a6184cc0df5b76b040f27996934d4728bb4536061ef",
+      "month": "2024-11",
+      "replay_id": "001cf207c0a74b25b8199a61",
+      "service_date": "2024-11-25",
+      "source_example_sha256": "ad3c595fb99db90545465b326a251878ad768f6ec3bd78a9e0d0a9d66ea66998",
+      "station_coordinate_key": "70040|2024-11-25"
+    },
+    {
+      "hmac_sha256": "001d579e14191edcccc96bad26056c0731045f5cf315e73c1fb09dc44aa2f1e2",
+      "month": "2024-12",
+      "replay_id": "001d579e14191edcccc96bad",
+      "service_date": "2024-12-28",
+      "source_example_sha256": "a3f90b0a5f7bb86ba33a9ef5642d9ee7270ff52a3707cb688d58163527552d90",
+      "station_coordinate_key": "70054|2024-12-28"
+    },
+    {
+      "hmac_sha256": "001d679f6e085e5eb8f991877bec4c210abea6d54b8e22e383cfdaccac10834d",
+      "month": "2024-12",
+      "replay_id": "001d679f6e085e5eb8f99187",
+      "service_date": "2024-12-04",
+      "source_example_sha256": "a4d2045328d9af28e834e211af1a946ac266c06990ed2c7610884b7f2d10abbd",
+      "station_coordinate_key": "70052|2024-12-04"
+    },
+    {
+      "hmac_sha256": "001d6fdd425b4b5c16963afaeca6df3484620456b80d0cb976032ef590158b08",
+      "month": "2024-12",
+      "replay_id": "001d6fdd425b4b5c16963afa",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "96941abdffc300f0aed8ff52221c1ccf0a162e02215254dd7f357799204f7528",
+      "station_coordinate_key": "70046|2024-12-16"
+    },
+    {
+      "hmac_sha256": "001d84ff03f1a284aa17d4f0cb665bd838717902fe529057059881a185d02846",
+      "month": "2024-11",
+      "replay_id": "001d84ff03f1a284aa17d4f0",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "0f73013e0c1632049cd2f2c3c603158472b683155ded2e05cc1ed6fa162fddf9",
+      "station_coordinate_key": "70059|2024-11-23"
+    },
+    {
+      "hmac_sha256": "001d9caa2d64d66ebf32783f98bf9dc10d5256d59aeac55c803172601afcc852",
+      "month": "2024-11",
+      "replay_id": "001d9caa2d64d66ebf32783f",
+      "service_date": "2024-11-11",
+      "source_example_sha256": "21099cbaf28383de6a6603eea26f4ba12676afe13a480c152a48e205a5599a26",
+      "station_coordinate_key": "70057|2024-11-11"
+    },
+    {
+      "hmac_sha256": "001e0de7a9734377ce5894e0646a034a0527b82b59d3a94d9c4c8c4138a8d143",
+      "month": "2024-12",
+      "replay_id": "001e0de7a9734377ce5894e0",
+      "service_date": "2024-12-30",
+      "source_example_sha256": "c785943cce85655ee6dc1daa7f50f1b13426320b2f2509fe573779035706d667",
+      "station_coordinate_key": "70038|2024-12-30"
+    },
+    {
+      "hmac_sha256": "001ea972bf4880df353a1cad24c078c3bae9b1832db78775d91e0c410759d859",
+      "month": "2024-12",
+      "replay_id": "001ea972bf4880df353a1cad",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "fbf91d4a8334a8bb6520e5ee534afb98acf07040eb3ef876b3df66d936929486",
+      "station_coordinate_key": "70040|2024-12-06"
+    },
+    {
+      "hmac_sha256": "001eb1332d947703b26a90b00b342be032738192f2502f6ab80d1c32c05b5009",
+      "month": "2024-11",
+      "replay_id": "001eb1332d947703b26a90b0",
+      "service_date": "2024-11-19",
+      "source_example_sha256": "560f922173d64bd06c0cf1b05e48178c4c422b3e93bc818b92dac43f3b893da4",
+      "station_coordinate_key": "70038|2024-11-19"
+    },
+    {
+      "hmac_sha256": "001ed1a1a366ecbdcc8e61b61ac7c584f02f666b002040fc36d996e1b8828e30",
+      "month": "2024-12",
+      "replay_id": "001ed1a1a366ecbdcc8e61b6",
+      "service_date": "2024-12-19",
+      "source_example_sha256": "c166b1057693b5e90e8e41dab3080adad736765f8673113e1cfe258e8f0322cf",
+      "station_coordinate_key": "70048|2024-12-19"
+    },
+    {
+      "hmac_sha256": "001f851b51b1fdc73f140c6f2c7ee1c23681bf8fd23edac9377168d23468358c",
+      "month": "2024-11",
+      "replay_id": "001f851b51b1fdc73f140c6f",
+      "service_date": "2024-11-24",
+      "source_example_sha256": "c2b9e95d493493347f7b9af191b95c888aea956b58cdb52d3bb15b1bf187068b",
+      "station_coordinate_key": "70046|2024-11-24"
+    },
+    {
+      "hmac_sha256": "001f86ab9df04732fc05c18c3a92bc41123246a5fc56a39f21dce2e42c7299bc",
+      "month": "2024-12",
+      "replay_id": "001f86ab9df04732fc05c18c",
+      "service_date": "2024-12-24",
+      "source_example_sha256": "d8f7898f18f2a6858653b7d5036fc923b9018d5980df742c5a85c5d00070611f",
+      "station_coordinate_key": "70046|2024-12-24"
+    },
+    {
+      "hmac_sha256": "001fa287b23a50fd12ed3682fd586b039baf7fba349c8bbaa85b49e10f83d486",
+      "month": "2024-12",
+      "replay_id": "001fa287b23a50fd12ed3682",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "176471461b01e06a9b296d39d574b3efd9d75b4745b6d2eebcbfca4d1f470bcc",
+      "station_coordinate_key": "70040|2024-12-31"
+    },
+    {
+      "hmac_sha256": "001fbb156b941390a6dc0a280b8632d0b316f01ed550fb3d7ea20bfda7cb6c4e",
+      "month": "2024-11",
+      "replay_id": "001fbb156b941390a6dc0a28",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "f362f255d57b8352499deea6ef284a3dd0dc7f8af08b4816a8ca4e839b3c8fe5",
+      "station_coordinate_key": "70055|2024-11-30"
+    },
+    {
+      "hmac_sha256": "001fc35c68278b2bcd12cd90ca63965b96b07a3b22adb9788a12ca6e02298822",
+      "month": "2024-11",
+      "replay_id": "001fc35c68278b2bcd12cd90",
+      "service_date": "2024-11-26",
+      "source_example_sha256": "b4875b0d630a5f1b439cad85d57ba0c44dc56ae305db24260dee0b8df4a55a12",
+      "station_coordinate_key": "70047|2024-11-26"
+    },
+    {
+      "hmac_sha256": "001fd5b0a8c47a47c0510aab7353ec9de2341dc00eb0afd6da7c4396540d5986",
+      "month": "2024-11",
+      "replay_id": "001fd5b0a8c47a47c0510aab",
+      "service_date": "2024-11-06",
+      "source_example_sha256": "4bbc62a8b253391188cbf0eb7c05d75503843f19e14ae20ca099cdbb65ea8c1f",
+      "station_coordinate_key": "70045|2024-11-06"
+    },
+    {
+      "hmac_sha256": "001fe9fce37ea562d7228ef3883c76dceabb1a10b18107bc1e18c3195ac67900",
+      "month": "2024-12",
+      "replay_id": "001fe9fce37ea562d7228ef3",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "44707ba6f101174664017d7d1c5dd48cdc2a6e9f80bfb6b5b71a977e807c2e70",
+      "station_coordinate_key": "70046|2024-12-14"
+    },
+    {
+      "hmac_sha256": "002011669cb9edc638d764755c47e6344ede8e942c90c1cba371fcb23f7759cd",
+      "month": "2024-12",
+      "replay_id": "002011669cb9edc638d76475",
+      "service_date": "2024-12-10",
+      "source_example_sha256": "7f6863e8216139c934ff1bf56cc48f2aa6b19f06296afdbb3780a648ebc3718d",
+      "station_coordinate_key": "70051|2024-12-10"
+    },
+    {
+      "hmac_sha256": "0020c80e0f7652e50e1fb9ee5b80375216e4dd66afeffea5bc825f9ef4c96707",
+      "month": "2024-11",
+      "replay_id": "0020c80e0f7652e50e1fb9ee",
+      "service_date": "2024-11-20",
+      "source_example_sha256": "9281c82641bb2188ae832cfbddb7e3985e713c47bd543709331e948dbed12097",
+      "station_coordinate_key": "70038|2024-11-20"
+    },
+    {
+      "hmac_sha256": "00212e5e1a316ec5854706d59c26aa815b344163656e7df46b7fab1256c63380",
+      "month": "2024-12",
+      "replay_id": "00212e5e1a316ec5854706d5",
+      "service_date": "2024-12-15",
+      "source_example_sha256": "18a0afe472741635631f72670884c1ed4b5b104029deeeb7d3f66ec6b8cad058",
+      "station_coordinate_key": "70053|2024-12-15"
+    },
+    {
+      "hmac_sha256": "00228f1cace69ed6f02197370565f831cb434d618497142ba15e2ba2f85363e9",
+      "month": "2024-12",
+      "replay_id": "00228f1cace69ed6f0219737",
+      "service_date": "2024-12-10",
+      "source_example_sha256": "8a799206eb2690ce4819e5dc2629015a54ce4d4b56d161f00b22cebd385cdf15",
+      "station_coordinate_key": "70041|2024-12-10"
+    },
+    {
+      "hmac_sha256": "00234f36573fcd20af73b0f121cd2b6e40a48b4b10062a27bf7ba6c19c25f474",
+      "month": "2024-11",
+      "replay_id": "00234f36573fcd20af73b0f1",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "ac9f61427a1c80900e1061eec6e3e4ffed89187283b09b2debb2b9d33a8df4a0",
+      "station_coordinate_key": "70051|2024-11-23"
+    },
+    {
+      "hmac_sha256": "0023b1b219549b97529b15652c9c2656c5891a49053cb7a3bb64b8d1fc549a66",
+      "month": "2024-11",
+      "replay_id": "0023b1b219549b97529b1565",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "0f5660e93e784095b31d1392ab484506e324a58e0c0566183d8ccd14d74be99f",
+      "station_coordinate_key": "70038|2024-11-30"
+    },
+    {
+      "hmac_sha256": "0023b28b29b9154f0adc4fbe750417f8f49367ec0d09df44b4a192d34ad46657",
+      "month": "2024-11",
+      "replay_id": "0023b28b29b9154f0adc4fbe",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "445d7880821adf4777d1fb5f2b6539c784d7dea1c053150739390373c8d28322",
+      "station_coordinate_key": "70040|2024-11-23"
+    },
+    {
+      "hmac_sha256": "002434076baf75eadb84db0256235b5d131b9c55236f4517e8b8016cbd22f4a1",
+      "month": "2024-11",
+      "replay_id": "002434076baf75eadb84db02",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "accbe1be277d468841f3ff4f4a51965225c3dc575f268e6ac739d8a135b798e2",
+      "station_coordinate_key": "70053|2024-11-18"
+    },
+    {
+      "hmac_sha256": "002453fe95638469b08e9bf7b919c6822820f3c65dd3a2180a7ed4af87121cbc",
+      "month": "2024-11",
+      "replay_id": "002453fe95638469b08e9bf7",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "17c083c197b6cc1d3fddf15dba85509fb0f23c05e056575b7eae7796fe41e769",
+      "station_coordinate_key": "70059|2024-11-17"
+    },
+    {
+      "hmac_sha256": "0024ab383364d277dae57214718f56db0e9ff6d852db1029e09819483e76ef24",
+      "month": "2024-11",
+      "replay_id": "0024ab383364d277dae57214",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "a32c2db1de54807dabb0ceb238f4f070358931c2d9fad7f5a3b90cc3b9f762a8",
+      "station_coordinate_key": "70059|2024-11-17"
+    },
+    {
+      "hmac_sha256": "0025881ed780fc6fee1b1fc7fb809ece340073bb060d63cbc7087d4d597d507e",
+      "month": "2024-11",
+      "replay_id": "0025881ed780fc6fee1b1fc7",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "4dc4c324728f205a7dd1c8612b4ee2aa28340dfdd245b0d743cb55ea682ab3ad",
+      "station_coordinate_key": "70043|2024-11-30"
+    },
+    {
+      "hmac_sha256": "0026c360443ce34c9991401800e8a73c97e1c19706ff4e506ba07fb9504abc12",
+      "month": "2024-12",
+      "replay_id": "0026c360443ce34c99914018",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "89494c5d6fc898598a665624460b9b456f3d5abb29d2d7ab8763475b06a003de",
+      "station_coordinate_key": "70059|2024-12-06"
+    },
+    {
+      "hmac_sha256": "002730b432b3d2243d2965b3b7dbf07c6691b2415c4d67881b273e263aa589ed",
+      "month": "2024-12",
+      "replay_id": "002730b432b3d2243d2965b3",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "b5eddd00badf9067b63618c35590696e6cc384cdccb0ae71d6e3509843049c61",
+      "station_coordinate_key": "70048|2024-12-16"
+    },
+    {
+      "hmac_sha256": "0027a309b5b09bc7aa38eb1fe55776352b52ffb13bc9c9558658e057cbfdc104",
+      "month": "2024-11",
+      "replay_id": "0027a309b5b09bc7aa38eb1f",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "b2e412572a817df59dbf655cbaa5a180ffac924a779669533d94a21468084286",
+      "station_coordinate_key": "70055|2024-11-17"
+    },
+    {
+      "hmac_sha256": "0027dc44482a2cb08b3492ac141cdcf5252c9a86dbff680df34b5395707d3c5a",
+      "month": "2024-12",
+      "replay_id": "0027dc44482a2cb08b3492ac",
+      "service_date": "2024-12-25",
+      "source_example_sha256": "a787d6677a37e4f17c8cb114fec65a3376a778660f2153a17360984d3bcac181",
+      "station_coordinate_key": "70053|2024-12-25"
+    },
+    {
+      "hmac_sha256": "002810dbe36dee1787b68dec629788c6d9c1ff0c573a58755b498da26d013dee",
+      "month": "2024-11",
+      "replay_id": "002810dbe36dee1787b68dec",
+      "service_date": "2024-11-05",
+      "source_example_sha256": "7ec0be032b0e62dd023c7c5e9b43b115fbe27224dfc8d5b2ca68ef304ce4b905",
+      "station_coordinate_key": "70055|2024-11-05"
+    },
+    {
+      "hmac_sha256": "00281f13e45c96b2399f3f60b60a77296bcb59d5c7e9d0fe2815bcafd41a71e8",
+      "month": "2024-12",
+      "replay_id": "00281f13e45c96b2399f3f60",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "5a9d30ba57b306e8e1eacd761970b38d07536a26c4c882c7aa4db0c46c159e27",
+      "station_coordinate_key": "70047|2024-12-06"
+    },
+    {
+      "hmac_sha256": "00287c8169572e136fe8ca3ecb5f168c05ce9b0aefa2de899d9cb4d572b0d322",
+      "month": "2024-11",
+      "replay_id": "00287c8169572e136fe8ca3e",
+      "service_date": "2024-11-25",
+      "source_example_sha256": "700bef1a61e29d4262457cbcd5831cb45a214af65889640f77949193f003c076",
+      "station_coordinate_key": "70057|2024-11-25"
+    },
+    {
+      "hmac_sha256": "0028daab2c1016cb54b137461f6b271dd2bb8c7a0fca7619b187c0d0178ebf55",
+      "month": "2024-11",
+      "replay_id": "0028daab2c1016cb54b13746",
+      "service_date": "2024-11-24",
+      "source_example_sha256": "1d10c2ab9d9c4a3c9c5ce5aa672178628033843f9dbb5d867258ed6f1a49ed56",
+      "station_coordinate_key": "70043|2024-11-24"
+    },
+    {
+      "hmac_sha256": "0029267ccff63f8b7fc68fcb09d71b19535dc81bd34b0650bd52c7f72bd24751",
+      "month": "2024-12",
+      "replay_id": "0029267ccff63f8b7fc68fcb",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "8c78bd6fa3928ef359fe757724e7bf544100ccfc585b3102bed132cbd1b0b2a7",
+      "station_coordinate_key": "70040|2024-12-14"
+    },
+    {
+      "hmac_sha256": "00296e7027d66c6e9ccf4045e2881d2d917573248454a3aa1e61f31305dde208",
+      "month": "2024-11",
+      "replay_id": "00296e7027d66c6e9ccf4045",
+      "service_date": "2024-11-27",
+      "source_example_sha256": "292e3041cd7cab3d73acde860a1692c258119cd562d9497eb73c76fa4bdb7ea9",
+      "station_coordinate_key": "70052|2024-11-27"
+    },
+    {
+      "hmac_sha256": "0029968ef9001f1f8a941ded98bb8fe44c4d49091295be2bfb9b7dabd1864e55",
+      "month": "2024-12",
+      "replay_id": "0029968ef9001f1f8a941ded",
+      "service_date": "2024-12-30",
+      "source_example_sha256": "8e89bb5cabb1cc67b791e19008d8c6d81d7357fb2eafe2ec900ef6b783b60fd0",
+      "station_coordinate_key": "70053|2024-12-30"
+    },
+    {
+      "hmac_sha256": "0029ed3daa9283a5284833c32c26ea0d802df951463f1390a3fd367b65d5a5aa",
+      "month": "2024-12",
+      "replay_id": "0029ed3daa9283a5284833c3",
+      "service_date": "2024-12-09",
+      "source_example_sha256": "e31fc63e3e2d6ab246e2f48b5d9325580f98562339b93cc68f5908c9bc0c8549",
+      "station_coordinate_key": "70059|2024-12-09"
+    },
+    {
+      "hmac_sha256": "0029f0a995c1d9c08a39ecd8f80ea257a26ffff63bda36cbefc2c97e8a0d1add",
+      "month": "2024-12",
+      "replay_id": "0029f0a995c1d9c08a39ecd8",
+      "service_date": "2024-12-12",
+      "source_example_sha256": "586b5e61b892a3a7ab771e539df0f2cd40b9bcf20cc0f474a89ec1b0415160e3",
+      "station_coordinate_key": "70045|2024-12-12"
+    },
+    {
+      "hmac_sha256": "002a9538d747ef304d3d484787e22a917648c4b5c280c21aff7faf559ab0aafa",
+      "month": "2024-11",
+      "replay_id": "002a9538d747ef304d3d4847",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "c3e422058d62be1ff700b2867ee20ed2d71efed7cd731a68b8c87080c24e56f1",
+      "station_coordinate_key": "70055|2024-11-23"
+    },
+    {
+      "hmac_sha256": "002abf16aacb640d1269fa5acaa1f182cde3a4f7dc4ebef9d80d24711aac9975",
+      "month": "2024-12",
+      "replay_id": "002abf16aacb640d1269fa5a",
+      "service_date": "2024-12-12",
+      "source_example_sha256": "bfc0616ca9c562a2ee87bfa6467ec8f753934b12c1ea6b21035a3cf4b18f2f41",
+      "station_coordinate_key": "70055|2024-12-12"
+    },
+    {
+      "hmac_sha256": "002ad0f34c7b9c511b8e666a619b9432778fd7c6e784cb6ef27d6ec50f590f4c",
+      "month": "2024-11",
+      "replay_id": "002ad0f34c7b9c511b8e666a",
+      "service_date": "2024-11-01",
+      "source_example_sha256": "7341ae6b2c1a5c61b0d201af9d2e358d2d6f6046aa443e09bcda78d21c61037b",
+      "station_coordinate_key": "70050|2024-11-01"
+    },
+    {
+      "hmac_sha256": "002b1534031798a0be48144e3375fa2676c110d04061bc295bc69c53c3c66cce",
+      "month": "2024-12",
+      "replay_id": "002b1534031798a0be48144e",
+      "service_date": "2024-12-27",
+      "source_example_sha256": "64131c6ae8cca7982b3796d2f68e0404751708130bdd22fb7c7eaee6870a708d",
+      "station_coordinate_key": "70049|2024-12-27"
+    },
+    {
+      "hmac_sha256": "002b2be3de02ef58f37484af4378149f169e7d276734551bb5310ba969679883",
+      "month": "2024-11",
+      "replay_id": "002b2be3de02ef58f37484af",
+      "service_date": "2024-11-01",
+      "source_example_sha256": "e3545bd845a879560b09a55daba55b4b7f9b71131e91f31715450d654dee8f0d",
+      "station_coordinate_key": "70038|2024-11-01"
+    },
+    {
+      "hmac_sha256": "002b8ac7b54a982e8914677b86d56b6d30e64bac4c3b768ce34b7f50e1f42ce1",
+      "month": "2024-12",
+      "replay_id": "002b8ac7b54a982e8914677b",
+      "service_date": "2024-12-28",
+      "source_example_sha256": "72fe6545d4509586f99cc1dd83dbb3216e52d2ea013a75f6c84a2021a2595a9b",
+      "station_coordinate_key": "70053|2024-12-28"
+    },
+    {
+      "hmac_sha256": "002cbedf3d145fb769423604fdc43b8363706b860ee92d3fac74afb1d8ba72ce",
+      "month": "2024-11",
+      "replay_id": "002cbedf3d145fb769423604",
+      "service_date": "2024-11-16",
+      "source_example_sha256": "206dcf40b553849d9252f6b7bd1d5608faeccb2e6e63e8e87dd4d8eed31dd2c8",
+      "station_coordinate_key": "70052|2024-11-16"
+    },
+    {
+      "hmac_sha256": "002cf06bffc2ddbd1f268a8a8a9881fedc0588e8477d18adaa0d332c797a2d27",
+      "month": "2024-11",
+      "replay_id": "002cf06bffc2ddbd1f268a8a",
+      "service_date": "2024-11-20",
+      "source_example_sha256": "f7e1d55cfa5ca3596bc2c78b1f0b1374f00481c57cfc29d44c95800aa30fa05f",
+      "station_coordinate_key": "70053|2024-11-20"
+    },
+    {
+      "hmac_sha256": "002e0fd00f823e3b700b1385bd39b122982e91c1681b52126fa800557642a459",
+      "month": "2024-12",
+      "replay_id": "002e0fd00f823e3b700b1385",
+      "service_date": "2024-12-08",
+      "source_example_sha256": "a26c5de5aa0e73df261990cd864024a5169b61f731b4e7cd00708edeefed11eb",
+      "station_coordinate_key": "70040|2024-12-08"
+    },
+    {
+      "hmac_sha256": "002e1442bbec7fa11aa59d53ca6c7a2727cc09ac1250a752fa57b0846b1fc1b9",
+      "month": "2024-12",
+      "replay_id": "002e1442bbec7fa11aa59d53",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "8e60b5b818dc52dc64e9ddb6eeb28da06061bddbefc546a6d89b50a8e6297cd0",
+      "station_coordinate_key": "70052|2024-12-16"
+    },
+    {
+      "hmac_sha256": "002e1e94ea5971e574d514f4ab6c8ad18a3b3a00f652dd3141c96f5063b1484b",
+      "month": "2024-12",
+      "replay_id": "002e1e94ea5971e574d514f4",
+      "service_date": "2024-12-02",
+      "source_example_sha256": "655d56ccc70f537f75f7e5755fa8389d9c8c6079259a98ed516001de6a16662a",
+      "station_coordinate_key": "70059|2024-12-02"
+    },
+    {
+      "hmac_sha256": "002e34250b7fbab601297700df3c041d1eb4cae7251ef63fe5b7af0ca255f03f",
+      "month": "2024-11",
+      "replay_id": "002e34250b7fbab601297700",
+      "service_date": "2024-11-25",
+      "source_example_sha256": "81f7aeaac48e067ce206ee9e39aca59ae7eddb275f1ae964e8fc5c054bc0e46c",
+      "station_coordinate_key": "70043|2024-11-25"
+    },
+    {
+      "hmac_sha256": "002ef279b27038e61c519626eec64cffb0d14a882926ad1d46a12fbe057ae1c8",
+      "month": "2024-11",
+      "replay_id": "002ef279b27038e61c519626",
+      "service_date": "2024-11-16",
+      "source_example_sha256": "6fb27ec8729b5859549965dd341245c6cf03073e5857f186d439a753674c71de",
+      "station_coordinate_key": "70048|2024-11-16"
+    },
+    {
+      "hmac_sha256": "002f03f6ddfbd52306ecaace02b0eb55a6b5e1fa57447bfd25be3de9d5ed0fc7",
+      "month": "2024-11",
+      "replay_id": "002f03f6ddfbd52306ecaace",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "bf6a2af0fbb8dcc1dfa5344da32dbaaa19df319398663be3e7283111c8bc78f6",
+      "station_coordinate_key": "70044|2024-11-17"
+    },
+    {
+      "hmac_sha256": "002f1f7ae4fcb5fe736586c96e78876a61056abbc6990dfb6b4a0a20a2da9691",
+      "month": "2024-11",
+      "replay_id": "002f1f7ae4fcb5fe736586c9",
+      "service_date": "2024-11-29",
+      "source_example_sha256": "d6e800199dfdd40c6e4c661156fbf0a19d163b7eb9e35b2cbb75891acc43ead2",
+      "station_coordinate_key": "70059|2024-11-29"
+    },
+    {
+      "hmac_sha256": "002f21dc83202b128541e4efb622674c72872cdeaf50f08340658d8d682cd892",
+      "month": "2024-11",
+      "replay_id": "002f21dc83202b128541e4ef",
+      "service_date": "2024-11-11",
+      "source_example_sha256": "f383992e4be71c6e747dee743a29598b396e34e83aef8a3ad402d2df95dc61a6",
+      "station_coordinate_key": "70047|2024-11-11"
+    },
+    {
+      "hmac_sha256": "002fc2a7b5a46a14e7b26b009a92e983adcc533027874a75e5080723da144507",
+      "month": "2024-12",
+      "replay_id": "002fc2a7b5a46a14e7b26b00",
+      "service_date": "2024-12-02",
+      "source_example_sha256": "87c01649bb9b9812eca9501d8209a395cb0d8de36b9e4daec8c673cdfe61ee30",
+      "station_coordinate_key": "70048|2024-12-02"
+    },
+    {
+      "hmac_sha256": "002fcdd47d320a79072715a13d3615d7a49127a1663bdb597a5d88eb46c14675",
+      "month": "2024-11",
+      "replay_id": "002fcdd47d320a79072715a1",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "4d14fd44992401886009ae0deb74c39e06d893549434ab08c8ee257479a8f6f2",
+      "station_coordinate_key": "70059|2024-11-23"
+    },
+    {
+      "hmac_sha256": "003028009ee96c6cb2469f72a278a2c95d4661949f3c373138d9c9ede6938715",
+      "month": "2024-11",
+      "replay_id": "003028009ee96c6cb2469f72",
+      "service_date": "2024-11-09",
+      "source_example_sha256": "cedefc43613b650175764be0a9300b11264979aeccc18d43a7897e5d0928d99e",
+      "station_coordinate_key": "70038|2024-11-09"
+    },
+    {
+      "hmac_sha256": "003036269eb4bc960e88fdad6efb9463d952078621f34e79d5cf6a1b5313a757",
+      "month": "2024-12",
+      "replay_id": "003036269eb4bc960e88fdad",
+      "service_date": "2024-12-12",
+      "source_example_sha256": "c68cbbeb4eccfee78dafc7e3eed34df4cf88c2dc1fbf34ff34987a95df5d8688",
+      "station_coordinate_key": "70047|2024-12-12"
+    },
+    {
+      "hmac_sha256": "00303eba5b0a214aedd2f52ad3ff1e98269443aafd3630d2c462de9b97308596",
+      "month": "2024-12",
+      "replay_id": "00303eba5b0a214aedd2f52a",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "c4d0bb79c720eca73a2690691f0551ccffad556349d299641bd6d447ae3cc054",
+      "station_coordinate_key": "70055|2024-12-16"
+    },
+    {
+      "hmac_sha256": "0030497ccdb85768f70404aef50cc13b6a03673f8f307ae8324765e8bc2dc79f",
+      "month": "2024-12",
+      "replay_id": "0030497ccdb85768f70404ae",
+      "service_date": "2024-12-17",
+      "source_example_sha256": "0c5d9789bbc60ebee1229131dc7b888c13268bfb4af221796507275347b07fbc",
+      "station_coordinate_key": "70054|2024-12-17"
+    },
+    {
+      "hmac_sha256": "0030827a7891f98822cb30170752e53ad98272a7aa454cad577eaf66514ff4ed",
+      "month": "2024-11",
+      "replay_id": "0030827a7891f98822cb3017",
+      "service_date": "2024-11-18",
+      "source_example_sha256": "9bfb96ba7735f9c679aa7d0d33bd64fc55cfe5cf8d43963580833afef2a63505",
+      "station_coordinate_key": "70040|2024-11-18"
+    },
+    {
+      "hmac_sha256": "0030c4c46dd0f6c3daeb45ed673e291fcfd0d43982151eb5b8a88c2a44902c11",
+      "month": "2024-11",
+      "replay_id": "0030c4c46dd0f6c3daeb45ed",
+      "service_date": "2024-11-17",
+      "source_example_sha256": "ada5f5e95f244b5b8f7cc572cfb913cd3c14ad11efe3ab8d8f5c45efd42acd93",
+      "station_coordinate_key": "70042|2024-11-17"
+    },
+    {
+      "hmac_sha256": "00314425d61da7bd538b79f36f60fbafc8a34d0fd67096bb4425c75422fd72be",
+      "month": "2024-11",
+      "replay_id": "00314425d61da7bd538b79f3",
+      "service_date": "2024-11-13",
+      "source_example_sha256": "74d2bc7e38bcd2d20c1506157baa51828f268619b75cc75af360c38bf8113fed",
+      "station_coordinate_key": "70040|2024-11-13"
+    },
+    {
+      "hmac_sha256": "0031eb9284710744461fdea4a3b54528e983814ab4c1bc66a1d9f06756fa6e94",
+      "month": "2024-11",
+      "replay_id": "0031eb9284710744461fdea4",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "f99ee89057ee9a44e346cc403bf3aef42d311fbb7e7e315c136a8dba407bce89",
+      "station_coordinate_key": "70051|2024-11-23"
+    },
+    {
+      "hmac_sha256": "0031f99a1ffc2a1ed25e3549b579e008bd3dcd27d30743d610f3f617451ad600",
+      "month": "2024-12",
+      "replay_id": "0031f99a1ffc2a1ed25e3549",
+      "service_date": "2024-12-02",
+      "source_example_sha256": "93988fa40e7e7fadf14148911e0b657d9f6bb90637eac625189b1ff41691ff6b",
+      "station_coordinate_key": "70053|2024-12-02"
+    },
+    {
+      "hmac_sha256": "00320bb843e3ac488a7a2c5dd5568f1270c3a3021f743f097a708458ab9c81c6",
+      "month": "2024-11",
+      "replay_id": "00320bb843e3ac488a7a2c5d",
+      "service_date": "2024-11-15",
+      "source_example_sha256": "5c16a6268b51c75c9e7050e84a90ddfbdf1d6fc6cca8dd89ad889f02bc2363ed",
+      "station_coordinate_key": "70053|2024-11-15"
+    },
+    {
+      "hmac_sha256": "003214907566acd1a88895f9cf260fb8a83c6baf61e8a02f044b5c4a82456ea5",
+      "month": "2024-12",
+      "replay_id": "003214907566acd1a88895f9",
+      "service_date": "2024-12-25",
+      "source_example_sha256": "b659dfa624f9a899b3174318440fdf161552c6c695a4488a7e38fa3e08f89f6e",
+      "station_coordinate_key": "70051|2024-12-25"
+    },
+    {
+      "hmac_sha256": "00321c472e5a9e69eb257912802cb788b49ea43839edec2a3018243f9be924a3",
+      "month": "2024-11",
+      "replay_id": "00321c472e5a9e69eb257912",
+      "service_date": "2024-11-03",
+      "source_example_sha256": "fdad164928fccdfa0000e55cd285296214448ec136a46000d10d18a95e66559b",
+      "station_coordinate_key": "70040|2024-11-03"
+    },
+    {
+      "hmac_sha256": "0032616e8c9f1a223ee7e03d010f3f8c5a25bced466d08f500742ae786fc2170",
+      "month": "2024-11",
+      "replay_id": "0032616e8c9f1a223ee7e03d",
+      "service_date": "2024-11-24",
+      "source_example_sha256": "8f294d427a874b9f900381783a0a129c2e7839c97d89fb6c79f8e5b3dc6964ad",
+      "station_coordinate_key": "70040|2024-11-24"
+    },
+    {
+      "hmac_sha256": "00328902800d9503e439a8dabc7197712958e95b6a3d617c38a59c5b907a33e8",
+      "month": "2024-12",
+      "replay_id": "00328902800d9503e439a8da",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "1da910cc5229e51a9bcee526f6b713cfe509e92ebf3de672b54ba5c036472398",
+      "station_coordinate_key": "70051|2024-12-31"
+    },
+    {
+      "hmac_sha256": "0032bd3119292ce7dce22330e16cec1c6e277612419f671517fd014a9a71af02",
+      "month": "2024-11",
+      "replay_id": "0032bd3119292ce7dce22330",
+      "service_date": "2024-11-21",
+      "source_example_sha256": "9b7952a3230a011efdb594edc637d3c7a2991f9111ac5870581951288b2323d1",
+      "station_coordinate_key": "70047|2024-11-21"
+    },
+    {
+      "hmac_sha256": "0032bd747a696790c8cf6b85cadbefe02690bd82b20c5f5a012e0f07865f65f7",
+      "month": "2024-12",
+      "replay_id": "0032bd747a696790c8cf6b85",
+      "service_date": "2024-12-18",
+      "source_example_sha256": "f49197d329f8dc7c91131f76aead60cae8c3c19a34e004cbf10f1fe0d95c5667",
+      "station_coordinate_key": "70046|2024-12-18"
+    },
+    {
+      "hmac_sha256": "0033356ffa76e46394519c05c74b310186d4800124daa87ee319a2253a132398",
+      "month": "2024-11",
+      "replay_id": "0033356ffa76e46394519c05",
+      "service_date": "2024-11-11",
+      "source_example_sha256": "e99f793592ecee7f206451a5f1271a5a9dc9b12b2ab1e4bfe16603dfd7c4ace9",
+      "station_coordinate_key": "70051|2024-11-11"
+    },
+    {
+      "hmac_sha256": "0033374fef4fbec77df86990067189e73f194b6d7a489036def99630281d3acf",
+      "month": "2024-12",
+      "replay_id": "0033374fef4fbec77df86990",
+      "service_date": "2024-12-24",
+      "source_example_sha256": "1563a9f3c9b65edee3a5bca519c89cf49a8703051c1f1c6f6fd0e37c1ce5915a",
+      "station_coordinate_key": "70053|2024-12-24"
+    },
+    {
+      "hmac_sha256": "00339c05f361b1c5ea0592522b238f80dd50ed6bf578fbb92116395e2d4e96b3",
+      "month": "2024-12",
+      "replay_id": "00339c05f361b1c5ea059252",
+      "service_date": "2024-12-02",
+      "source_example_sha256": "5e295bc7513415e22f9ede891ba3a0149b08c91b7990361de69cdf73a1e97e34",
+      "station_coordinate_key": "70059|2024-12-02"
+    },
+    {
+      "hmac_sha256": "0033de279177212ce009467cb9c01258f958771b18a7bcdaef3fe64563c2598f",
+      "month": "2024-12",
+      "replay_id": "0033de279177212ce009467c",
+      "service_date": "2024-12-23",
+      "source_example_sha256": "e83bb83959302a6e8215f8008b18351303c0d72c84729f262919c4a18e1c19b0",
+      "station_coordinate_key": "70049|2024-12-23"
+    },
+    {
+      "hmac_sha256": "0033e962d05ff8c3bc6feefcebf865d33208870909c4d723c88f14eb3588754f",
+      "month": "2024-11",
+      "replay_id": "0033e962d05ff8c3bc6feefc",
+      "service_date": "2024-11-04",
+      "source_example_sha256": "9da3d153ef3b8bb8ebfa7f151afac3d0ea14356b1b2d4a99e093438413d8636e",
+      "station_coordinate_key": "70057|2024-11-04"
+    },
+    {
+      "hmac_sha256": "00340d69a8ff21e6159a12e96c9cbaaf6d6632ad5c00362885206814f74dfee6",
+      "month": "2024-12",
+      "replay_id": "00340d69a8ff21e6159a12e9",
+      "service_date": "2024-12-04",
+      "source_example_sha256": "6868ba3cec3fe6d73d278fdd14de44d90a6dc2e58fe095b74c7e3e0b5a793703",
+      "station_coordinate_key": "70041|2024-12-04"
+    },
+    {
+      "hmac_sha256": "003413abe92b2ea5b1bc8b65fd99853c4785765065d83f12771c9f2c60787590",
+      "month": "2024-11",
+      "replay_id": "003413abe92b2ea5b1bc8b65",
+      "service_date": "2024-11-09",
+      "source_example_sha256": "bf857db5ab20126f8208af45fb94bfad298693296902405888c01b8dca47057e",
+      "station_coordinate_key": "70038|2024-11-09"
+    },
+    {
+      "hmac_sha256": "00343ec5ac5f95ef346f8a5d404666d323763a21a92003f2ce4093c4120289ca",
+      "month": "2024-12",
+      "replay_id": "00343ec5ac5f95ef346f8a5d",
+      "service_date": "2024-12-20",
+      "source_example_sha256": "fc42fdb60f19428612a2de5da6c32522498edcb4da29c86af697347972c30fd7",
+      "station_coordinate_key": "70055|2024-12-20"
+    },
+    {
+      "hmac_sha256": "0034a4336e0c5858c3f0a12f1edbcf96768aa493ff9a9d5a359a35671cf28810",
+      "month": "2024-11",
+      "replay_id": "0034a4336e0c5858c3f0a12f",
+      "service_date": "2024-11-22",
+      "source_example_sha256": "703cc0c81fab41e865b866260e43865519aae736d589ff6df47fbd29dbac59c6",
+      "station_coordinate_key": "70054|2024-11-22"
+    },
+    {
+      "hmac_sha256": "0034a59d5c4eb2a7cf01715e5a3f8a46eeb3abd2cbbf20ef7833610ddc8e658e",
+      "month": "2024-12",
+      "replay_id": "0034a59d5c4eb2a7cf01715e",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "277ba23763f6dd699d3f7aba7ed06feb7d2df9feb41fc7cb9ff030fc2829cca0",
+      "station_coordinate_key": "70059|2024-12-31"
+    },
+    {
+      "hmac_sha256": "0034bfa31806f2c995e6036d3b3ae76a27b4b3c8cabacc419a4df789e8131372",
+      "month": "2024-12",
+      "replay_id": "0034bfa31806f2c995e6036d",
+      "service_date": "2024-12-11",
+      "source_example_sha256": "fb029a2fac22ae1d40e2ee32433440f72629744810c157a2160b5d2cabf0e88e",
+      "station_coordinate_key": "70040|2024-12-11"
+    },
+    {
+      "hmac_sha256": "0035371db17ce65f2529ca9fec57dee409cb3a3e0f5470ca415b0979e92cbc59",
+      "month": "2024-12",
+      "replay_id": "0035371db17ce65f2529ca9f",
+      "service_date": "2024-12-17",
+      "source_example_sha256": "8a3a52c1a4a7a652a2c69f26f2c0bd2c0c6b3b01c036bfa25ff7c7ef95eaccaa",
+      "station_coordinate_key": "70050|2024-12-17"
+    },
+    {
+      "hmac_sha256": "003587fd1ade0c252121adc57886edc3e25ed6c8a873fa5d33446cb23abcbf24",
+      "month": "2024-11",
+      "replay_id": "003587fd1ade0c252121adc5",
+      "service_date": "2024-11-19",
+      "source_example_sha256": "4a89464ba4e39ce47dcc80b5864d2e5b28f5eea109bc2cfe6d94f1b3cf19ff42",
+      "station_coordinate_key": "70041|2024-11-19"
+    },
+    {
+      "hmac_sha256": "0035ac92bdf719bf08fb11ddf36e70acb29dccdc29eda41e1017c3b803e67617",
+      "month": "2024-11",
+      "replay_id": "0035ac92bdf719bf08fb11dd",
+      "service_date": "2024-11-15",
+      "source_example_sha256": "14081f86d72b2344a28b82fad24144227f00b8f8d51b423aacc58563505f1e22",
+      "station_coordinate_key": "70042|2024-11-15"
+    },
+    {
+      "hmac_sha256": "0035cb22b49472acadefc99b2ec319373ddef99dcb0132f77604cebde9d2d855",
+      "month": "2024-12",
+      "replay_id": "0035cb22b49472acadefc99b",
+      "service_date": "2024-12-20",
+      "source_example_sha256": "78ab5048d9c2aaca32566bcf67ad253b13bd2a2346049702b8f6043ed3796401",
+      "station_coordinate_key": "70040|2024-12-20"
+    },
+    {
+      "hmac_sha256": "003651d50e611d772185de616c5e66391455d30fc7de76c07416f78d7eb6226d",
+      "month": "2024-12",
+      "replay_id": "003651d50e611d772185de61",
+      "service_date": "2024-12-07",
+      "source_example_sha256": "86dedd12945a9a45d3c70f3102fa490a882426458b9e4149266ca6ff3ea53cbd",
+      "station_coordinate_key": "70053|2024-12-07"
+    },
+    {
+      "hmac_sha256": "0036b84a47af9d622a70855f7f733e435ec3cf66a2a653babf7848f53c2fcf65",
+      "month": "2024-12",
+      "replay_id": "0036b84a47af9d622a70855f",
+      "service_date": "2024-12-19",
+      "source_example_sha256": "1268a1f33c0445eb459eccb512059d73c720d71ad7aea65647dde7ec6d11bc38",
+      "station_coordinate_key": "70048|2024-12-19"
+    },
+    {
+      "hmac_sha256": "0037589ba08090f217247f9a34e8b756e4a14742370782be28c16242eb43f4f0",
+      "month": "2024-12",
+      "replay_id": "0037589ba08090f217247f9a",
+      "service_date": "2024-12-08",
+      "source_example_sha256": "94d198b4ece8b58530a0ede9c0123e436a1c508d1ad3dca51b82155ab32a2620",
+      "station_coordinate_key": "70051|2024-12-08"
+    },
+    {
+      "hmac_sha256": "003780681acb84c34fb10304b34cb90c15600168dce67644efb2b33bcb11b153",
+      "month": "2024-11",
+      "replay_id": "003780681acb84c34fb10304",
+      "service_date": "2024-11-14",
+      "source_example_sha256": "4ef382833c22c99ecea0bdb21f55d63341fbb7ac4e797e121752f95412776883",
+      "station_coordinate_key": "70040|2024-11-14"
+    },
+    {
+      "hmac_sha256": "0037d13f35e56a9cffc14a0290e2e4f05209dbf3e6dc46b0ddb27fdf66779a07",
+      "month": "2024-12",
+      "replay_id": "0037d13f35e56a9cffc14a02",
+      "service_date": "2024-12-09",
+      "source_example_sha256": "55f69fda02f109b8bb152f52ac57cb57a86faac54dae9a71bd1b200394e7b667",
+      "station_coordinate_key": "70045|2024-12-09"
+    },
+    {
+      "hmac_sha256": "003877f39fb3a59a71c7e30a53ab3119a07f967c613e3fd91b8ba366d6dc3d1d",
+      "month": "2024-12",
+      "replay_id": "003877f39fb3a59a71c7e30a",
+      "service_date": "2024-12-30",
+      "source_example_sha256": "6ae2778158ee218b50dba274feadd9d26ff1b6b633ecb792b9850bfd94750ff5",
+      "station_coordinate_key": "70038|2024-12-30"
+    },
+    {
+      "hmac_sha256": "00387df106dc4a4433e05752b45f3705fce06df8715aef866889a69335dfb945",
+      "month": "2024-12",
+      "replay_id": "00387df106dc4a4433e05752",
+      "service_date": "2024-12-23",
+      "source_example_sha256": "161f44f673952c2a100274f0ab412beb009686cd15412198fdadec239f961e5f",
+      "station_coordinate_key": "70059|2024-12-23"
+    },
+    {
+      "hmac_sha256": "0038ce0d4af0f537160a150d62af95377725dd0cb3732a734cbcea3d319a9a6c",
+      "month": "2024-12",
+      "replay_id": "0038ce0d4af0f537160a150d",
+      "service_date": "2024-12-14",
+      "source_example_sha256": "4b89c043e0b7870e92e5d771279756bde8e1d61730bed8bbd139c527ad28a13f",
+      "station_coordinate_key": "70038|2024-12-14"
+    },
+    {
+      "hmac_sha256": "00397554e3234fe4ff6d294209d3e90ca030b5b46729c11db1c98ae2bdc93ef2",
+      "month": "2024-11",
+      "replay_id": "00397554e3234fe4ff6d2942",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "0e94b7786ebc45d204a0362f3f329af1cc4fc164216426ad2f820257217cf79d",
+      "station_coordinate_key": "70046|2024-11-30"
+    },
+    {
+      "hmac_sha256": "00399a56600e2bc76d6920bde7e85fd4152f7272bc72a2c978c3f45855c4b5ea",
+      "month": "2024-12",
+      "replay_id": "00399a56600e2bc76d6920bd",
+      "service_date": "2024-12-30",
+      "source_example_sha256": "550ccd7a718cdf283f6cd545c7c8ce10ad638e883b39fe07bb9fe4d9b6f8b0b2",
+      "station_coordinate_key": "70046|2024-12-30"
+    },
+    {
+      "hmac_sha256": "0039e3d60e23df073ea69811900fe7390717de07f6d8026e4b32d335bc5309a6",
+      "month": "2024-12",
+      "replay_id": "0039e3d60e23df073ea69811",
+      "service_date": "2024-12-27",
+      "source_example_sha256": "201f6b82327f7de6b963eb719b7049f0446ef8190e1378d2eb6aec858573095d",
+      "station_coordinate_key": "70053|2024-12-27"
+    },
+    {
+      "hmac_sha256": "003ae56d3aa005668693e95d4e21cedd44445da9d1498f57dac4bda41019cb70",
+      "month": "2024-11",
+      "replay_id": "003ae56d3aa005668693e95d",
+      "service_date": "2024-11-10",
+      "source_example_sha256": "b77fe9846427247788b75c29ddcc19df0ece36379219c7ba36a3a97142a96d3a",
+      "station_coordinate_key": "70046|2024-11-10"
+    },
+    {
+      "hmac_sha256": "003b3273c651d90499256fe51521017ab6e903732cd7c2fa8d576e7f21bc3fad",
+      "month": "2024-11",
+      "replay_id": "003b3273c651d90499256fe5",
+      "service_date": "2024-11-28",
+      "source_example_sha256": "49ff3d670a81a34e2c12b6be5a1e0d4fa4c95fca9af978f6e838c41696ab359f",
+      "station_coordinate_key": "70059|2024-11-28"
+    },
+    {
+      "hmac_sha256": "003b6d934951b2189d77d9754952344ee55aa10e915a656bd61f7b4643d9ac0b",
+      "month": "2024-12",
+      "replay_id": "003b6d934951b2189d77d975",
+      "service_date": "2024-12-16",
+      "source_example_sha256": "caca199d5fd5434cf14c7aec56eeab84740e882dbeb94fef798825efc5095c8c",
+      "station_coordinate_key": "70052|2024-12-16"
+    },
+    {
+      "hmac_sha256": "003c86568396e0f1b895fa697ed43f6f9be3a508a677483fc8516014f6e3495e",
+      "month": "2024-11",
+      "replay_id": "003c86568396e0f1b895fa69",
+      "service_date": "2024-11-03",
+      "source_example_sha256": "8780e238f231a6bad04a9888d07dd6be4436a8940c550b951fd5b132bacbfefb",
+      "station_coordinate_key": "70038|2024-11-03"
+    },
+    {
+      "hmac_sha256": "003ce3e690d263436e7cf5fbe4edd64bcedc34e0bfff760c074a07bbeefa0722",
+      "month": "2024-11",
+      "replay_id": "003ce3e690d263436e7cf5fb",
+      "service_date": "2024-11-11",
+      "source_example_sha256": "795eba8b1b790a69d7c83bf47b9031f44220b5ebd028541d900e0a894a93af77",
+      "station_coordinate_key": "70040|2024-11-11"
+    },
+    {
+      "hmac_sha256": "003d480a081a32cfa89a7212e9468bf6204fb972b5ca550e3a92268a0a7deacf",
+      "month": "2024-12",
+      "replay_id": "003d480a081a32cfa89a7212",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "b1e9a9ea7d8ee3a60e802286192fa87308948665117485a0534eccf3f479eec3",
+      "station_coordinate_key": "70044|2024-12-31"
+    },
+    {
+      "hmac_sha256": "003d66288fff4813400f4b73a3c082dc36fa8ae7318b483df6db12980b1a0de9",
+      "month": "2024-11",
+      "replay_id": "003d66288fff4813400f4b73",
+      "service_date": "2024-11-28",
+      "source_example_sha256": "5190c874e53ab47a2814c40678015c3e02496b96a109a96fe7fc98f642e81e1d",
+      "station_coordinate_key": "70059|2024-11-28"
+    },
+    {
+      "hmac_sha256": "003d96118dc12b6eb390c22f7a510ac875c3e9f9aee24ad086752420e5c8009b",
+      "month": "2024-12",
+      "replay_id": "003d96118dc12b6eb390c22f",
+      "service_date": "2024-12-23",
+      "source_example_sha256": "cf2111739043e6197bfb4cf43db8fd3ec936ae09c1889c71423892d47aaa1941",
+      "station_coordinate_key": "70057|2024-12-23"
+    },
+    {
+      "hmac_sha256": "003de5f8677aa1203ea3502cf65a62376f72010e89bcfe71177030bb95d2a66d",
+      "month": "2024-11",
+      "replay_id": "003de5f8677aa1203ea3502c",
+      "service_date": "2024-11-20",
+      "source_example_sha256": "1e37ff1afbd78d32ba4dcdf427ce870b0a399027f64577ad1d3c33263a888b39",
+      "station_coordinate_key": "70057|2024-11-20"
+    },
+    {
+      "hmac_sha256": "003e2071625c3e034158622c8170501d2e38933811b7bfe255d6b480811ed358",
+      "month": "2024-11",
+      "replay_id": "003e2071625c3e034158622c",
+      "service_date": "2024-11-03",
+      "source_example_sha256": "85a820c90a54ef690978999cb4ca127f8693f2240a282db998a4c279503d4ae8",
+      "station_coordinate_key": "70045|2024-11-03"
+    },
+    {
+      "hmac_sha256": "003e2921ccd0abedcdf96d7d5175b0f783b3f9840173bbe295d89f7f385a5966",
+      "month": "2024-12",
+      "replay_id": "003e2921ccd0abedcdf96d7d",
+      "service_date": "2024-12-15",
+      "source_example_sha256": "a9cd4352d45f828a7100a452b197a3ff8e8aa010e7d25ee907f90b160da7f594",
+      "station_coordinate_key": "70059|2024-12-15"
+    },
+    {
+      "hmac_sha256": "003e70025146575bcc1e4012fae79658cba2fe4de6edb0980b6f97c31061b2fd",
+      "month": "2024-11",
+      "replay_id": "003e70025146575bcc1e4012",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "05952a8ca4d380e5b550e9c0dbe08d94169d683acbbe4397faacb3e94d987c37",
+      "station_coordinate_key": "70054|2024-11-30"
+    },
+    {
+      "hmac_sha256": "003f0e2e4953120b52ff020be17e99d348461972930f707ba1238b1d8da267c8",
+      "month": "2024-12",
+      "replay_id": "003f0e2e4953120b52ff020b",
+      "service_date": "2024-12-07",
+      "source_example_sha256": "597af61338c4bbb1907cc8e6c2985193d88ad7407622f5383f91184632181042",
+      "station_coordinate_key": "70053|2024-12-07"
+    },
+    {
+      "hmac_sha256": "0040d72768f01a88e25dcf995f2c6409f1558aaa5ad34e86d3d1f0f5535a8eeb",
+      "month": "2024-12",
+      "replay_id": "0040d72768f01a88e25dcf99",
+      "service_date": "2024-12-26",
+      "source_example_sha256": "e68a1014cfad56d08936c78145eb1a9a7cade0b77751849c9a61d8e4ddf7738f",
+      "station_coordinate_key": "70044|2024-12-26"
+    },
+    {
+      "hmac_sha256": "004173ed5be590e97aa1dd2dabc92dabde63887ac2595c0b72ddced0406eee9a",
+      "month": "2024-11",
+      "replay_id": "004173ed5be590e97aa1dd2d",
+      "service_date": "2024-11-10",
+      "source_example_sha256": "1818ba1528c26cd464e15daaca7b847ac9e388e619097aebf82bb3f8b45fd8c8",
+      "station_coordinate_key": "70048|2024-11-10"
+    },
+    {
+      "hmac_sha256": "0042140e5a157505fe3ecb8a96916d3962482c935214b0f7280fd1cc73bc648e",
+      "month": "2024-11",
+      "replay_id": "0042140e5a157505fe3ecb8a",
+      "service_date": "2024-11-08",
+      "source_example_sha256": "a50f06415ea2671f7060baba8a93f6de214ab0b451a575782231231016c9d825",
+      "station_coordinate_key": "70050|2024-11-08"
+    },
+    {
+      "hmac_sha256": "004224530e932d9fdf0de6ff1a5939adf5abf3493cb1f286e6207532830c5071",
+      "month": "2024-12",
+      "replay_id": "004224530e932d9fdf0de6ff",
+      "service_date": "2024-12-29",
+      "source_example_sha256": "4c3bcaed4440870a7628582b3deb05179b48612d9a03528583ed29857cb3c984",
+      "station_coordinate_key": "70045|2024-12-29"
+    },
+    {
+      "hmac_sha256": "004227692bb00cbadb4e6fe3b6b3a201a0d55b27203d8de1f659ea628d884e47",
+      "month": "2024-12",
+      "replay_id": "004227692bb00cbadb4e6fe3",
+      "service_date": "2024-12-22",
+      "source_example_sha256": "6ab33ea143c3424c24f905173b1c368de37b6e19c378b15a07afb0fdd704ab71",
+      "station_coordinate_key": "70047|2024-12-22"
+    },
+    {
+      "hmac_sha256": "00425c75fce3d046978431b34923304a792d7ccba1912cb342a2eca78be48707",
+      "month": "2024-11",
+      "replay_id": "00425c75fce3d046978431b3",
+      "service_date": "2024-11-23",
+      "source_example_sha256": "4f9e549dc77c77048cebb012a51c87b6adcfa1db0995ab81dfc145f4d718c5c5",
+      "station_coordinate_key": "70047|2024-11-23"
+    },
+    {
+      "hmac_sha256": "00425e1db71aea15ecbc57939edcd5bd1a6d31481836bf8f9170a7eb40031a7b",
+      "month": "2024-12",
+      "replay_id": "00425e1db71aea15ecbc5793",
+      "service_date": "2024-12-31",
+      "source_example_sha256": "34b92f800358d49b9f08ea0b9a2d66bf3decea6fbd3f3a51f907e969361a857b",
+      "station_coordinate_key": "70049|2024-12-31"
+    },
+    {
+      "hmac_sha256": "004293cc96d7763596a42e11d2b1dfec8a46f3b24a8cb20b4699a1ee5adb37d8",
+      "month": "2024-12",
+      "replay_id": "004293cc96d7763596a42e11",
+      "service_date": "2024-12-27",
+      "source_example_sha256": "fc77f2f89480683d66d3a53460d87e5ca721428a43977f75905ddb76b944705b",
+      "station_coordinate_key": "70059|2024-12-27"
+    },
+    {
+      "hmac_sha256": "0043a16759829b72d025406b261c55a705202c95201894c574b25fc6bca430db",
+      "month": "2024-12",
+      "replay_id": "0043a16759829b72d025406b",
+      "service_date": "2024-12-06",
+      "source_example_sha256": "41c07ad57f7820a164fb990db95405ba9c95c14ec44b2d1ef20f65a16d2793f9",
+      "station_coordinate_key": "70044|2024-12-06"
+    },
+    {
+      "hmac_sha256": "0043aa1f73698fbcfc6b1c9f34a705e6dddfcb052a798d2cde89e423b0e20510",
+      "month": "2024-11",
+      "replay_id": "0043aa1f73698fbcfc6b1c9f",
+      "service_date": "2024-11-30",
+      "source_example_sha256": "c1f93abf96c5cf45222c3a7492256447603ed87f5e082b3d9c3fbd6b75c5fc03",
+      "station_coordinate_key": "70053|2024-11-30"
+    },
+    {
+      "hmac_sha256": "0043ea8e3a170eedf717045a3e8175b675db95ab608a063600da55a5b51633ba",
+      "month": "2024-11",
+      "replay_id": "0043ea8e3a170eedf717045a",
+      "service_date": "2024-11-09",
+      "source_example_sha256": "17d5e41c348485c82f3bf9f5634938b4d0229d1aea03bec3776d460d34cfe32c",
+      "station_coordinate_key": "70042|2024-11-09"
+    },
+    {
+      "hmac_sha256": "0043f66fa16757dfb17669762edce1ea6bd730f424fd3c18970736bd8df542c9",
+      "month": "2024-11",
+      "replay_id": "0043f66fa16757dfb1766976",
+      "service_date": "2024-11-25",
+      "source_example_sha256": "fbbf69472e1e4a4e2f4ed81193981f2cd6538742355e65b193de1c9c17c54c25",
+      "station_coordinate_key": "70041|2024-11-25"
+    },
+    {
+      "hmac_sha256": "00450cebf344affdb21cb359d3aefc16c844ff510e8cf83b921ab88eadfdd761",
+      "month": "2024-11",
+      "replay_id": "00450cebf344affdb21cb359",
+      "service_date": "2024-11-15",
+      "source_example_sha256": "69dc2a9606bb1a13df583ea5da37495052cb391c67609c849b8c93151e394f67",
+      "station_coordinate_key": "70039|2024-11-15"
+    },
+    {
+      "hmac_sha256": "004561779f2fb5dcedb7f786f86f32626470f10256e5ae46fc98eb210c25fa60",
+      "month": "2024-11",
+      "replay_id": "004561779f2fb5dcedb7f786",
+      "service_date": "2024-11-24",
+      "source_example_sha256": "60fcbbbbb020f4a6826a5f11a2b0cdd8c561b4c327066d99b1c660e9b331c262",
+      "station_coordinate_key": "70042|2024-11-24"
+    }
+  ],
+  "final_test_outcomes_opened": false,
+  "invariant_candidate_count_by_month": {
+    "2024-11": 88982,
+    "2024-12": 91735
+  },
+  "maximum_examples": 200,
+  "model_manifest_sha256": "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b",
+  "position_substitution": "PUBLIC_GTFS_ORIGIN_STOP_COORDINATE",
+  "selection_hash": "HMAC_SHA256",
+  "selection_inputs": [
+    "source_example_sha256",
+    "service_date",
+    "month",
+    "feature-derived scoring invariance"
+  ],
+  "selection_seed": "arrive90-travel-time-v1-final-replay",
+  "split": "FINAL_TEST",
+  "version": "travel-time-replay-selection-v1"
+}
