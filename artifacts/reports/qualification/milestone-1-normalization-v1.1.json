@@ -1,0 +1,180 @@
+{
+  "acceptance_version": "travel-time-v1.1",
+  "checks": {
+    "all_368_vehicle_objects_and_schedule_verified": true,
+    "all_partition_content_and_contract_checks_passed": true,
+    "canonical_observation_identifiers_unique": true,
+    "complete_route_day_partition_coverage": true,
+    "conflicting_states_are_quarantined": true,
+    "every_retained_row_is_lineaged_or_quarantined": true,
+    "fresh_process_manifest_is_byte_identical": true,
+    "full_year_gap_report_has_no_missing_inventory_date": true,
+    "known_schema_registry_covers_every_object": true,
+    "make_check_passed": true,
+    "normalized_counts_match_manifest": true,
+    "processing_is_file_bounded_and_memory_reported": true,
+    "raw_and_normalized_bulk_data_are_ignored": true,
+    "schedule_index_is_complete_and_verified": true,
+    "source_utc_attachment_precedes_deduplication": true
+  },
+  "environment": {
+    "implementation_commit": "0edae533808f9158a4d08c48f2f01413a021b418",
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "acceptance_charter": "989f3cf6cd1960376e85c2796d3f9918f6efbc8e263d0a1b3d457afd5b87993e",
+    "acquisition_lock": "e87921fa37c0d2c723c6b2cb95534eb41aea0a36c293c8b2bc2106f8e0c71a68",
+    "build_plan": "105813248e652e51edda323546c4b6c6506f5a9c4eb04be32aa9eeba42157936",
+    "dataset_manifest": "5e659d260775ac84e7fc63b34700062a2388ac5c07596bda2def4876d0ce546e",
+    "implementation": "123b8bdd11b4b0b9e1193b85cad3dc89ed71f42e2bb6c7bf041a75e512a7ce74",
+    "inventory_lock": "9eafc25c9a5ea2ae8ae3c9386424372b0e50757bbe7e81e933ff8bf0b7586593",
+    "schedule_index": "ea861d32e335c5f5d7912fb7618081b6f6ec34b64970c218dfb61e58daae7e0c",
+    "uv_lock": "40c0dd592f439a69b6a502862a53723d758eddae3abc68924027b2c47f7b448f"
+  },
+  "observed": {
+    "acquisition": {
+      "acquisition_lock_path": "configs/source-locks/mbta-2024-acquired.json",
+      "acquisition_lock_sha256": "e87921fa37c0d2c723c6b2cb95534eb41aea0a36c293c8b2bc2106f8e0c71a68",
+      "object_count": 368,
+      "schedule_database_sha256": "89b20d64e7decb200418c00394a3a84ce2e9bb2c7a176f6d1eabc9624c8a6341",
+      "schema_fingerprints": [
+        "19a903f40fda492962061d39f2e8f7f3bb4ed4cd84048d184129f266859331db",
+        "28dfaee107b51e131cf6a67e906a9938d1187210ad7ed41073ccf36ed72917e7",
+        "30f604f9dc2703280cb891abe832d6619ac11e77b81840d4dde3d54b93d32a4a",
+        "3e2e571fcd5fe82f2124532269993fa8d39ed5bc83ceeb024d50eb1bc077c60f",
+        "6e4564adb990dc1279d8660e1a7c5e07666c2645dc391854d77f6629d8c42993",
+        "6f5d7fd177e12992e6b93ed3ad617db10175074895acda5b6bb1955c39b25e82",
+        "84cb89ca28794c5faf412ab415a2e5fdeef66d06cba3ae64c9ac1f2806065ace",
+        "8d2e022570c543d823397acf7df287f1c409100f2f54b2519a61e4a72ffdb7c3",
+        "9ca5c43970e3a6a1d1596d2c49cc521e2205d80613e0c26daef0f66be137e317",
+        "b4bfa3875b5d35a739e2bc02626f2322405d24ecb9c40e14bf8e73cd11a14a21",
+        "b6561108277333dc0e12daa720e69424f469d0ed5b46b54ed6f1773bbc13b5f6",
+        "be0dac04eb0faa9641ca24e9799d0a2a31f9fc56749cf84f73986e31035ee561",
+        "d4312226b218180e6f144b9c1742112a8bb6d1e6cc8e027af754b3e595671558",
+        "e65d50d6156d31b3bb5271c2355c1f66ddd5a309a508e35730779544f59865d8",
+        "e9848667979e2e88e404070e9410386f2b2437b7e16989c3a7a75e39aff75727",
+        "eb54a213a20a85baad93d73f596371c3ab51c697f5bb35a258610c5d831ec74d",
+        "ef3d235030148952ac7806e907b1402a89791d5a989b07fcb8afd0ed4f2ea34c"
+      ],
+      "total_row_count": 208444419,
+      "total_size_bytes": 7684705816
+    },
+    "boundary_exclusion_report": {
+      "boundary_source_count": 3,
+      "boundary_source_keys": [
+        "feeds/mbta_all/COMPACTED_mbta_all_2023-12-31_13:42:28.parquet",
+        "feeds/mbta_all/COMPACTED_mbta_all_2024-01-01_13:42:28.parquet",
+        "feeds/mbta_all/COMPACTED_mbta_all_2025-01-01_13:42:19.parquet"
+      ],
+      "excluded_lineage_count": 82003,
+      "excluded_observation_count": 58545
+    },
+    "gap_report": {
+      "first_inventory_date": "2023-12-31",
+      "last_inventory_date": "2025-01-01",
+      "maximum_inventory_date_gap_days": 1,
+      "missing_inventory_date_count": 0,
+      "source_object_count": 368
+    },
+    "normalization_first_process": {
+      "acceptance_version": "travel-time-v1.1",
+      "dataset_manifest_path": "manifests/2024/dataset-manifest-5e659d260775ac84e7fc63b34700062a2388ac5c07596bda2def4876d0ce546e.json",
+      "dataset_manifest_sha256": "5e659d260775ac84e7fc63b34700062a2388ac5c07596bda2def4876d0ce546e",
+      "elapsed_seconds": 1311.1616832502186,
+      "largest_source_object_bytes": 27966665,
+      "maximum_concurrent_source_objects": 1,
+      "normalization_version": "travel-time-normalization-v1",
+      "peak_resident_memory_bytes": 599244800,
+      "retained_rows_per_second": 11782.991523747629,
+      "source_rows_per_second": 158976.89938840366,
+      "year": 2024
+    },
+    "normalization_restart_process": {
+      "acceptance_version": "travel-time-v1.1",
+      "dataset_manifest_path": "manifests/2024/dataset-manifest-5e659d260775ac84e7fc63b34700062a2388ac5c07596bda2def4876d0ce546e.json",
+      "dataset_manifest_sha256": "5e659d260775ac84e7fc63b34700062a2388ac5c07596bda2def4876d0ce546e",
+      "elapsed_seconds": 1401.0523809581064,
+      "largest_source_object_bytes": 27966665,
+      "maximum_concurrent_source_objects": 1,
+      "normalization_version": "travel-time-normalization-v1",
+      "peak_resident_memory_bytes": 586792960,
+      "retained_rows_per_second": 11027.001709554184,
+      "source_rows_per_second": 148777.03491532255,
+      "year": 2024
+    },
+    "partition_report": {
+      "all_partition_checks_passed": true,
+      "expected_partition_keys_complete": true,
+      "invalid_partitions": [],
+      "lineage_entry_count": 15291699,
+      "merged_observation_count": 1395750,
+      "normalized_observation_count": 11007856,
+      "partition_bytes": 677225116,
+      "partition_count": 1098,
+      "timestamp_max_epoch_microseconds": 1735714774000000,
+      "timestamp_min_epoch_microseconds": 1704104510000000
+    },
+    "quarantine_report": {
+      "bytes": 599566,
+      "content_hash_matches": true,
+      "only_frozen_reasons": true,
+      "reason_counts": {
+        "CONFLICTING_DUPLICATE_STATE": 75627,
+        "CONFLICTING_OVERLAP_STATE": 78
+      },
+      "reason_counts_match": true,
+      "row_count": 75705,
+      "row_count_matches": true
+    },
+    "schedule_report": {
+      "bytes": 105130,
+      "content_hash_matches": true,
+      "database_hash_matches_acquisition": true,
+      "first_service_date": "2024-01-01",
+      "last_service_date": "2024-12-31",
+      "service_dates_are_unique_and_ordered": true,
+      "service_day_count": 366
+    },
+    "schema_object_counts": {
+      "19a903f40fda492962061d39f2e8f7f3bb4ed4cd84048d184129f266859331db": 1,
+      "28dfaee107b51e131cf6a67e906a9938d1187210ad7ed41073ccf36ed72917e7": 2,
+      "30f604f9dc2703280cb891abe832d6619ac11e77b81840d4dde3d54b93d32a4a": 132,
+      "3e2e571fcd5fe82f2124532269993fa8d39ed5bc83ceeb024d50eb1bc077c60f": 11,
+      "6e4564adb990dc1279d8660e1a7c5e07666c2645dc391854d77f6629d8c42993": 30,
+      "6f5d7fd177e12992e6b93ed3ad617db10175074895acda5b6bb1955c39b25e82": 8,
+      "84cb89ca28794c5faf412ab415a2e5fdeef66d06cba3ae64c9ac1f2806065ace": 1,
+      "8d2e022570c543d823397acf7df287f1c409100f2f54b2519a61e4a72ffdb7c3": 6,
+      "9ca5c43970e3a6a1d1596d2c49cc521e2205d80613e0c26daef0f66be137e317": 123,
+      "b4bfa3875b5d35a739e2bc02626f2322405d24ecb9c40e14bf8e73cd11a14a21": 1,
+      "b6561108277333dc0e12daa720e69424f469d0ed5b46b54ed6f1773bbc13b5f6": 7,
+      "be0dac04eb0faa9641ca24e9799d0a2a31f9fc56749cf84f73986e31035ee561": 1,
+      "d4312226b218180e6f144b9c1742112a8bb6d1e6cc8e027af754b3e595671558": 4,
+      "e65d50d6156d31b3bb5271c2355c1f66ddd5a309a508e35730779544f59865d8": 1,
+      "e9848667979e2e88e404070e9410386f2b2437b7e16989c3a7a75e39aff75727": 38,
+      "eb54a213a20a85baad93d73f596371c3ab51c697f5bb35a258610c5d831ec74d": 1,
+      "ef3d235030148952ac7806e907b1402a89791d5a989b07fcb8afd0ed4f2ea34c": 1
+    },
+    "summary": {
+      "exact_duplicate_row_count": 4283843,
+      "identity_availability_by_route": {
+        "Blue": 1.0,
+        "Orange": 1.0,
+        "Red": 1.0
+      },
+      "identity_availability_overall": 1.0,
+      "normalized_observation_count": 11007856,
+      "overlap_conflicting_identity_count": 9,
+      "partition_count": 1098,
+      "quarantined_row_count": 75705,
+      "retained_raw_row_count": 15449407,
+      "source_object_count": 368,
+      "source_row_count": 208444419
+    }
+  },
+  "qualification_command": "make qualify-milestone1",
+  "state": "PASSED",
+  "year": 2024
+}
