@@ -45,7 +45,7 @@ This measured discriminator governs the archive adapter.
 
 The first real episode run produced 1,664 deterministic trip episodes after the frozen 600-second gap and stop-sequence-regression rules.
 The original one-day support denominator included singleton timestamp fragments that cannot demonstrate temporal progress.
-Acceptance version `travel-time-v1.1` defines a trackable episode using only pre-outcome evidence: at least two distinct canonical event timestamps.
+Acceptance version `travel-time-v1.2` defines a trackable episode using only pre-outcome evidence: at least two distinct canonical event timestamps.
 The 70 percent multi-stop threshold remains unchanged, every episode remains visible, and all later full-population quality gates retain every fragment.
 
 | Line | All episodes | Trackable | Excluded | One observation | Zero duration | All zero/one/multi `STOPPED_AT` | Trackable zero/one/multi | All multi-stop rate | Trackable rate | Post-gap fragments |

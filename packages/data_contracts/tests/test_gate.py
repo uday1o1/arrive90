@@ -9,7 +9,7 @@ from arrive90_data_contracts.gates import GateState, load_report, validate_gate_
 
 _BASE_REPORT = {
     "milestone": 2,
-    "acceptance_version": "travel-time-v1.1",
+    "acceptance_version": "travel-time-v1.2",
     "state": "ACCEPTED",
 }
 
@@ -39,13 +39,13 @@ def test_validate_gate_report_rejects_mismatches_unknown_and_legacy_reports() ->
         "gate report milestone mismatch: expected 2"
     ]
     assert validate_gate_report({**_BASE_REPORT, "acceptance_version": "v1"}, 2) == [
-        "gate report acceptance version mismatch: expected travel-time-v1.1"
+        "gate report acceptance version mismatch: expected travel-time-v1.2"
     ]
     assert validate_gate_report({**_BASE_REPORT, "state": "UNKNOWN"}, 2) == [
         "invalid gate state: 'UNKNOWN'"
     ]
     assert validate_gate_report(
-        {"milestone": 2, "acceptance_version": "travel-time-v1.1", "status": "PASSED"},
+        {"milestone": 2, "acceptance_version": "travel-time-v1.2", "status": "PASSED"},
         2,
     ) == [
         "legacy gate report key is forbidden: status",
@@ -85,9 +85,9 @@ def test_gate_runner_accepts_only_current_accepted_report(
 @pytest.mark.parametrize(
     "report",
     [
-        {"milestone": 0, "acceptance_version": "travel-time-v1.1"},
+        {"milestone": 0, "acceptance_version": "travel-time-v1.2"},
         {**_BASE_REPORT, "milestone": 0, "state": "UNKNOWN"},
-        {"milestone": 0, "acceptance_version": "travel-time-v1.1", "status": "PASSED"},
+        {"milestone": 0, "acceptance_version": "travel-time-v1.2", "status": "PASSED"},
         {**_BASE_REPORT, "milestone": 1},
         {**_BASE_REPORT, "milestone": 0, "acceptance_version": "legacy"},
     ],

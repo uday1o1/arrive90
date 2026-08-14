@@ -1,5 +1,4 @@
 {
-  "acceptance_charter_sha256": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
   "acceptance_version": "travel-time-v1.2",
   "checks": {
     "all_real_one_day_checks_passed": true,
@@ -17,14 +16,82 @@
     "schedule_publication_precedes_feature_cutoff": true,
     "source_utc_policy_matches_alignment_discriminator": true
   },
-  "command": "make qualify-milestone0 && make gate MILESTONE=0",
   "environment": {
     "implementation_commit": "e35e9e521be720de9ef7c2a9eb32b27fe9c1efa1",
     "machine": "arm64",
     "platform": "macOS-26.5.2-arm64-arm-64bit",
     "python": "3.12.13"
   },
+  "example_manifest_sha256": "e6cd4af2a1a5684a85cd40358bbb8ef4558cf3b418f325d24977c699bfeec2aa",
   "failing_checks": [],
+  "fresh_process_gate_controls": [
+    {
+      "expected_exit_code": 0,
+      "name": "accepted",
+      "observed_exit_code": 0,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "not_started",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "in_progress",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "blocked",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "failed",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "missing_state",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "unknown_state",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "legacy_status",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "milestone_mismatch",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "acceptance_mismatch",
+      "observed_exit_code": 1,
+      "passed": true
+    },
+    {
+      "expected_exit_code": 1,
+      "name": "malformed",
+      "observed_exit_code": 1,
+      "passed": true
+    }
+  ],
   "input_manifest_hashes": {
     "acceptance_charter": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
     "build_plan": "00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1",
@@ -32,7 +99,7 @@
     "source_locks": "3165e37f01aa130fe908952314464e66487868c3cdc01dc895cbbe75a043ffff",
     "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
   },
-  "milestone": 0,
+  "normalized_manifest_sha256": "2bc1e7a6f0ca05fe46c9205c0ed52a49cca85fa2f33a9a1777435c373408d7e9",
   "observed": {
     "episode_count": 1664,
     "episode_support_by_route": {
@@ -174,6 +241,7 @@
     },
     "source_row_count": 610834
   },
-  "qualification_report_sha256": "342e81c325bda313f83440eae8aeab43383173022f5d868add5a2f2fd42e6944",
-  "state": "ACCEPTED"
+  "qualification_command": "make qualify-milestone0",
+  "source_date": "2024-05-15",
+  "state": "PASSED"
 }

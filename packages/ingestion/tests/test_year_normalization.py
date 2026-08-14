@@ -45,7 +45,7 @@ from arrive90_ingestion.year_normalization import (
     read_normalized_partition,
 )
 
-ACCEPTANCE_VERSION = "travel-time-v1.1"
+ACCEPTANCE_VERSION = "travel-time-v1.2"
 ACQUIRED_AT = datetime(2026, 8, 14, 12, tzinfo=UTC)
 INVENTORY_DATES = (date(2023, 12, 31), date(2024, 5, 15), date(2025, 1, 1))
 

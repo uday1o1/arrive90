@@ -1,0 +1,96 @@
+acceptance_version: travel-time-v1.2
+artifact_family: travel-time-v1
+build_plan_sha256: 00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1
+build_plan_baseline_commit: e35e9e521be720de9ef7c2a9eb32b27fe9c1efa1
+timezone: America/New_York
+source_timestamp:
+  input_semantics: NAIVE_UTC
+  normalization: ATTACH_UTC_WITHOUT_CLOCK_ARITHMETIC
+  schedule_alignment_probe_matches: 13260
+  schedule_alignment_naive_utc_median_seconds: -88
+  schedule_alignment_naive_boston_median_seconds: 14312
+gate_state_key: state
+gate_states: [NOT_STARTED, IN_PROGRESS, ACCEPTED, BLOCKED, FAILED]
+scope:
+  agency: MBTA
+  audited_route_ids: [Red, Orange, Blue]
+  modeled_route_ids: [Blue]
+  required_retained_line_count: 1
+  service_date_start: 2024-01-01
+  service_date_end: 2024-12-31
+target:
+  anchor_status: STOPPED_AT
+  destination_offset_min: 1
+  destination_offset_max: 8
+  scheduled_remaining_seconds_max: 1800
+  model_horizon_seconds: 3600
+  probability_horizons_seconds: [300, 600, 900, 1200, 1800, 2700, 3600]
+episode:
+  gap_seconds: 600
+  sensitivity_gap_seconds: [300, 900]
+  split_on_stop_sequence_regression: true
+  same_timestamp_multiple_sequences: AMBIGUOUS_STOP_SEQUENCE
+schedule:
+  require_unique_active_version: true
+  require_publication_no_later_than_cutoff: true
+  require_exact_trip_route_direction_start_platform_sequence: true
+intervals:
+  width_seconds_max: 180
+  zero_lower_state: LEFT_CENSORED
+  over_width_state: OVER_WIDTH_INTERVAL
+  over_width_fitting_eligible: false
+splits:
+  training: [2024-01-01, 2024-07-31]
+  model_validation: [2024-08-01, 2024-09-30]
+  calibration: [2024-10-01, 2024-10-31]
+  final_test: [2024-11-01, 2024-12-31]
+peak_slice:
+  timezone: America/New_York
+  iso_weekdays: [1, 2, 3, 4, 5]
+  intervals:
+    - {start_inclusive: "07:00:00", end_exclusive: "10:00:00"}
+    - {start_inclusive: "16:00:00", end_exclusive: "19:00:00"}
+  holidays_override: false
+one_day_gate:
+  required_routes: [Red, Orange, Blue]
+  identity_availability_overall_min: 0.99
+  identity_availability_per_line_min: 0.98
+  trackable_episode_min_distinct_canonical_event_timestamps: 2
+  trackable_multi_stop_episode_rate_per_line_min: 0.70
+  trackable_multi_stop_min_distinct_unambiguous_stopped_sequences: 2
+  finite_examples_per_line_min: 500
+  finite_interval_width_coverage_per_line_min: 0.90
+  finite_interval_width_seconds_max: 180
+  required_episode_reporting:
+    - all_episode_count
+    - trackable_episode_count
+    - excluded_episode_count
+    - one_observation_episode_count
+    - zero_duration_episode_count
+    - all_episode_stopped_sequence_bucket_counts
+    - trackable_episode_stopped_sequence_bucket_counts
+    - unconditioned_multi_stop_episode_rate
+    - trackable_multi_stop_episode_rate
+    - gap_split_count
+    - post_gap_fragment_count
+full_year_gate:
+  exact_schedule_match_scheduled_blue_overall_min: 0.99
+  exact_schedule_match_scheduled_blue_direction_min: 0.99
+  likelihood_support_blue_overall_min: 0.75
+  likelihood_support_blue_direction_peak_slice_min: 0.70
+  interval_width_coverage_blue_overall_min: 0.90
+  interval_width_coverage_blue_slice_min: 0.80
+  trip_episodes_blue_min: 1000
+  service_dates_per_nontraining_split_min: 25
+  likelihood_examples_per_blue_direction_peak_slice_min: 500
+  distinct_anchors_per_blue_direction_peak_slice_min: 250
+  right_censored_examples_per_nontraining_split_min: 100
+sampling:
+  anchors_per_service_date_route_direction_max: 300
+  hash: HMAC_SHA256
+  seed: arrive90-travel-time-v1-anchor-sample
+  analysis_weight: BASE_WEIGHT_DIVIDED_BY_INCLUSION_PROBABILITY
+artifacts:
+  promoted_bundle_size_bytes_max: 10485760
+  bulk_data_tracked: false
+  demo_requires_network: false

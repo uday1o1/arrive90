@@ -1,4 +1,4 @@
-"""Run and freeze the complete travel-time-v1.1 Milestone 1 gate."""
+"""Run and freeze the complete travel-time-v1.2 Milestone 1 gate."""
 
 from __future__ import annotations
 
@@ -20,21 +20,21 @@ import pyarrow.parquet as pq  # type: ignore[import-untyped]
 from arrive90_ingestion.vehicle import normalize_vehicle_parquet
 
 ROOT = Path(__file__).resolve().parents[1]
-ACCEPTANCE_VERSION = "travel-time-v1.1"
+ACCEPTANCE_VERSION = "travel-time-v1.2"
 YEAR = 2024
 EXPECTED_OBJECT_COUNT = 368
 EXPECTED_PARTITION_COUNT = 1_098
 EXPECTED_SERVICE_DAY_COUNT = 366
 EXPECTED_ROUTES = frozenset({"Blue", "Orange", "Red"})
 
-ACCEPTANCE_PATH = ROOT / "configs/acceptance/travel-time-v1.1.yaml"
+ACCEPTANCE_PATH = ROOT / "configs/acceptance/travel-time-v1.2.yaml"
 ACQUISITION_LOCK_PATH = ROOT / "configs/source-locks/mbta-2024-acquired.json"
 INVENTORY_LOCK_PATH = ROOT / "configs/source-locks/mbta-2024.json"
 NORMALIZED_ROOT = ROOT / "data/normalized"
 RAW_ROOT = ROOT / "data/raw"
 FIRST_RUNTIME_PATH = ROOT / "artifacts/runtime/milestone-1/normalization-run.json"
 RESTART_RUNTIME_PATH = ROOT / "artifacts/runtime/milestone-1-restart/normalization-run.json"
-QUALIFICATION_PATH = ROOT / "artifacts/reports/qualification/milestone-1-normalization-v1.1.json"
+QUALIFICATION_PATH = ROOT / "artifacts/reports/qualification/milestone-1-normalization-v1.2.json"
 GATE_PATH = ROOT / "artifacts/reports/gates/milestone-1.json"
 
 ARRIVE90 = shutil.which("arrive90") or ""
@@ -451,6 +451,9 @@ def build_reports() -> tuple[dict[str, Any], dict[str, Any]]:
             and sum(schema_counts.values()) == EXPECTED_OBJECT_COUNT
         ),
         "make_check_passed": check_process.returncode == 0,
+        "normalized_manifest_acceptance_version_matches": (
+            manifest.get("acceptance_version") == ACCEPTANCE_VERSION
+        ),
         "normalized_counts_match_manifest": (
             partition_report["normalized_observation_count"]
             == _integer(summary.get("normalized_observation_count"), "normalized rows")

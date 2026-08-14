@@ -38,7 +38,7 @@ from arrive90_ingestion.vehicle import (
     VEHICLE_LABEL,
 )
 
-ACCEPTANCE_VERSION = "travel-time-v1.1"
+ACCEPTANCE_VERSION = "travel-time-v1.2"
 SOURCE_KEY = "feeds/mbta_all/day.parquet"
 SOURCE_URL = f"https://busobservatory-lake.s3.amazonaws.com/{SOURCE_KEY}"
 

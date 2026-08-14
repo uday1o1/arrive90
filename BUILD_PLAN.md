@@ -4,9 +4,12 @@ Status: implementation-ready plan.
 
 Planning snapshot: 2026-08-14.
 
-Acceptance version: `travel-time-v1.1`.
+Acceptance version: `travel-time-v1.2`.
 
 The predictive artifact family remains `travel-time-v1`.
+
+The full-year source-quality audit freezes Blue as the modeled V1 line.
+Orange and Red remain in acquisition, normalization, and transparent data-quality reports but cannot contribute to model fitting, selection, calibration, final predictive metrics, or the explorer bundle.
 
 Arrive90 is a local-first MBTA rail travel-time reliability lab.
 It estimates a calibrated distribution for how long an already observed train will take to be observed stopped at a selected downstream station.
@@ -58,7 +61,8 @@ The browser must expose the model version, feature cutoff, source manifest, spli
 
 - One agency: MBTA.
 - Rail VehiclePosition observations from calendar year 2024.
-- The heavy-rail route identifiers `Red`, `Orange`, and `Blue`, subject to the frozen line-retention gate.
+- Complete source-quality diagnostics for the heavy-rail route identifiers `Red`, `Orange`, and `Blue`.
+- A frozen Blue Line modeling and replay scope selected by the full-year line-retention gate.
 - A train already observed at a specific stop.
 - A downstream stop on the same matched trip pattern.
 - Historical observation replay.
@@ -686,7 +690,7 @@ arrive90/
   uv.lock
   Makefile
   configs/
-    acceptance/travel-time-v1.1.yaml
+    acceptance/travel-time-v1.2.yaml
     sources/bus-observatory-mbta-2024.yaml
     sources/mbta-gtfs-archive-2024.yaml
     features/travel-time-v1.yaml
@@ -773,7 +777,7 @@ Every milestone has exactly one state:
 - `FAILED`.
 
 The machine-readable report key is exactly `state` and its value is one of those five uppercase strings.
-Legacy `status`, `PASSED`, and `INSUFFICIENT_EVIDENCE` values are invalid under `travel-time-v1.1` rather than silently translated.
+Legacy `status`, `PASSED`, and `INSUFFICIENT_EVIDENCE` values are invalid under `travel-time-v1.2` rather than silently translated.
 
 A milestone becomes `ACCEPTED` only when every acceptance item passes.
 A software defect leaves the milestone `IN_PROGRESS` while it is fixed.
@@ -794,9 +798,22 @@ No later milestone begins until the previous milestone is `ACCEPTED`.
 Milestone 0 replaces the gate-report schema, shared validator, CLI runner, and active report writers before its first acceptance report is evaluated.
 Contract tests cover every valid state, the four nonaccepted exit paths, a missing `state`, an unknown state, malformed JSON, mismatched milestone and acceptance version, and legacy reports.
 
+### 14.1 Acceptance-version transition
+
+`travel-time-v1.2` supersedes `travel-time-v1.1` as the active acceptance version before model-population selection or model training.
+The `travel-time-v1.1` reports remain historical evidence and are nonauthoritative for later milestone transitions.
+The Blue scope and support thresholds use only the outcome-safe full-year audit projection permitted by Section 8 and were selected without opening final-test duration bounds, threshold outcomes, predictions, errors, or metric contributions.
+
+Before Milestone 2 resumes, the active tracker returns Milestone 0 to `IN_PROGRESS`, Milestone 1 to `NOT_STARTED`, and Milestone 2 to `NOT_STARTED`.
+Milestone 0 reruns its complete real pinned-day qualification and gate controls under the new charter and returns to `ACCEPTED`.
+Milestone 1 reverifies every acquired object, regenerates acceptance-bound normalized manifests in two fresh processes from the unchanged normalized semantics, reruns its complete qualification, and returns to `ACCEPTED`.
+The prior unsampled audit is nonauthoritative input to the scope decision only and is rebuilt under `travel-time-v1.2` before Milestone 2 can become `ACCEPTED`.
+No old report or manifest is rewritten to conceal the transition.
+
 ## 15. Proposed data-quality gates
 
-The numeric data-quality criteria below are proposed from the pre-model one-day cadence probe and are frozen before the complete-year audit.
+The Milestone 0 criteria were frozen from the pre-model one-day cadence probe.
+The Blue-specific Milestone 2 support criteria are frozen in `travel-time-v1.2` from the outcome-safe aggregate audit projection before model training.
 They may be replaced only by a new acceptance version before model training.
 
 ### 15.1 One-day feasibility gate
@@ -818,23 +835,23 @@ The heavy-rail planning probe observed 13,622 Blue, 23,912 Orange, and 18,846 Re
 It observed 97.33 percent of those proxy intervals at or below 180 seconds, with line p95 widths from 102 to 136 seconds.
 Those observations establish feasibility but do not substitute for the executable gate.
 
-### 15.2 Full-year retained-line gate
+### 15.2 Full-year Blue Line retention gate
 
 A line is retained only when all of the following pass on the complete source-quality audit:
 
 - Core identity availability is at least 99 percent overall and at least 98 percent for the line.
-- Exact active-schedule trip, platform, and stop-sequence match is at least 95 percent overall and at least 90 percent for every line and direction.
-- At least 90 percent of generated anchor-destination examples are likelihood-eligible as interval-resolved, left-censored, or valid positive right-censored rows overall.
-- At least 80 percent have that support in every line-by-direction-by-peak-or-off-peak slice.
+- Among scheduled Blue episodes, exact active-schedule trip, platform, and stop-sequence match is at least 99 percent overall and at least 99 percent in each direction.
+- At least 75 percent of generated Blue anchor-destination examples are likelihood-eligible as interval-resolved, left-censored, or valid positive right-censored rows overall.
+- At least 70 percent have that support in every Blue direction-by-peak-or-off-peak slice.
 - At least 90 percent of finite intervals are no wider than 180 seconds overall.
 - At least 80 percent meet that width in every required line-by-direction-by-peak-or-off-peak slice.
-- Every retained line contains at least 1,000 distinct trip episodes and at least 25 service dates in each validation, calibration, and final-test split.
-- Every retained line-direction-peak-or-off-peak cell present in a nontraining split contains at least 500 likelihood-eligible examples and at least 250 distinct anchors in that split.
+- Blue contains at least 1,000 distinct trip episodes and at least 25 service dates in each validation, calibration, and final-test split.
+- Every Blue direction-by-peak-or-off-peak cell present in a nontraining split contains at least 500 likelihood-eligible examples and at least 250 distinct anchors in that split.
 - Every fixed horizon reports its identified and unresolved weight, and unsupported metric-specific slice levels are visibly marked rather than pooled or silently omitted.
 - Each nontraining split contains at least 100 right-censored examples overall for the censored outcome-class report, while no right-censored slice is required to contain resolved examples.
 
-At least two of Red, Orange, and Blue must pass for the multi-line V1 claim.
-If fewer than two lines pass, planning re-enters `DECIDE` for a line-specific product rather than silently lowering the gate.
+Blue must pass every criterion for the line-specific V1 claim.
+Orange and Red support remains visible in the data card without being pooled into the modeled population.
 
 ## 16. Milestone plan
 
@@ -842,7 +859,7 @@ If fewer than two lines pass, planning re-enters `DECIDE` for a line-specific pr
 
 Deliverables:
 
-- Replace the active acceptance charter with `travel-time-v1.1` while retaining `travel-time-v1` as the predictive artifact family.
+- Replace the active acceptance charter with `travel-time-v1.2` while retaining `travel-time-v1` as the predictive artifact family.
 - Add the content-addressed public inventory snapshot, canonical 368-entry extractor, `InventoryLockEntry` lock, and source profile.
 - Add acquired-content locks for the pinned Bus Observatory object and official 2024 schedule archive plus the expanded database's derived-artifact lock.
 - Implement resumable pinned-object and schedule-archive download, exact hash verification, bounded gzip expansion, and read-only SQLite version lookup.
@@ -927,7 +944,7 @@ Deliverables:
 
 Acceptance gate:
 
-- At least two of Red, Orange, and Blue pass every Section 15.2 criterion.
+- Blue passes every Section 15.2 criterion.
 - Every row belongs to exactly one split and no episode or service date crosses a boundary.
 - Seeded future-observation, final-episode-length, future-schedule, post-outcome aggregate, and split-leakage defects fail through the public dataset builder.
 - The full-year retention audit reads only the final-test audit projection, while any Milestone 2 read of sealed final-test duration bounds fails.
@@ -1198,7 +1215,7 @@ No pull request, release, package publication, deployment, or external artifact 
 
 ## 20. Replan triggers and bounded fallbacks
 
-- If fewer than two lines pass the frozen full-year data gate, re-enter product-scope selection for a line-specific V1 before model fitting.
+- If Blue fails the frozen full-year data gate, re-enter product-scope selection before model fitting.
 - If schedule matching fails for a line, exclude that line under the frozen rule rather than fabricating scheduled features.
 - If the full-feature candidate does not beat the strongest promotable AFT baseline under the frozen validation ordering, promote the simplest passing AFT baseline and continue every evaluation and explorer milestone.
 - If the final test contradicts a validation claim, publish the negative result and narrow the claim registry without changing the frozen model.

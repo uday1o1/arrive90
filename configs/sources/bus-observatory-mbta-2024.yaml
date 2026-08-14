@@ -1,5 +1,5 @@
 profile_version: bus-observatory-mbta-2024-v1
-acceptance_version: travel-time-v1.1
+acceptance_version: travel-time-v1.2
 inventory_url: https://busobservatory-lake.s3.amazonaws.com/index/data-inventory.json
 inventory_snapshot_sha256: e918dd7d2e91da6735456f0de4f4107be9876984effd51f5aa9114d3807a4ade
 feed_id: mbta_all

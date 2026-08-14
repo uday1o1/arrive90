@@ -227,7 +227,7 @@ def build_parser() -> argparse.ArgumentParser:
     qualify_day.add_argument(
         "--acceptance-charter",
         type=Path,
-        default=Path("configs/acceptance/travel-time-v1.1.yaml"),
+        default=Path("configs/acceptance/travel-time-v1.2.yaml"),
     )
     qualify_day.add_argument(
         "--runtime-root",

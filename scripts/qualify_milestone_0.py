@@ -1,4 +1,4 @@
-"""Run and freeze the complete travel-time-v1.1 Milestone 0 gate."""
+"""Run and freeze the complete travel-time-v1.2 Milestone 0 gate."""
 
 from __future__ import annotations
 
@@ -15,9 +15,9 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-ACCEPTANCE_VERSION = "travel-time-v1.1"
+ACCEPTANCE_VERSION = "travel-time-v1.2"
 PINNED_DATE = "2024-05-15"
-QUALIFICATION_PATH = ROOT / "artifacts/reports/qualification/milestone-0-travel-time-v1.1.json"
+QUALIFICATION_PATH = ROOT / "artifacts/reports/qualification/milestone-0-travel-time-v1.2.json"
 GATE_PATH = ROOT / "artifacts/reports/gates/milestone-0.json"
 ARRIVE90 = shutil.which("arrive90") or ""
 GIT = shutil.which("git") or ""
@@ -180,7 +180,7 @@ def build_reports() -> tuple[dict[str, Any], dict[str, Any]]:
         summary = _load_json(Path(str(first["run_summary_path"])))
         gate_controls = _gate_controls(temp_root / "gate-controls")
 
-    charter_path = ROOT / "configs/acceptance/travel-time-v1.1.yaml"
+    charter_path = ROOT / "configs/acceptance/travel-time-v1.2.yaml"
     charter = _load_yaml(charter_path)
     timestamp_policy = charter.get("source_timestamp")
     if not isinstance(timestamp_policy, dict):

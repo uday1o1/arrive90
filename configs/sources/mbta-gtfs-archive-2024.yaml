@@ -1,5 +1,5 @@
 profile_version: mbta-gtfs-archive-2024-v1
-acceptance_version: travel-time-v1.1
+acceptance_version: travel-time-v1.2
 url: https://performancedata.mbta.com/lamp/gtfs_archive/2024/GTFS_ARCHIVE.db.gz
 response_profile:
   content_length_bytes: 150725341

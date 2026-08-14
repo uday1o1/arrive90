@@ -54,7 +54,7 @@ def _config_files(
     inventory.write_text(
         json.dumps(
             {
-                "acceptance_version": "travel-time-v1.1",
+                "acceptance_version": "travel-time-v1.2",
                 "entries": [
                     {
                         "inventory_date": PINNED_DATE.isoformat(),
@@ -71,7 +71,7 @@ def _config_files(
     bus_profile.write_text(
         yaml.safe_dump(
             {
-                "acceptance_version": "travel-time-v1.1",
+                "acceptance_version": "travel-time-v1.2",
                 "sample": {
                     "inventory_date": PINNED_DATE,
                     "url": VEHICLE_URL,
@@ -88,7 +88,7 @@ def _config_files(
     schedule_profile.write_text(
         yaml.safe_dump(
             {
-                "acceptance_version": "travel-time-v1.1",
+                "acceptance_version": "travel-time-v1.2",
                 "url": SCHEDULE_URL,
                 "response_profile": {
                     "content_length_bytes": schedule.stat().st_size,
@@ -190,7 +190,7 @@ def test_pinned_day_fails_closed_on_wrong_acceptance_version(tmp_path: Path) -> 
     inventory.write_text(
         json.dumps({"acceptance_version": "legacy", "entries": []}), encoding="utf-8"
     )
-    with pytest.raises(AcquisitionError, match=r"travel-time-v1\.1"):
+    with pytest.raises(AcquisitionError, match=r"travel-time-v1\.2"):
         acquire_pinned_day(
             PINNED_DATE,
             include_schedule=False,

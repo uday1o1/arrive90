@@ -25,7 +25,7 @@ from arrive90_ingestion.year_acquisition import (
     acquire_full_year,
 )
 
-ACCEPTANCE_VERSION = "travel-time-v1.1"
+ACCEPTANCE_VERSION = "travel-time-v1.2"
 ACQUIRED_AT = datetime(2026, 8, 14, 12, tzinfo=UTC)
 LAST_MODIFIED = datetime(2025, 11, 28, 12, tzinfo=UTC)
 
