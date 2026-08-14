@@ -1,7 +1,13 @@
 acceptance_version: travel-time-v1
-build_plan_sha256: 393b92bc7cd5174faf78d1073c19311fa11e6a9a9d8cd21c4db2b878a46d0e4a
-build_plan_commit: 6609bc64a4539d6c705d4ee387742bd9ca53c987
+build_plan_sha256: a326dfc8deeb475aaffbbbcedddc203a194b564d29f8debfabdbbe8da0bcfc7e
+build_plan_baseline_commit: 6609bc64a4539d6c705d4ee387742bd9ca53c987
 timezone: America/New_York
+source_timestamp:
+  input_semantics: NAIVE_UTC
+  normalization: ATTACH_UTC_WITHOUT_CLOCK_ARITHMETIC
+  schedule_alignment_probe_matches: 13260
+  schedule_alignment_naive_utc_median_seconds: -88
+  schedule_alignment_naive_boston_median_seconds: 14312
 gate_state_key: state
 gate_states: [NOT_STARTED, IN_PROGRESS, ACCEPTED, BLOCKED, FAILED]
 scope:

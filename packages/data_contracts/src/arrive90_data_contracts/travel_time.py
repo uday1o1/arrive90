@@ -6,7 +6,7 @@ import hashlib
 import json
 import math
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from enum import StrEnum
 from typing import Any
 
@@ -36,13 +36,6 @@ class HistoricalVehicleStatus(StrEnum):
     INCOMING_AT = "INCOMING_AT"
     STOPPED_AT = "STOPPED_AT"
     IN_TRANSIT_TO = "IN_TRANSIT_TO"
-
-
-class TimezoneStatus(StrEnum):
-    """Successful local-time resolution states retained after quarantine."""
-
-    UNIQUE_LOCAL_TIME = "UNIQUE_LOCAL_TIME"
-    RESOLVED_DST_FOLD = "RESOLVED_DST_FOLD"
 
 
 class EpisodeScheduleMatchStatus(StrEnum):
@@ -227,10 +220,8 @@ class VehicleObservation:
     direction_id: int
     vehicle_id: str
     vehicle_label: str | None
-    observation_local_naive: datetime
-    dst_fold: int | None
+    observation_source_naive_utc: datetime
     observation_utc: datetime
-    timezone_status: TimezoneStatus
     stop_sequence: int | None
     stop_id: str | None
     current_status: HistoricalVehicleStatus
@@ -266,15 +257,11 @@ class VehicleObservation:
             raise ValueError("schedule_relationship must be a canonical known enum")
         if not isinstance(self.current_status, HistoricalVehicleStatus):
             raise ValueError("current_status must be a canonical known enum")
-        if not isinstance(self.timezone_status, TimezoneStatus):
-            raise ValueError("timezone_status must be a canonical known enum")
-        if self.observation_local_naive.tzinfo is not None:
-            raise ValueError("observation_local_naive must not have timezone information")
+        if self.observation_source_naive_utc.tzinfo is not None:
+            raise ValueError("observation_source_naive_utc must not have timezone information")
         require_utc(self.observation_utc, "observation_utc")
-        if self.timezone_status is TimezoneStatus.UNIQUE_LOCAL_TIME and self.dst_fold is not None:
-            raise ValueError("unique local time must not carry a DST fold")
-        if self.timezone_status is TimezoneStatus.RESOLVED_DST_FOLD and self.dst_fold not in (0, 1):
-            raise ValueError("resolved DST time must carry fold zero or one")
+        if self.observation_source_naive_utc.replace(tzinfo=UTC) != self.observation_utc:
+            raise ValueError("observation_utc must attach UTC without clock arithmetic")
         expected_lineage = tuple(
             sorted(
                 self.source_lineage,

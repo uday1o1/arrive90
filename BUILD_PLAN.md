@@ -111,8 +111,8 @@ Its pinned local qualification values are:
 - Size: 23,432,007 bytes.
 - SHA-256: `e91537e12d7cb68fd06d467e70e33a8cda02c682102098a1ce9baad7692eac73`.
 - Rows: 610,834.
-- Whole-object source observation range: 2024-05-14 13:30:54 through 2024-05-15 13:40:36 in timezone-naive Boston local time.
-- Retained Red, Orange, and Blue observation maximum: 2024-05-15 13:40:34 in timezone-naive Boston local time.
+- Whole-object source observation range: 2024-05-14 13:30:54 through 2024-05-15 13:40:36 in timezone-naive UTC.
+- Retained Red, Orange, and Blue observation maximum: 2024-05-15 13:40:34 in timezone-naive UTC.
 
 The required source fields are:
 
@@ -218,10 +218,8 @@ VehicleObservation
   direction_id
   vehicle_id
   vehicle_label
-  observation_local_naive
-  dst_fold or null
+  observation_source_naive_utc
   observation_utc
-  timezone_status
   stop_sequence
   stop_id
   current_status
@@ -242,26 +240,22 @@ Finite floats are represented for hashing by their exact IEEE-754 hexadecimal va
 Lineage pairs `(source_object_key, source_row_ordinal)` are sorted by UTF-8 object-key bytes and then integer ordinal.
 Rows with the same identity key and byte-identical canonical payload collapse to one observation while retaining every sorted lineage pair.
 Rows with the same identity key and different payloads are all quarantined as `CONFLICTING_DUPLICATE_STATE` rather than selected by file order.
-The `observation_id` is the SHA-256 of the canonical identity key after timezone resolution and payload conflicts are eliminated.
+The `observation_id` is the SHA-256 of the canonical identity key after source UTC attachment and payload conflicts are eliminated.
 An event evidence key omits `stop_sequence` and `current_status` from the identity key.
 Multiple sequences under one event evidence key are ambiguous, while multiple statuses at one sequence remain an evidence set for target-bound rules.
 
-### 5.3 Timezone rule
+### 5.3 Source timestamp rule
 
-The source parser converted an original epoch timestamp to Boston local time and removed the timezone offset.
-Normalization interprets the source value under `America/New_York` before canonical deduplication and episode construction.
+The locked 2024 MBTA compacted objects store `vehicle.timestamp` as timezone-naive UTC.
+Normalization requires a naive source value and attaches UTC without clock arithmetic before canonical deduplication and episode construction.
+Boston local time is derived only after that attachment for schedule and calendar features.
 
-The frozen order is raw validation, provisional sequencing, timezone resolution, canonical deduplication, and then trip-episode construction.
-Provisional sequences use only `(trip_start_date, trip_start_time, trip_id, route_id, direction_id, vehicle_id)` and raw lineage within each source object.
-They are ordered by integer source-row ordinal and cannot inspect schedule matches, outcome status, destination rows, or model features.
-Ordinary local times receive their unique valid UTC conversion and `dst_fold = null`.
-Nonexistent spring-forward local times are quarantined.
-For a fall-back local time, both fold candidates are evaluated against the nearest unambiguous timestamps in the same provisional sequence and the frozen nonnegative-time and 600-second cadence constraints.
-A fold is assigned only when exactly one candidate is feasible.
-An exact raw semantic duplicate in an overlapping object may inherit that uniquely resolved fold before canonical deduplication.
-If both folds or neither fold remain feasible, the raw occurrence is quarantined as `AMBIGUOUS_DST_FOLD`.
-Rows that share every local-naive identity field but resolve to opposite folds retain different `observation_utc` values, different canonical identities, and separate lineage.
-No trip episode is consulted during fold resolution.
+The frozen discriminator uses exact platform-and-sequence `STOPPED_AT` matches against the official schedule.
+On the pinned object, 13,260 matched observations have median schedule deviation -88 seconds under naive-UTC interpretation and 14,312 seconds under naive-Boston interpretation.
+The source profile records these values and the archived producer implementation used to define the field.
+
+The frozen order is raw validation, source UTC attachment, canonical deduplication, and then trip-episode construction.
+Raw-lineage order may be audited for regressions but cannot change the canonical timestamp or inspect schedule matches, outcome status, destination rows, or model features.
 
 ### 5.4 Trip episode
 
@@ -610,7 +604,7 @@ Public inventory + 368 boundary-aware MBTA objects + 2024 GTFS schedule archive
                  immutable source-object lock
                               |
                               v
-       schema validation, timezone repair, overlap deduplication
+       schema validation, source UTC attachment, overlap deduplication
                               |
                               v
                   normalized observations
@@ -848,10 +842,10 @@ Deliverables:
 - Implement resumable pinned-object and schedule-archive download, exact hash verification, bounded gzip expansion, and read-only SQLite version lookup.
 - Implement `InventoryLockEntry`, `AcquisitionContentEntry`, `DerivedArtifactEntry`, `VehicleObservation`, `TripEpisode`, and downstream example contracts.
 - Replace the active gate-report contract, validator, `scripts/gate.py`, CLI path, and report-writer state field with the five-state Section 14 model.
-- Implement the one-day Parquet schema validator, rail filter, overlap-ready observation identity, timezone conversion, episode builder, destination generator, and arrival-interval builder.
+- Implement the one-day Parquet schema validator, rail filter, overlap-ready observation identity, source UTC attachment, episode builder, destination generator, and arrival-interval builder.
 - Implement exact pinned-day schedule matching and one real observation-cutoff feature-row view.
 - Introduce the `arrive90` CLI subset declared in Section 13 and exercise the complete pinned-day qualification through it.
-- Add synthetic edge fixtures for duplicates, conflicts, missing fields, invalid enums, raw time regressions, excessive gaps, stop-sequence progression, stop-sequence regression and recovery, same-timestamp ambiguity, DST ambiguity, future schedule publication, future outcome access, over-width intervals, and censoring.
+- Add synthetic edge fixtures for duplicates, conflicts, missing fields, invalid enums, raw time regressions, excessive gaps, stop-sequence progression, stop-sequence regression and recovery, same-timestamp ambiguity, source timestamp semantics, future schedule publication, future outcome access, over-width intervals, and censoring.
 - Run the real pinned 2024-05-15 object through the public CLI.
 - Write the deterministic one-day qualification report and manifest hashes.
 - Update the active milestone tracker and remove old gate reports from the current evidence index.
@@ -862,7 +856,7 @@ Acceptance gate:
 - The pinned-day schedule, trip, platform, and stop-sequence joins are measured rather than mocked.
 - Every pinned-day schedule row used by a feature was published no later than that feature's anchor cutoff.
 - A source row cannot enter a different trip episode after a fresh-process rerun.
-- DST resolution precedes deduplication, and the opposite-fold and ambiguous-fold fixtures behave exactly as declared in Section 5.3.
+- Source UTC attachment precedes deduplication, and the pinned schedule-alignment discriminator matches Section 5.3.
 - Deduplicated observations retain every exact source object and row-ordinal lineage entry.
 - Every finite outcome upper bound is a later same-episode `STOPPED_AT` observation at the selected destination.
 - Every feature cutoff is the anchor observation and deliberate later-observation access fails.
@@ -888,10 +882,10 @@ Deliverables:
 - Normalize all 2024 rail observations one source object at a time.
 - Handle schema evolution by required field name and explicit optional fields.
 - Deduplicate overlap across adjacent objects while retaining complete lineage.
-- Reconstruct timezone-aware UTC timestamps under the frozen policy.
+- Attach timezone-aware UTC to validated naive source timestamps under the frozen policy.
 - Write route and service-date partitioned Parquet plus content-addressed manifests.
 - Extract schedule versions and build the read-only schedule lookup index.
-- Publish full-year row, duplicate, conflict, quarantine, gap, DST, storage, throughput, and schema reports.
+- Publish full-year row, duplicate, conflict, quarantine, gap, timestamp, storage, throughput, and schema reports.
 
 Acceptance gate:
 
@@ -1082,8 +1076,8 @@ Acceptance gate:
 - Vehicle status enum parsing.
 - Stable observation identity and conflicting duplicates.
 - Multiple duplicate ordinals within one object and duplicate lineage across adjacent objects.
-- Service-day, 24-plus-hour schedule, and daylight-saving behavior.
-- Distinct valid opposite-fold observations with identical local-naive identity fields and an unresolved-fold quarantine control.
+- Service-day, 24-plus-hour schedule, and Boston schedule-timezone behavior.
+- Naive-UTC source attachment and a control proving that naive-Boston interpretation fails the pinned schedule-alignment discriminator.
 - Episode identity, time regression, and gap splitting.
 - Canonical post-deduplication observation order, ordinary stop progression, same-timestamp sequence ambiguity, stop-sequence regression split, and recovery isolation.
 - Destination offsets and terminal deduplication.
@@ -1213,7 +1207,7 @@ The completed repository includes:
 
 - Canonical source inventory and source-lock report.
 - Full-year data-quality and retained-scope report.
-- Schema and timezone audit.
+- Schema and timestamp audit.
 - Trip-episode and label-quality report.
 - Dataset and split manifests.
 - Leakage tests with seeded failures.

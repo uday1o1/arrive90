@@ -79,7 +79,8 @@ The collector implementation is pinned at commit [`de653c0ab29243c9b1d64d3b425ac
 
 The compacted archive preserves trip, route, direction, vehicle, stop, stop sequence, Vehicle Position status, source vehicle timestamp, and coordinates.
 It does not preserve Trip Updates, explicit cancellations, the collector fetch timestamp, the original fetch batch, or the GTFS-Realtime feed-header timestamp.
-Its source timestamps are timezone-naive Boston local values.
+The locked 2024 MBTA objects align to the official schedule only when `vehicle.timestamp` is interpreted as timezone-naive UTC.
+The pinned schedule-alignment discriminator governs normalization for this archive even though the archived producer README describes configured local-time conversion.
 S3 `Last-Modified` values cannot repair this gap because older objects were migrated or reuploaded in November 2025.
 
 A bounded 2024-05-15 diagnostic joined the official 2024 event export, official 2024 schedule archive, and the public Bus Observatory object.

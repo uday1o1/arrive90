@@ -17,9 +17,16 @@ sample:
   sha256: e91537e12d7cb68fd06d467e70e33a8cda02c682102098a1ce9baad7692eac73
   row_count: 610834
   schema_fingerprint: 30f604f9dc2703280cb891abe832d6619ac11e77b81840d4dde3d54b93d32a4a
-  whole_object_min_local: "2024-05-14 13:30:54"
-  whole_object_max_local: "2024-05-15 13:40:36"
-  retained_heavy_rail_max_local: "2024-05-15 13:40:34"
+  whole_object_min_naive_utc: "2024-05-14 13:30:54"
+  whole_object_max_naive_utc: "2024-05-15 13:40:36"
+  retained_heavy_rail_max_naive_utc: "2024-05-15 13:40:34"
+timestamp_semantics:
+  source_field: vehicle.timestamp
+  input_semantics: NAIVE_UTC
+  archived_producer_commit: de653c0ab29243c9b1d64d3b425acbffc81d2822
+  schedule_alignment_probe_matches: 13260
+  schedule_alignment_naive_utc_median_seconds: -88
+  schedule_alignment_naive_boston_median_seconds: 14312
 license:
   identifier: CC-BY-NC-4.0
   attribution: Jacobs Urban Tech Hub at Cornell Tech

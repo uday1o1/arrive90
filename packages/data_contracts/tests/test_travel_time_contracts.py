@@ -13,7 +13,6 @@ from arrive90_data_contracts.travel_time import (
     EpisodeScheduleMatchStatus,
     HistoricalVehicleStatus,
     SourceLineageEntry,
-    TimezoneStatus,
     TripEpisode,
     TripScheduleRelationship,
     VehicleObservation,
@@ -40,10 +39,8 @@ def _observation(**changes: object) -> VehicleObservation:
         "direction_id": 0,
         "vehicle_id": "vehicle-1",
         "vehicle_label": "1812",
-        "observation_local_naive": datetime(2024, 5, 15, 8, 0),
-        "dst_fold": None,
+        "observation_source_naive_utc": datetime(2024, 5, 15, 12, 0),
         "observation_utc": NOW,
-        "timezone_status": TimezoneStatus.UNIQUE_LOCAL_TIME,
         "stop_sequence": 40,
         "stop_id": "70068",
         "current_status": HistoricalVehicleStatus.STOPPED_AT,
@@ -229,21 +226,18 @@ def test_vehicle_observation_retains_sorted_complete_duplicate_lineage() -> None
         replace(observation, source_lineage=(first, first))
 
 
-def test_vehicle_observation_rejects_identity_and_timezone_drift() -> None:
+def test_vehicle_observation_rejects_identity_and_source_timestamp_drift() -> None:
     observation = _observation()
     with pytest.raises(ValueError, match="observation_id"):
         replace(observation, observation_id="wrong")
     with pytest.raises(ValueError, match="must not have timezone"):
-        replace(observation, observation_local_naive=NOW)
+        replace(observation, observation_source_naive_utc=NOW)
     with pytest.raises(ValueError, match="must be timezone-aware UTC"):
         replace(observation, observation_utc=NOW.replace(tzinfo=None))
-    with pytest.raises(ValueError, match="must not carry"):
-        replace(observation, dst_fold=0)
-    with pytest.raises(ValueError, match="fold zero or one"):
+    with pytest.raises(ValueError, match="without clock arithmetic"):
         replace(
             observation,
-            timezone_status=TimezoneStatus.RESOLVED_DST_FOLD,
-            dst_fold=None,
+            observation_source_naive_utc=datetime(2024, 5, 15, 8, 0),
         )
 
 
@@ -254,7 +248,6 @@ def test_vehicle_observation_rejects_identity_and_timezone_drift() -> None:
         ({"stop_sequence": -1}, "stop_sequence"),
         ({"schedule_relationship": "SCHEDULED"}, "schedule_relationship"),
         ({"current_status": "STOPPED_AT"}, "current_status"),
-        ({"timezone_status": "UNIQUE_LOCAL_TIME"}, "timezone_status"),
         ({"latitude": math.inf}, "latitude"),
         ({"latitude": 91.0}, "latitude"),
         ({"longitude": -181.0}, "longitude"),
