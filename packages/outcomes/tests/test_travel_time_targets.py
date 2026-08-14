@@ -171,6 +171,16 @@ def test_same_timestamp_destination_status_cannot_supply_lower_evidence() -> Non
     assert example.upper_evidence_observation_id == stopped.observation_id
 
 
+def test_same_timestamp_origin_status_cannot_replace_anchor_as_zero_lower_evidence() -> None:
+    anchor = _observation(0, 1, HistoricalVehicleStatus.STOPPED_AT)
+    same_time = _observation(0, 1, HistoricalVehicleStatus.IN_TRANSIT_TO)
+    upper = _observation(120, 10, HistoricalVehicleStatus.STOPPED_AT)
+    example = _build([anchor, same_time, upper]).examples[0]
+    assert example.outcome_state is DownstreamOutcomeState.LEFT_CENSORED
+    assert example.lower_evidence_observation_id == anchor.observation_id
+    assert (example.lower_bound_seconds, example.upper_bound_seconds) == (0, 120)
+
+
 def test_over_width_finite_interval_remains_visible_but_ineligible() -> None:
     example = _build(
         [

@@ -158,7 +158,7 @@ def _lower_evidence(
 ) -> VehicleObservation:
     candidates: list[VehicleObservation] = [anchor]
     for observed_at, event in groups:
-        if observed_at < anchor.observation_utc or observed_at >= before_utc:
+        if observed_at <= anchor.observation_utc or observed_at >= before_utc:
             continue
         sequence = _unambiguous_sequence(event)
         if sequence is None:
