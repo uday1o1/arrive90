@@ -27,6 +27,10 @@ from arrive90_ingestion.pinned_sources import (
     acquire_pinned_day,
     result_payload,
 )
+from arrive90_ingestion.year_acquisition import (
+    DEFAULT_FULL_ACQUISITION_LOCK,
+    acquire_full_year,
+)
 
 
 def _source_lock(args: argparse.Namespace) -> int:
@@ -59,7 +63,35 @@ def _gate(args: argparse.Namespace) -> int:
 
 
 def _source_download(args: argparse.Namespace) -> int:
-    result = acquire_pinned_day(
+    if args.year is not None:
+        if args.include_schedule:
+            raise ValueError("--include-schedule is implicit and cannot be combined with --year")
+        full_result = acquire_full_year(
+            args.year,
+            inventory_lock_path=args.inventory_lock,
+            pinned_acquisition_lock_path=args.acquisition_lock,
+            raw_root=args.raw_root,
+            acquisition_lock_path=args.full_acquisition_lock,
+            workers=args.workers,
+        )
+        print(
+            json.dumps(
+                {
+                    "acquisition_lock_path": str(full_result.acquisition_lock_path),
+                    "acquisition_lock_sha256": full_result.acquisition_lock_sha256,
+                    "object_count": full_result.object_count,
+                    "schedule_database_sha256": full_result.schedule_database_sha256,
+                    "schema_fingerprints": full_result.schema_fingerprints,
+                    "total_row_count": full_result.total_row_count,
+                    "total_size_bytes": full_result.total_size_bytes,
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.date is None:
+        raise ValueError("one of --date or --year is required")
+    pinned_result = acquire_pinned_day(
         args.date,
         include_schedule=args.include_schedule,
         inventory_lock_path=args.inventory_lock,
@@ -68,7 +100,7 @@ def _source_download(args: argparse.Namespace) -> int:
         raw_root=args.raw_root,
         acquisition_lock_path=args.acquisition_lock,
     )
-    print(json.dumps(result_payload(result), sort_keys=True))
+    print(json.dumps(result_payload(pinned_result), sort_keys=True))
     return 0
 
 
@@ -125,13 +157,21 @@ def build_parser() -> argparse.ArgumentParser:
     lock.set_defaults(handler=_source_lock)
 
     download = source_commands.add_parser("download")
-    download.add_argument("--date", type=date.fromisoformat, required=True)
+    download_scope = download.add_mutually_exclusive_group(required=True)
+    download_scope.add_argument("--date", type=date.fromisoformat)
+    download_scope.add_argument("--year", type=int)
     download.add_argument("--include-schedule", action="store_true")
+    download.add_argument("--workers", type=int, default=4)
     download.add_argument("--inventory-lock", type=Path, default=DEFAULT_INVENTORY_LOCK)
     download.add_argument("--bus-profile", type=Path, default=DEFAULT_BUS_PROFILE)
     download.add_argument("--schedule-profile", type=Path, default=DEFAULT_SCHEDULE_PROFILE)
     download.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
     download.add_argument("--acquisition-lock", type=Path, default=DEFAULT_ACQUISITION_LOCK)
+    download.add_argument(
+        "--full-acquisition-lock",
+        type=Path,
+        default=DEFAULT_FULL_ACQUISITION_LOCK,
+    )
     download.set_defaults(handler=_source_download)
 
     data = commands.add_parser("data")

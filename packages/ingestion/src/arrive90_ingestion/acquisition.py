@@ -50,6 +50,15 @@ class DownloadResult:
 
 
 @dataclass(frozen=True, slots=True)
+class HttpObjectMetadata:
+    """Stable HTTP object metadata observed before a bounded download."""
+
+    size_bytes: int
+    etag: str | None
+    last_modified_at_utc: datetime | None
+
+
+@dataclass(frozen=True, slots=True)
 class ParquetProfile:
     """Stable physical facts required before normalization."""
 
@@ -125,6 +134,42 @@ def _http_timestamp(value: str | None) -> datetime | None:
     if parsed.tzinfo is None:
         raise AcquisitionError("HTTP Last-Modified timestamp must be timezone-aware")
     return parsed.astimezone(UTC)
+
+
+def fetch_http_object_metadata(
+    url: str,
+    *,
+    allowed_hosts: frozenset[str],
+    maximum_bytes: int,
+    timeout_seconds: float = 60,
+) -> HttpObjectMetadata:
+    """Read bounded immutable-object metadata with an allow-listed HTTPS HEAD request."""
+
+    _validate_source_url(url, allowed_hosts)
+    if maximum_bytes <= 0:
+        raise AcquisitionError("maximum metadata object size must be positive")
+    request = urllib.request.Request(  # noqa: S310 - URL allow-listed.
+        url,
+        headers={"User-Agent": DOWNLOAD_USER_AGENT},
+        method="HEAD",
+    )
+    opener = urllib.request.build_opener(_AllowListedRedirectHandler(allowed_hosts))
+    with opener.open(request, timeout=timeout_seconds) as response:
+        _validate_source_url(response.geturl(), allowed_hosts)
+        if response.getcode() != 200:
+            raise AcquisitionError(f"unexpected HTTP status for metadata: {response.getcode()}")
+        raw_size = response.headers.get("Content-Length")
+        try:
+            size = int(raw_size) if raw_size is not None else 0
+        except ValueError as error:
+            raise AcquisitionError("response Content-Length must be an integer") from error
+        if not 0 < size <= maximum_bytes:
+            raise AcquisitionError("response Content-Length is outside the bounded size limit")
+        return HttpObjectMetadata(
+            size_bytes=size,
+            etag=_normalize_etag(response.headers.get("ETag")),
+            last_modified_at_utc=_http_timestamp(response.headers.get("Last-Modified")),
+        )
 
 
 def _existing_download(

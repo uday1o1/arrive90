@@ -20,6 +20,7 @@ from arrive90_ingestion.acquisition import (
     acquisition_content_entry,
     download_resumable,
     expand_gzip_bounded,
+    fetch_http_object_metadata,
     parquet_profile,
     schedule_derived_entry,
     select_schedule_version,
@@ -41,6 +42,7 @@ class _Response(io.BytesIO):
         status: int,
         url: str = SOURCE_URL,
         content_range: str | None = None,
+        content_length: int | None = None,
     ) -> None:
         super().__init__(body)
         self.status = status
@@ -50,6 +52,8 @@ class _Response(io.BytesIO):
         self.headers["Last-Modified"] = "Wed, 15 May 2024 12:00:00 GMT"
         if content_range is not None:
             self.headers["Content-Range"] = content_range
+        if content_length is not None:
+            self.headers["Content-Length"] = str(content_length)
 
     def getcode(self) -> int:
         return self.status
@@ -100,6 +104,33 @@ def test_resumable_download_appends_only_a_valid_range_response(
     assert opener.requests[0].get_header("Range") == "bytes=3-"
     assert result.etag == "etag-1"
     assert result.last_modified_at_utc == LAST_MODIFIED
+
+
+def test_http_metadata_is_bounded_and_normalized(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    del tmp_path
+    opener = _Opener(_Response(b"", status=200, content_length=123))
+    _install_opener(monkeypatch, opener)
+
+    metadata = fetch_http_object_metadata(
+        SOURCE_URL,
+        allowed_hosts=ALLOWED_HOSTS,
+        maximum_bytes=200,
+    )
+
+    assert opener.requests[0].method == "HEAD"
+    assert metadata.size_bytes == 123
+    assert metadata.etag == "etag-1"
+    assert metadata.last_modified_at_utc == LAST_MODIFIED
+
+    opener.response = _Response(b"", status=200, content_length=201)
+    with pytest.raises(AcquisitionError, match="bounded size"):
+        fetch_http_object_metadata(
+            SOURCE_URL,
+            allowed_hosts=ALLOWED_HOSTS,
+            maximum_bytes=200,
+        )
 
 
 def test_download_restarts_when_server_ignores_range(
