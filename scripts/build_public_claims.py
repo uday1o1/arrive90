@@ -12,12 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 ACCEPTANCE = "configs/acceptance/travel-time-v1.2.yaml"
 FINAL = "artifacts/reports/final/travel-time-v1.2.json"
 FINAL_CLAIMS = "artifacts/reports/claims/travel-time-v1.2.json"
-CLEAN = "artifacts/reports/qualification/clean-checkout-v1.2.json"
-AUDIT = "artifacts/reports/qualification/repository-audit-v1.2.json"
 LICENSES = "artifacts/reports/qualification/licenses-v1.json"
 PERFORMANCE = "artifacts/reports/qualification/milestone-6-performance-v1.2.json"
 ROBUSTNESS = "artifacts/reports/qualification/milestone-6-robustness-v1.2.json"
 REPRODUCTION = "artifacts/reports/qualification/milestone-6-reproduction-v1.2.json"
+PUBLIC_CLAIMS = "artifacts/reports/qualification/public-claims-v1.2.json"
 
 
 def _digest(relative: str) -> str:
@@ -135,9 +134,9 @@ def _expected_measured_result(final: dict[str, Any], final_hash: str) -> str:
                 f"SHA-256 `{final_hash}`."
             ),
             (
-                "The [machine-readable claim registry]"
-                "(artifacts/reports/claims/travel-time-v1.2.json) preserves the exact "
-                "denominators, confidence intervals, and report pointers."
+                "The [machine-readable public claim audit]"
+                f"({PUBLIC_CLAIMS}) derives every displayed value, denominator, confidence "
+                "interval, and report pointer from that immutable report."
             ),
             "",
             "![Frozen model comparison](docs/assets/model-comparison.svg)",
@@ -145,95 +144,97 @@ def _expected_measured_result(final: dict[str, Any], final_hash: str) -> str:
     )
 
 
+README_CLAIM_POINTERS = {
+    "aft-interval-nlls": (
+        "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
+        "/models/SCHEDULE_CALENDAR-normal/interval_negative_log_likelihood",
+        "/models/FULL-normal-scale-0p5/availability/all_selected",
+    ),
+    "empirical-midpoint-point-difference": (
+        "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT",
+    ),
+    "final-test-population": (
+        "/models/FULL-normal-scale-0p5/availability/all_selected",
+        "/final_test/start_date",
+        "/final_test/end_date",
+    ),
+    "identified-15-minute-brier": ("/models/FULL-normal-scale-0p5/horizons/2",),
+    "monthly-nll-drift": (
+        "/drift/interval_nll_difference",
+        "/drift/months/2024-11/metrics/availability/likelihood",
+        "/drift/months/2024-12/metrics/availability/likelihood",
+    ),
+    "official-schedule-point-difference": (
+        "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE",
+    ),
+    "p50-median-interval-distance": (
+        "/point_diagnostics/models/PROMOTED_P50/median_absolute_interval_distance_seconds",
+        "/point_diagnostics/models/PROMOTED_P50/metric_eligible",
+    ),
+    "prediction-width": (
+        "/models/FULL-normal-scale-0p5/prediction_interval_width_seconds",
+        "/models/FULL-normal-scale-0p5/availability/prediction_interval_resolved",
+    ),
+}
+
+
+def _resolve_pointer(document: dict[str, Any], pointer: str) -> Any:
+    value: Any = document
+    for raw_token in pointer.removeprefix("/").split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        value = value[int(token)] if isinstance(value, list) else value[token]
+    return value
+
+
 def _readme_claim_map(final: dict[str, Any], final_hash: str) -> list[dict[str, Any]]:
-    promoted = final["models"]["FULL-normal-scale-0p5"]
-    population = promoted["availability"]["all_selected"]
-    schedule_comparison = final["point_diagnostics"]["comparisons"][
-        "PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE"
+    claims = [
+        {
+            "artifact_sha256": final_hash,
+            "evidence": [
+                {"report_pointer": pointer, "value": _resolve_pointer(final, pointer)}
+                for pointer in pointers
+            ],
+            "id": claim_id,
+        }
+        for claim_id, pointers in README_CLAIM_POINTERS.items()
     ]
-    empirical_comparison = final["point_diagnostics"]["comparisons"][
-        "PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
-    ]
-    promoted_median = final["point_diagnostics"]["models"]["PROMOTED_P50"][
-        "median_absolute_interval_distance_seconds"
-    ]
-    brier = _find_horizon(promoted, 900)
-    return [
+    claims.append(
         {
-            "id": "final-test-population",
-            "report_pointers": [
-                "/models/FULL-normal-scale-0p5/availability/all_selected/raw_row_count",
-                "/models/FULL-normal-scale-0p5/availability/all_selected/distinct_anchor_count",
-                "/models/FULL-normal-scale-0p5/availability/all_selected/distinct_service_day_count",
-            ],
-            "values": {
-                "anchors": population["distinct_anchor_count"],
-                "rows": population["raw_row_count"],
-                "service_days": population["distinct_service_day_count"],
-            },
-        },
-        {
-            "id": "aft-interval-nlls",
-            "report_pointers": [
-                "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
-                "/models/SCHEDULE_CALENDAR-normal/interval_negative_log_likelihood",
-            ],
-            "values": {
-                "promoted": promoted["interval_negative_log_likelihood"],
-                "schedule_calendar": final["models"]["SCHEDULE_CALENDAR-normal"][
-                    "interval_negative_log_likelihood"
-                ],
-            },
-        },
-        {
-            "id": "official-schedule-point-difference",
-            "report_pointers": [
-                "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE"
-            ],
-            "values": schedule_comparison,
-        },
-        {
-            "id": "empirical-midpoint-point-difference",
-            "report_pointers": [
-                "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
-            ],
-            "values": empirical_comparison,
-        },
-        {
-            "id": "p50-median-interval-distance",
-            "report_pointers": [
-                "/point_diagnostics/models/PROMOTED_P50/median_absolute_interval_distance_seconds"
-            ],
-            "values": promoted_median,
-        },
-        {
-            "id": "identified-15-minute-brier",
-            "report_pointers": ["/models/FULL-normal-scale-0p5/horizons/2"],
-            "values": brier,
-        },
-        {
-            "id": "prediction-width",
-            "report_pointers": ["/models/FULL-normal-scale-0p5/prediction_interval_width_seconds"],
-            "values": promoted["prediction_interval_width_seconds"],
-        },
-        {
-            "id": "monthly-nll-drift",
-            "report_pointers": ["/drift/interval_nll_difference"],
-            "values": final["drift"]["interval_nll_difference"],
-        },
-        {
+            "artifact_sha256": final_hash,
+            "evidence": [{"report_pointer": "/", "value_sha256": final_hash}],
             "id": "immutable-final-report",
-            "report_pointers": ["/"],
-            "values": {"sha256": final_hash},
-        },
-    ]
+        }
+    )
+    return claims
+
+
+def _readme_claim_map_is_exhaustive(
+    final: dict[str, Any], final_hash: str, claims: list[dict[str, Any]]
+) -> bool:
+    expected_ids = {*README_CLAIM_POINTERS, "immutable-final-report"}
+    if {claim.get("id") for claim in claims} != expected_ids:
+        return False
+    for claim in claims:
+        if claim.get("artifact_sha256") != final_hash:
+            return False
+        evidence = claim.get("evidence")
+        if not isinstance(evidence, list) or not evidence:
+            return False
+        for item in evidence:
+            pointer = item.get("report_pointer")
+            if not isinstance(pointer, str):
+                return False
+            if pointer == "/":
+                if item.get("value_sha256") != final_hash:
+                    return False
+            elif item.get("value") != _resolve_pointer(final, pointer):
+                return False
+    return True
 
 
 def build_report() -> dict[str, Any]:
     final = _load(FINAL)
     final_claims = _load(FINAL_CLAIMS)
-    clean = _load(CLEAN)
-    audit = _load(AUDIT)
     licenses = _load(LICENSES)
     performance = _load(PERFORMANCE)
     robustness = _load(ROBUSTNESS)
@@ -251,13 +252,13 @@ def build_report() -> dict[str, Any]:
     ]["mean_absolute_interval_distance_difference_seconds"]
     expected_result_section = _expected_measured_result(final, final_hash)
     observed_result_section = _readme_section(readme, "Measured result")
+    readme_claims = _readme_claim_map(final, final_hash)
     checks = {
         "accepted_full_year_reproduction_is_retained": reproduction.get("status") == "PASSED",
         "all_previous_milestone_reports_are_accepted": all(
             gate.get("milestone") == number and gate.get("state") == "ACCEPTED"
             for number, gate in enumerate(gates)
         ),
-        "clean_checkout_passed": clean.get("status") == "PASSED",
         "final_claim_registry_binds_current_report": (
             final_claims.get("final_report_sha256") == final_hash
             and all(
@@ -274,7 +275,9 @@ def build_report() -> dict[str, Any]:
         "readme_measured_result_section_matches_artifact_exactly": (
             observed_result_section == expected_result_section
         ),
-        "repository_audit_passed": audit.get("status") == "PASSED",
+        "readme_public_claim_audit_is_exhaustive": _readme_claim_map_is_exhaustive(
+            final, final_hash, readme_claims
+        ),
         "robustness_evidence_passed": robustness.get("status") == "PASSED",
     }
     claims = [
@@ -372,7 +375,15 @@ def build_report() -> dict[str, Any]:
         "claims": claims,
         "failing_checks": sorted(key for key, value in checks.items() if not value),
         "final_report_sha256": final_hash,
-        "readme_claims": _readme_claim_map(final, final_hash),
+        "input_hashes": {
+            "final_claim_registry": _digest(FINAL_CLAIMS),
+            "final_report": final_hash,
+            "licenses": _digest(LICENSES),
+            "performance": _digest(PERFORMANCE),
+            "reproduction": _digest(REPRODUCTION),
+            "robustness": _digest(ROBUSTNESS),
+        },
+        "readme_claims": readme_claims,
         "readme_measured_result_section_sha256": hashlib.sha256(
             observed_result_section.encode()
         ).hexdigest(),

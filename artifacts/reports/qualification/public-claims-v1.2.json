@@ -1,0 +1,369 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+  "checks": {
+    "accepted_full_year_reproduction_is_retained": true,
+    "all_previous_milestone_reports_are_accepted": true,
+    "final_claim_registry_binds_current_report": true,
+    "license_and_attribution_audit_passed": true,
+    "performance_evidence_passed": true,
+    "promoted_model_outperforms_strongest_aft_baseline": true,
+    "readme_measured_result_section_matches_artifact_exactly": true,
+    "readme_public_claim_audit_is_exhaustive": true,
+    "robustness_evidence_passed": true
+  },
+  "claims": [
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/final/travel-time-v1.2.json",
+          "sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453"
+        },
+        {
+          "path": "artifacts/reports/claims/travel-time-v1.2.json",
+          "sha256": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4"
+        }
+      ],
+      "claim": "The promoted full bundle recorded final-test interval NLL 1.6470.",
+      "evidence_state": "MEASURED_FROZEN_FINAL_TEST",
+      "id": "promoted-interval-nll",
+      "report_pointer": "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
+      "value": 1.6470473269094874
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/final/travel-time-v1.2.json",
+          "sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453"
+        }
+      ],
+      "claim": "The strongest comparable schedule-and-calendar AFT baseline recorded final-test interval NLL 1.6735.",
+      "evidence_state": "MEASURED_FROZEN_FINAL_TEST",
+      "id": "schedule-calendar-interval-nll",
+      "report_pointer": "/models/SCHEDULE_CALENDAR-normal/interval_negative_log_likelihood",
+      "value": 1.6734912865675513
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/final/travel-time-v1.2.json",
+          "sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453"
+        },
+        {
+          "path": "artifacts/reports/claims/travel-time-v1.2.json",
+          "sha256": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4"
+        }
+      ],
+      "claim": "On common finite-upper rows, promoted p50 mean absolute interval distance was 7.310 seconds lower than the official schedule.",
+      "confidence_interval": {
+        "lower_95": -7.783085673756529,
+        "upper_95": -6.87217618952257
+      },
+      "evidence_state": "MEASURED_NARROW_POINT_DIAGNOSTIC",
+      "id": "promoted-vs-official-schedule",
+      "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE/mean_absolute_interval_distance_difference_seconds",
+      "value": -7.309836849344991
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/final/travel-time-v1.2.json",
+          "sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453"
+        },
+        {
+          "path": "artifacts/reports/claims/travel-time-v1.2.json",
+          "sha256": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4"
+        }
+      ],
+      "claim": "On common finite-upper rows, promoted p50 mean absolute interval distance was 4.874 seconds lower than the empirical midpoint.",
+      "confidence_interval": {
+        "lower_95": -5.454905612737747,
+        "upper_95": -4.306609382804121
+      },
+      "evidence_state": "MEASURED_NARROW_POINT_DIAGNOSTIC",
+      "id": "promoted-vs-empirical-midpoint",
+      "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT/mean_absolute_interval_distance_difference_seconds",
+      "value": -4.8739884303249426
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/qualification/milestone-6-performance-v1.2.json",
+          "sha256": "c26ffacb390fad526d5ea2fdf5786ab71694da04175f2e45bf56e675eb1d5484"
+        }
+      ],
+      "claim": "Full-year normalization peaked at 634,109,952 bytes while the verified raw store occupied 8,804,061,429 bytes.",
+      "evidence_state": "MEASURED_LOCAL_PERFORMANCE",
+      "id": "bounded-normalization-memory",
+      "value": 634109952
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/qualification/milestone-6-robustness-v1.2.json",
+          "sha256": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218"
+        }
+      ],
+      "claim": "All nine seeded defects fail for their intended reason and controls pass.",
+      "evidence_state": "MEASURED_PAIRED_ROBUSTNESS",
+      "id": "paired-robustness",
+      "value": 9
+    },
+    {
+      "acceptance_version": "travel-time-v1.2",
+      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "artifacts": [
+        {
+          "path": "artifacts/reports/qualification/milestone-6-reproduction-v1.2.json",
+          "sha256": "af72059fa91f797756ff41c8ccd08665fbcbfe9f45056e9e2f32f2463bf9b8c5"
+        }
+      ],
+      "claim": "A clean full-year rebuild matched the committed terminal, and its second pass verified 4,827 immutable files without rewriting them.",
+      "evidence_state": "MEASURED_CLEAN_REPRODUCTION",
+      "id": "full-year-reproduction",
+      "value": 4827
+    }
+  ],
+  "failing_checks": [],
+  "final_report_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+  "input_hashes": {
+    "final_claim_registry": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "licenses": "68a2df5caffd3a418ffaf7c49e98ae0ba78e32a485bfb6964f28ca8276c577ee",
+    "performance": "c26ffacb390fad526d5ea2fdf5786ab71694da04175f2e45bf56e675eb1d5484",
+    "reproduction": "af72059fa91f797756ff41c8ccd08665fbcbfe9f45056e9e2f32f2463bf9b8c5",
+    "robustness": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218"
+  },
+  "readme_claims": [
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
+          "value": 1.6470473269094874
+        },
+        {
+          "report_pointer": "/models/SCHEDULE_CALENDAR-normal/interval_negative_log_likelihood",
+          "value": 1.6734912865675513
+        },
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/availability/all_selected",
+          "value": {
+            "analysis_weight": 167692.0,
+            "distinct_anchor_count": 36600,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 199364
+          }
+        }
+      ],
+      "id": "aft-interval-nlls"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT",
+          "value": {
+            "common_rows": {
+              "analysis_weight": 137747.8012420635,
+              "distinct_anchor_count": 36467,
+              "distinct_service_day_count": 61,
+              "raw_row_count": 157112
+            },
+            "mean_absolute_interval_distance_difference_seconds": {
+              "estimate": -4.8739884303249426,
+              "lower_95": -5.454905612737747,
+              "quantile_method": "linear",
+              "replicates": 2000,
+              "seed": 902024,
+              "service_day_blocks": 61,
+              "upper_95": -4.306609382804121
+            },
+            "negative_favors_promoted": true
+          }
+        }
+      ],
+      "id": "empirical-midpoint-point-difference"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/availability/all_selected",
+          "value": {
+            "analysis_weight": 167692.0,
+            "distinct_anchor_count": 36600,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 199364
+          }
+        },
+        {
+          "report_pointer": "/final_test/start_date",
+          "value": "2024-11-01"
+        },
+        {
+          "report_pointer": "/final_test/end_date",
+          "value": "2024-12-31"
+        }
+      ],
+      "id": "final-test-population"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/horizons/2",
+          "value": {
+            "brier_complete_population_lower": 0.0258225732067528,
+            "brier_complete_population_upper": 0.190534204926121,
+            "brier_identified": 0.024866007938126485,
+            "horizon_seconds": 900,
+            "identified": {
+              "analysis_weight": 134690.4789484127,
+              "distinct_anchor_count": 36467,
+              "distinct_service_day_count": 61,
+              "raw_row_count": 152036
+            },
+            "unresolved": {
+              "analysis_weight": 33001.521051587304,
+              "distinct_anchor_count": 23252,
+              "distinct_service_day_count": 61,
+              "raw_row_count": 47328
+            }
+          }
+        }
+      ],
+      "id": "identified-15-minute-brier"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/drift/interval_nll_difference",
+          "value": 0.03211910233451398
+        },
+        {
+          "report_pointer": "/drift/months/2024-11/metrics/availability/likelihood",
+          "value": {
+            "analysis_weight": 66012.22362301587,
+            "distinct_anchor_count": 17924,
+            "distinct_service_day_count": 30,
+            "raw_row_count": 76099
+          }
+        },
+        {
+          "report_pointer": "/drift/months/2024-12/metrics/availability/likelihood",
+          "value": {
+            "analysis_weight": 70414.49202380952,
+            "distinct_anchor_count": 18503,
+            "distinct_service_day_count": 31,
+            "raw_row_count": 79863
+          }
+        }
+      ],
+      "id": "monthly-nll-drift"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE",
+          "value": {
+            "common_rows": {
+              "analysis_weight": 137747.8012420635,
+              "distinct_anchor_count": 36467,
+              "distinct_service_day_count": 61,
+              "raw_row_count": 157112
+            },
+            "mean_absolute_interval_distance_difference_seconds": {
+              "estimate": -7.309836849344991,
+              "lower_95": -7.783085673756529,
+              "quantile_method": "linear",
+              "replicates": 2000,
+              "seed": 902024,
+              "service_day_blocks": 61,
+              "upper_95": -6.87217618952257
+            },
+            "negative_favors_promoted": true
+          }
+        }
+      ],
+      "id": "official-schedule-point-difference"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/point_diagnostics/models/PROMOTED_P50/median_absolute_interval_distance_seconds",
+          "value": {
+            "estimate": 5.345742311648451,
+            "lower_95": 4.8267756722316335,
+            "quantile_method": "linear",
+            "replicates": 2000,
+            "seed": 902024,
+            "service_day_blocks": 61,
+            "upper_95": 5.8291606318621705
+          }
+        },
+        {
+          "report_pointer": "/point_diagnostics/models/PROMOTED_P50/metric_eligible",
+          "value": {
+            "analysis_weight": 137747.8012420635,
+            "distinct_anchor_count": 36467,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 157112
+          }
+        }
+      ],
+      "id": "p50-median-interval-distance"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/prediction_interval_width_seconds",
+          "value": {
+            "definition": "p90 minus p50",
+            "mean": 94.0567182381457,
+            "p95": 223.72746313617188
+          }
+        },
+        {
+          "report_pointer": "/models/FULL-normal-scale-0p5/availability/prediction_interval_resolved",
+          "value": {
+            "analysis_weight": 167692.0,
+            "distinct_anchor_count": 36600,
+            "distinct_service_day_count": 61,
+            "raw_row_count": 199364
+          }
+        }
+      ],
+      "id": "prediction-width"
+    },
+    {
+      "artifact_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+      "evidence": [
+        {
+          "report_pointer": "/",
+          "value_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453"
+        }
+      ],
+      "id": "immutable-final-report"
+    }
+  ],
+  "readme_measured_result_section_sha256": "a386658558c0fffe70a3bfef5720427edcb4d4cefd25ed3bb793d19096af37a0",
+  "status": "PASSED",
+  "version": "public-claims-v1.2"
+}

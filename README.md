@@ -27,7 +27,7 @@ It reduced the same diagnostic by 4.874 seconds versus the empirical midpoint ba
 | December minus November NLL drift | +0.032 | Descriptive temporal comparison |
 
 Every value above maps to the [immutable final report](artifacts/reports/final/travel-time-v1.2.json) with SHA-256 `8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453`.
-The [machine-readable claim registry](artifacts/reports/claims/travel-time-v1.2.json) preserves the exact denominators, confidence intervals, and report pointers.
+The [machine-readable public claim audit](artifacts/reports/qualification/public-claims-v1.2.json) derives every displayed value, denominator, confidence interval, and report pointer from that immutable report.
 
 ![Frozen model comparison](docs/assets/model-comparison.svg)
 

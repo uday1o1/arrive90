@@ -13,10 +13,12 @@ from scripts.audit_repository import (  # noqa: E402
 )
 from scripts.build_public_claims import (  # noqa: E402
     FINAL,
+    PUBLIC_CLAIMS,
     _digest,
     _expected_measured_result,
     _load,
     _readme_claim_map,
+    _readme_claim_map_is_exhaustive,
     _readme_section,
 )
 from scripts.report_milestone_7 import _qualification_environment  # noqa: E402
@@ -75,8 +77,12 @@ def test_current_workflows_reference_only_defined_make_targets() -> None:
 
 def test_public_claim_report_contains_exhaustive_readme_claim_map() -> None:
     final = _load(FINAL)
-    claim_ids = {claim["id"] for claim in _readme_claim_map(final, _digest(FINAL))}
+    final_hash = _digest(FINAL)
+    claims = _readme_claim_map(final, final_hash)
+    claim_ids = {claim["id"] for claim in claims}
 
+    assert f"]({PUBLIC_CLAIMS})" in (ROOT / "README.md").read_text(encoding="utf-8")
+    assert _readme_claim_map_is_exhaustive(final, final_hash, claims) is True
     assert claim_ids == {
         "aft-interval-nlls",
         "empirical-midpoint-point-difference",
