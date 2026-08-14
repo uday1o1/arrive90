@@ -1,130 +1,95 @@
 import { expect, test } from "@playwright/test";
 
-async function openPlanner(page) {
+async function openExplorer(page) {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Choose for the arrival that matters." })).toBeVisible();
-  await expect(page.getByText("ready · loopback local")).toBeVisible();
-  await page.getByLabel("Origin station").selectOption("alpha");
-  await page.getByLabel("Destination station").selectOption("bravo");
+  await expect(page.getByRole("heading", { name: "Replay a prediction before revealing what happened." })).toBeVisible();
+  await expect(page.getByText("ready · verified local artifacts")).toBeVisible();
+  await expect(page.getByLabel("Held-out replay", { exact: true })).not.toHaveValue("");
 }
 
-async function compare(page) {
-  await page.getByRole("button", { name: "Compare routes" }).click();
-  await expect(page.getByRole("heading", { name: "Your route comparison" })).toBeVisible();
+async function scoreReplay(page) {
+  await page.getByRole("button", { name: "Score held-out replay" }).click();
+  await expect(page.getByRole("heading", { name: "Three honest points of comparison" })).toBeVisible();
 }
 
-function localUtcInput(date) {
-  return date.toISOString().slice(0, 16);
-}
+test("full replay selection, prediction, and outcome reveal is honest", async ({ page, context }) => {
+  const requested = [];
+  page.on("request", (request) => requested.push(request.url()));
+  await openExplorer(page);
+  await page.getByLabel("Direction").selectOption("1");
+  await scoreReplay(page);
 
-test("direct target-not-met trip remains actionable and text-complete", async ({ page, context }) => {
-  await openPlanner(page);
-  await page.getByLabel("Reliability target").selectOption("0.80");
-  await page.locator("#cap").fill("0");
-  await compare(page);
+  expect(requested.some((url) => url.endsWith("/outcome"))).toBe(false);
+  await expect(page.getByText("Official schedule diagnostic")).toBeVisible();
+  await expect(page.getByText("Training-only empirical midpoint")).toBeVisible();
+  await expect(page.getByText("Promoted survival model")).toBeVisible();
+  await expect(page.getByRole("table", { name: "Text alternative for the arrival CDF" })).toBeVisible();
+  await expect(page.getByRole("row", { name: /p50/ })).toBeVisible();
+  await expect(page.getByRole("row", { name: /p80/ })).toBeVisible();
+  await expect(page.getByRole("row", { name: /p90/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cutoff-visible history" })).toBeVisible();
+  await expect(page.getByText("Hidden until explicit reveal")).toBeVisible();
+  await expect(page.locator("#outcome-result")).toBeHidden();
 
-  await expect(page.getByText(/Target not met/)).toBeVisible();
-  await expect(page.locator("#safer-summary")).toHaveText("Direct itinerary");
-  await expect(page.locator("#deadline-probability")).toHaveText("75% estimate");
-  await expect(page.locator("#fastest-model-status")).toContainText("Probability unavailable");
-  await expect(page.getByRole("link", { name: "How this estimate is evaluated" })).toBeVisible();
-
-  await page.getByRole("button", { name: "Start this trip" }).click();
-  await expect(page.locator("#trip-state")).toContainText("Trip active");
-  await page.getByRole("button", { name: "Confirm boarded" }).click();
-  await expect(page.locator("#trip-state")).toContainText("on final leg");
-  await expect(page.getByRole("list", { name: "Live trip events" })).toContainText("deterministic state");
+  await page.getByRole("button", { name: "Reveal actual outcome" }).click();
+  await expect(page.locator("#outcome-result")).toBeVisible();
+  await expect(page.locator("#outcome-result")).toContainText(/INTERVAL RESOLVED|LEFT CENSORED|RIGHT CENSORED|MISSING STOP OBSERVATION|OVER WIDTH INTERVAL|SESSION DISCONTINUITY/);
+  expect(requested.some((url) => url.endsWith("/outcome"))).toBe(true);
   expect(await context.cookies()).toEqual([]);
   expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
-  expect(page.url()).not.toContain("Bearer");
-  await page.getByRole("button", { name: "Stop trip" }).click();
-  await expect(page.locator("#trip-state")).toContainText("ended");
+
+  if (process.env.ARRIVE90_CAPTURE_DEMO === "1") {
+    const video = page.video();
+    await page.screenshot({ path: "artifacts/demos/replay-explorer.png", fullPage: true });
+    await page.close();
+    await video.saveAs("artifacts/demos/replay-explorer-walkthrough.webm");
+  }
 });
 
-test("transfer trip exposes selected uncertainty and schedule-only recovery", async ({ page }) => {
-  await openPlanner(page);
-  await compare(page);
+test("fixed horizons, calibration diagnostics, and evidence remain visible", async ({ page }) => {
+  await openExplorer(page);
+  await page.getByLabel("Prediction horizon").selectOption("1200");
+  await scoreReplay(page);
 
-  await expect(page.getByText(/Synthetic fixture. Estimated target met/)).toBeVisible();
-  await expect(page.locator("#safer-summary")).toHaveText("One-transfer itinerary");
-  await expect(page.locator("#deadline-probability")).toHaveText("94% estimate");
-  await expect(page.getByRole("row", { name: /p50/ })).toBeVisible();
-  await expect(page.getByRole("row", { name: /p90/ })).toBeVisible();
-  await expect(page.locator("#backup-summary")).toContainText("Backup: one transfer");
-  if (process.env.ARRIVE90_CAPTURE_UI === "1") {
-    await page.screenshot({ path: "artifacts/demos/milestone-7-synthetic-ui.png", fullPage: true });
+  await expect(page.locator("#model-detail")).toContainText("20m 00s");
+  await expect(page.getByRole("table", { name: "Text alternative for held-out calibration bins" })).toBeVisible();
+  await expect(page.locator("#calibration-summary")).toContainText("ECE");
+  await expect(page.getByRole("heading", { name: "Artifact lineage" })).toBeVisible();
+  await expect(page.locator("#lineage")).toContainText("FULL-normal-scale-0p5");
+  await expect(page.getByText("199,364")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Methodology and limitations stay beside the demo." })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Inspect the machine-readable evaluation evidence" })).toHaveAttribute("href", "/v1/explorer/evidence");
+});
+
+test("empty filtering and unsupported requests explain the problem", async ({ page, request }) => {
+  await openExplorer(page);
+  await page.getByLabel("Origin station").selectOption({ index: 1 });
+  await page.getByLabel("Destination station").selectOption({ index: 1 });
+  if (await page.getByText("No held-out replays match those controls.").isVisible()) {
+    await expect(page.getByRole("button", { name: "Score held-out replay" })).toBeDisabled();
   }
 
-  await page.getByRole("button", { name: "Start this trip" }).click();
-  await page.getByRole("button", { name: "Confirm boarded" }).click();
-  await expect(page.locator("#trip-state")).toContainText("on first leg");
-  await page.getByRole("button", { name: "Confirm at transfer" }).click();
-
-  const recovery = page.getByRole("heading", { name: "Recovery option after confirmed transfer state" });
-  await expect(recovery).toBeVisible();
-  await expect(page.locator("#recovery-card")).toContainText("Conditional schedule action");
-  await expect(page.locator("#recovery-card")).toContainText("New deadline probabilityNot computed");
-  await expect(page.locator("#recovery-card")).toContainText("New arrival quantilesNot computed");
-  await expect(page.locator("#recovery-card")).toContainText("Reliability target statusNot applicable");
-  await page.getByRole("button", { name: "Use this schedule option" }).click();
-  await expect(page.locator("#trip-state")).toContainText("on final leg");
-  await expect(page.getByRole("list", { name: "Live trip events" })).toContainText("recovery schedule only");
+  const invalidLine = await request.get("/v1/explorer/inventory?line_id=Red");
+  expect(invalidLine.status()).toBe(422);
+  expect((await invalidLine.text())).toContain("only retained line");
+  const invalidHorizon = await request.get("/v1/explorer/reliability?horizon_seconds=42");
+  expect(invalidHorizon.status()).toBe(422);
+  expect((await invalidHorizon.text())).toContain("unsupported reliability horizon");
 });
 
-test("stale, abstained, sparse, unsupported-target, and future branches stay explicit", async ({ page }) => {
-  await openPlanner(page);
-
-  await page.getByLabel("Origin station").selectOption("alpha-stale");
-  await compare(page);
-  await expect(page.getByText(/Stale feed: schedule only/)).toBeVisible();
-  await expect(page.locator("#selected-model-status")).toContainText("unavailable");
-  await expect(page.getByRole("button", { name: "Start this trip" })).toBeDisabled();
-
-  await page.getByLabel("Origin station").selectOption("alpha-absent");
-  await compare(page);
-  await expect(page.getByText(/Model abstained/)).toBeVisible();
-
-  await page.getByLabel("Origin station").selectOption("alpha-sparse");
-  await compare(page);
-  await expect(page.getByText(/Insufficient evidence/)).toBeVisible();
-  await expect(page.locator("#probability-panel")).toBeHidden();
-
-  await page.getByLabel("Origin station").selectOption("alpha");
-  await page.getByLabel("Reliability target").selectOption("0.95");
-  await compare(page);
-  await expect(page.getByText(/Insufficient evidence/)).toBeVisible();
-  await expect(page.locator("#deadline-probability")).toHaveText("94% estimate");
-
-  const ready = new Date(Date.now() + 20 * 60_000);
-  const deadline = new Date(ready.getTime() + 30 * 60_000);
-  await page.getByLabel("Ready at").fill(localUtcInput(ready));
-  await page.getByLabel("Arrive by").fill(localUtcInput(deadline));
-  await compare(page);
-  await expect(page.getByText(/Future request: schedule only/)).toBeVisible();
-  await expect(page.getByText("Search again within 15 minutes of readiness before starting a trip.")).toBeVisible();
-  await expect(page.locator("#probability-panel")).toBeHidden();
-});
-
-test("normalization, keyboard landmarks, and no-map use are visible", async ({ page }) => {
-  await openPlanner(page);
-  await page.locator("[data-optional-map]").evaluate((node) => node.remove());
-  const current = new Date();
-  current.setSeconds(0, 0);
-  await page.getByLabel("Ready at").fill(localUtcInput(new Date(current.getTime() - 60_000)));
-  await page.getByLabel("Arrive by").fill(localUtcInput(new Date(current.getTime() + 31 * 60_000)));
-  await compare(page);
-  await expect(page.getByText("Times were conservatively normalized.")).toBeVisible();
-  await expect(page.locator("#normalization")).toContainText("Requested ready");
-  await expect(page.locator("#normalization")).toContainText("Effective deadline");
-
-  await expect(page.getByRole("main")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "What this interface does not claim" })).toBeVisible();
-  await expect(page.getByText("Schedule comparator")).toBeVisible();
-  await expect(page.getByText("Bounded decision")).toBeVisible();
-  await page.goto("/");
+test("primary workflow is keyboard reachable and never depends on color", async ({ page }) => {
+  await openExplorer(page);
+  await page.keyboard.press("Home");
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Skip to journey planner" })).toBeFocused();
+  await expect(page.getByRole("link", { name: "Skip to replay controls" })).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#planner$/);
+  await expect(page).toHaveURL(/#controls$/);
+  await expect(page.getByLabel("Line", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Direction")).toBeVisible();
+  await expect(page.getByLabel("Origin station")).toBeVisible();
+  await expect(page.getByLabel("Destination station")).toBeVisible();
+  await expect(page.getByText(/meaning never depends on color alone/i)).toBeHidden();
+  await scoreReplay(page);
+  await expect(page.getByText(/meaning never depends on color alone/i)).toBeVisible();
+  await expect(page.locator("#calibration-rows")).toContainText("Supported bin");
 });

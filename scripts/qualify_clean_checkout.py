@@ -17,7 +17,7 @@ GIT: str = shutil.which("git") or ""
 if not GIT:
     raise RuntimeError("git is required for clean-checkout qualification")
 
-COMMANDS = (
+FULL_COMMANDS = (
     ("install_python", ("uv", "python", "install")),
     ("sync_python", ("uv", "sync", "--frozen")),
     ("install_node", ("npm", "ci")),
@@ -80,6 +80,11 @@ COMMANDS = (
     ),
 )
 
+DEMO_COMMANDS = (
+    ("sync_python", ("uv", "sync", "--frozen")),
+    ("network_free_demo", ("make", "demo")),
+)
+
 
 def _run(
     command: tuple[str, ...], *, cwd: Path, env: dict[str, str]
@@ -102,7 +107,7 @@ def _version(command: tuple[str, ...], *, cwd: Path, env: dict[str, str]) -> str
     return completed.stdout.strip() or completed.stderr.strip()
 
 
-def qualify(*, repository: str, commit: str) -> dict[str, Any]:
+def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str, Any]:
     # Docker Desktop and Colima share the project filesystem, but do not necessarily
     # share the operating system's default temporary directory with the daemon.
     with tempfile.TemporaryDirectory(
@@ -158,8 +163,12 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
         env["UV_CACHE_DIR"] = str(clone / ".cache" / "uv")
         failing_command: str | None = None
         observations: dict[str, Any] = {}
-        for name, command in COMMANDS:
-            completed = _run(command, cwd=clone, env=env)
+        commands = DEMO_COMMANDS if workflow == "demo" else FULL_COMMANDS
+        for name, command in commands:
+            command_env = dict(env)
+            if name == "network_free_demo":
+                command_env["UV_OFFLINE"] = "1"
+            completed = _run(command, cwd=clone, env=command_env)
             result: dict[str, Any] = {
                 "command": " ".join(command),
                 "name": name,
@@ -181,6 +190,14 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
                     float(coverage.group(1)) if coverage else None
                 )
                 observations["python_tests_passed"] = passed_counts[0] if passed_counts else None
+            if name == "network_free_demo":
+                manifest_path = clone / "artifacts/runtime/demo-terminal-manifest.json"
+                expected_path = clone / "artifacts/demo/travel-time-v1/terminal-manifest.json"
+                observations["terminal_manifest_reproduced"] = (
+                    manifest_path.is_file()
+                    and expected_path.is_file()
+                    and manifest_path.read_bytes() == expected_path.read_bytes()
+                )
         status = _run((GIT, "status", "--porcelain"), cwd=clone, env=env)
         head = _version((GIT, "rev-parse", "HEAD"), cwd=clone, env=env)
         for name in ("security", "licenses", "reliability", "repository-audit"):
@@ -194,6 +211,10 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
             "exact_commit_checked_out": head == commit,
             "fresh_clone_remained_clean": status.returncode == 0 and not status.stdout.strip(),
         }
+        if workflow == "demo":
+            checks["expected_terminal_manifest_reproduced"] = bool(
+                observations.get("terminal_manifest_reproduced")
+            )
         return {
             "checks": checks,
             "commit": commit,
@@ -215,6 +236,7 @@ def qualify(*, repository: str, commit: str) -> dict[str, Any]:
             "repository": repository,
             "results": results,
             "status": "PASSED" if all(checks.values()) else "FAILED",
+            "workflow": workflow,
         }
 
 
@@ -223,12 +245,13 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--repository", required=True)
     command.add_argument("--commit", required=True)
     command.add_argument("--output", type=Path, required=True)
+    command.add_argument("--workflow", choices=("demo", "full"), default="full")
     return command
 
 
 def main() -> int:
     args = parser().parse_args()
-    report = qualify(repository=args.repository, commit=args.commit)
+    report = qualify(repository=args.repository, commit=args.commit, workflow=args.workflow)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(args.output)

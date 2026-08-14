@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import itertools
 import json
 import os
 import platform
@@ -33,9 +32,7 @@ from arrive90_decision.contracts import (
 from arrive90_decision.initial import select_initial_decision
 from arrive90_decision.recovery import select_recovery_decision
 from arrive90_service.app import create_app
-from arrive90_service.contracts import ServiceConfig
-from arrive90_service.demo import LocalBlockedBackend
-from arrive90_service.store import CapabilityTripStore
+from arrive90_service.explorer import ExplorerRepository
 from fastapi.testclient import TestClient
 
 NOW = datetime(2025, 1, 1, 12, tzinfo=UTC)
@@ -203,45 +200,20 @@ def build_report() -> dict[str, Any]:
     )
 
     recovery_result = _summary(_duration_samples(recover))
-    config = ServiceConfig(
-        allowed_hosts=frozenset({"testserver"}),
-        allowed_origins=frozenset({"http://testserver"}),
-        decision_keys=(("benchmark", b"d" * 32),),
-        active_decision_key_version="benchmark",
-        trip_keys=(("benchmark", b"t" * 32),),
-        active_trip_key_version="benchmark",
-        search_limit_per_minute=30,
-    )
-    epoch_ticks = itertools.count(100.0, 3.0)
-    store = CapabilityTripStore(":memory:", config)
-    app = create_app(
-        backend=LocalBlockedBackend(),
-        store=store,
-        config=config,
-        clock=lambda: NOW,
-        epoch_clock=lambda: next(epoch_ticks),
-    )
+    repository = ExplorerRepository.load()
+    replay_id = sorted(repository.records)[0]
+    app = create_app(repository=repository)
     client = TestClient(app)
-    payload = {
-        "deadline": (NOW + timedelta(minutes=30)).isoformat(),
-        "destination_station_id": "demo-destination",
-        "maximum_extra_minutes": 20,
-        "origin_station_id": "demo-origin",
-        "ready_at": NOW.isoformat(),
-        "reliability_target": "0.90",
-    }
 
     def api_search() -> None:
-        response = client.post(
-            "/v1/journeys/search",
-            json=payload,
-            headers={"Origin": "http://testserver"},
+        response = client.get(
+            f"/v1/explorer/replays/{replay_id}/prediction",
+            params={"horizon_seconds": 900},
         )
         if response.status_code != 200:
             raise RuntimeError("benchmark API request failed")
 
     api_result = _summary(_duration_samples(api_search, iterations=200))
-    store.close()
     decision_p95 = max(item["p95_ms"] for item in decision_results.values())
     hardware_match = (
         platform.system() == "Linux"

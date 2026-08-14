@@ -1,0 +1,25 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "artifact_hashes": {
+    "claim_registry": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4",
+    "explorer_assets": "43271906d6212dc0dbbfea581b5269154bb698f4f70a6297defed7b79ed10245",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "replay_fixture": "0d869ab66d1a5026676f62b535795d4187ebcc0c1b445298908708ea9760d1b0"
+  },
+  "checks": {
+    "all_fixed_horizons_present": true,
+    "exact_allow_listed_model_loaded": true,
+    "later_outcome_revealed_separately": true,
+    "offline_prediction_matched_within_1e_12": true,
+    "prediction_excludes_outcome_fields": true,
+    "three_quantiles_present": true
+  },
+  "horizon_seconds": 900,
+  "model_bundle_id": "FULL-normal-scale-0p5",
+  "outcome_state_after_reveal": "INTERVAL_RESOLVED",
+  "replay_id": "00001720c2cf3bb8dc22b373",
+  "selected_horizon_probability": 0.9999990903495056,
+  "split": "FINAL_TEST",
+  "state": "PASSED",
+  "version": "network-free-demo-terminal-v1"
+}

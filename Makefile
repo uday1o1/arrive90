@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test demo demo-serve check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -40,6 +40,12 @@ frontend-check:
 
 browser-test: frontend-check
 	npm run test:e2e
+
+demo:
+	$(UV_RUN) python scripts/run_demo_smoke.py
+
+demo-serve:
+	$(UV_RUN) arrive90-api
 
 check: lock-check format-check lint typecheck test
 

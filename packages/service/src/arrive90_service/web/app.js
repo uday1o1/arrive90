@@ -1,361 +1,296 @@
-const elements = Object.fromEntries(
-  [
-    "system-pill", "search-form", "origin", "destination", "ready-at", "deadline", "target",
-    "cap", "cap-output", "search-button", "form-error", "results", "decision-status",
-    "normalization", "requested-ready", "effective-ready", "requested-deadline",
-    "effective-deadline", "fastest-summary", "fastest-time", "fastest-transfers",
-    "fastest-model-status", "safer-summary", "safer-time", "safer-extra", "safer-transfers",
-    "probability-panel", "deadline-probability", "probability-meter", "selected-model-status",
-    "quantile-rows", "quantile-empty", "timeline", "backup-summary", "explanations",
-    "start-trip", "confirm-boarded", "confirm-transfer", "stop-trip", "trip-state",
-    "trip-guidance", "event-log", "recovery-card", "recovery-reason", "recovery-route",
-    "activate-recovery",
-  ].map((id) => [id, document.getElementById(id)]),
-);
+const elements = Object.fromEntries([...document.querySelectorAll("[id]")].map((node) => [node.id, node]));
+const SVG = "http://www.w3.org/2000/svg";
+const state = { inventory: null, metadata: null, prediction: null, replayId: null };
 
-const session = {
-  decisionCapability: null,
-  selectedItineraryId: null,
-  selectedTransferCount: 0,
-  tripId: null,
-  tripBearer: null,
-  stateVersion: 0,
-  lastEventId: 0,
-  recoveryDecision: null,
-};
-
-const explanationText = {
-  EXTRA_TIME_FOR_RELIABILITY: "The selected route adds scheduled time in exchange for its higher modeled deadline estimate.",
-  HISTORICAL_SUPPORT_SPARSE: "The required historical support cell is unavailable, so the model output is suppressed.",
-  LIVE_FEED_STALE: "The applicable live evidence is stale and the result is schedule-only.",
-};
-
-function localInputValue(date) {
-  const shifted = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
-  return shifted.toISOString().slice(0, 16);
+async function api(path) {
+  const response = await fetch(path, { headers: { Accept: "application/json" } });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    const detail = typeof payload.detail === "string" ? payload.detail : payload.detail?.message;
+    throw new Error(detail || `Local explorer request failed with status ${response.status}.`);
+  }
+  return response.json();
 }
 
-function formatTime(value) {
-  if (!value) return "Unavailable";
-  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+function clear(node) {
+  node.replaceChildren();
 }
 
-function minutes(seconds) {
-  if (seconds === null || seconds === undefined) return "Unavailable";
-  return `${Math.round(seconds / 60)} min`;
+function option(value, label) {
+  const node = document.createElement("option");
+  node.value = value;
+  node.textContent = label;
+  return node;
 }
 
-function clearChildren(node) {
-  while (node.firstChild) node.removeChild(node.firstChild);
+function addDefinition(list, term, description) {
+  const wrapper = document.createElement("div");
+  const dt = document.createElement("dt");
+  const dd = document.createElement("dd");
+  dt.textContent = term;
+  dd.textContent = description;
+  wrapper.append(dt, dd);
+  list.append(wrapper);
 }
 
-function appendListItem(parent, text) {
-  const item = document.createElement("li");
-  item.textContent = text;
-  parent.append(item);
+function seconds(value) {
+  if (value === null || value === undefined) return "Unavailable";
+  const rounded = Math.round(Number(value));
+  const minutes = Math.floor(rounded / 60);
+  const remainder = rounded % 60;
+  return `${minutes}m ${String(remainder).padStart(2, "0")}s`;
 }
 
-function resetSession() {
-  session.decisionCapability = null;
-  session.selectedItineraryId = null;
-  session.selectedTransferCount = 0;
-  session.tripId = null;
-  session.tripBearer = null;
-  session.stateVersion = 0;
-  session.lastEventId = 0;
-  session.recoveryDecision = null;
-  elements["trip-state"].textContent = "No active trip.";
-  elements["start-trip"].hidden = false;
-  elements["confirm-boarded"].hidden = true;
-  elements["confirm-transfer"].hidden = true;
-  elements["stop-trip"].hidden = true;
-  elements["recovery-card"].hidden = true;
-  clearChildren(elements["event-log"]);
+function percent(value) {
+  return `${(Number(value) * 100).toFixed(1)}%`;
 }
 
-function renderSlot(prefix, slot, selected) {
-  const unavailable = prefix === "safer" ? "selected-model-status" : `${prefix}-model-status`;
-  if (!slot) {
-    elements[`${prefix}-summary`].textContent = "No eligible itinerary.";
-    elements[`${prefix}-time`].textContent = "Unavailable";
-    elements[`${prefix}-transfers`].textContent = "Unavailable";
-    if (prefix === "safer") elements["safer-extra"].textContent = "Unavailable";
-    elements[unavailable].textContent = "No route is available for this decision state.";
+function fillSelect(select, values, makeLabel, includeAll = true) {
+  const previous = select.value;
+  clear(select);
+  if (includeAll) select.append(option("", "All"));
+  for (const value of values) select.append(option(String(value), makeLabel(value)));
+  if ([...select.options].some((item) => item.value === previous)) select.value = previous;
+}
+
+function matchingReplays() {
+  return state.inventory.replays.filter((row) =>
+    (!elements.direction.value || row.direction_id === elements.direction.value) &&
+    (!elements.origin.value || row.origin.stop_id === elements.origin.value) &&
+    (!elements.destination.value || row.destination.stop_id === elements.destination.value));
+}
+
+function refreshReplayOptions() {
+  const rows = matchingReplays();
+  const previous = elements.replay.value;
+  clear(elements.replay);
+  for (const row of rows) {
+    elements.replay.append(option(
+      row.replay_id,
+      `${row.service_date} · ${row.origin.name} to ${row.destination.name} · ${row.replay_id.slice(0, 8)}`,
+    ));
+  }
+  if ([...elements.replay.options].some((item) => item.value === previous)) elements.replay.value = previous;
+  elements["control-error"].hidden = rows.length > 0;
+  elements["control-error"].textContent = rows.length ? "" : "No held-out replays match those controls.";
+  elements["replay-form"].querySelector("button").disabled = rows.length === 0;
+}
+
+function svgNode(name, attributes = {}) {
+  const node = document.createElementNS(SVG, name);
+  for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
+  return node;
+}
+
+function renderCdf(rows) {
+  const chart = elements["cdf-chart"];
+  clear(chart);
+  chart.append(
+    svgNode("title", { id: "cdf-chart-title" }),
+    svgNode("desc", { id: "cdf-chart-desc" }),
+  );
+  chart.children[0].textContent = "Predicted cumulative arrival probability by time horizon";
+  chart.children[1].textContent = "A line chart with a point for every fixed evaluation horizon.";
+  chart.append(svgNode("line", { x1: 56, x2: 612, y1: 220, y2: 220, class: "axis" }));
+  chart.append(svgNode("line", { x1: 56, x2: 56, y1: 20, y2: 220, class: "axis" }));
+  const points = rows.map((row, index) => {
+    const x = 56 + index * (556 / (rows.length - 1));
+    const y = 220 - row.probability * 190;
+    return { ...row, x, y };
+  });
+  chart.append(svgNode("polyline", { points: points.map((row) => `${row.x},${row.y}`).join(" "), class: "cdf-line" }));
+  for (const row of points) {
+    const point = svgNode("circle", { cx: row.x, cy: row.y, r: 5, class: "cdf-point" });
+    const title = svgNode("title");
+    title.textContent = `${seconds(row.seconds)}: ${percent(row.probability)}`;
+    point.append(title);
+    chart.append(point);
+  }
+  clear(elements["cdf-rows"]);
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    const horizon = document.createElement("td");
+    const probability = document.createElement("td");
+    horizon.textContent = seconds(row.seconds);
+    probability.textContent = percent(row.probability);
+    tr.append(horizon, probability);
+    elements["cdf-rows"].append(tr);
+  }
+}
+
+function renderQuantiles(rows) {
+  clear(elements["quantile-rows"]);
+  clear(elements["interval-chart"]);
+  const resolved = rows.filter((row) => row.resolved_within_60_minutes);
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    for (const value of [row.level, seconds(row.seconds), row.resolved_within_60_minutes ? "Resolved" : "Unresolved beyond 60m"]) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.append(td);
+    }
+    elements["quantile-rows"].append(tr);
+  }
+  if (!resolved.length) {
+    elements["interval-text"].textContent = "All promoted-model quantiles are unresolved beyond the frozen 60-minute model horizon.";
     return;
   }
-  const routeType = slot.transfer_count === 0 ? "Direct itinerary" : "One-transfer itinerary";
-  elements[`${prefix}-summary`].textContent = routeType;
-  elements[`${prefix}-time`].textContent = minutes(slot.planned_time_seconds);
-  elements[`${prefix}-transfers`].textContent = String(slot.transfer_count);
-  if (prefix === "safer") elements["safer-extra"].textContent = minutes(slot.extra_planned_time_seconds);
-  if (!selected || slot.deadline_probability === null) {
-    elements[unavailable].textContent = selected
-      ? "Model probability and quantiles are unavailable for this result."
-      : "Probability unavailable: this comparator output has not been validated.";
-  } else {
-    elements[unavailable].textContent = "Selected model output passed the configured support lookup for this fixture.";
+  const maximum = 3600;
+  for (const row of rows) {
+    const marker = document.createElement("div");
+    marker.className = row.seconds === null ? "quantile-marker unresolved" : "quantile-marker";
+    marker.style.left = `${Math.min(100, Number(row.seconds ?? maximum) / maximum * 100)}%`;
+    marker.textContent = row.level;
+    marker.title = row.seconds === null ? `${row.level} unresolved beyond 60 minutes` : `${row.level} ${seconds(row.seconds)}`;
+    elements["interval-chart"].append(marker);
   }
+  elements["interval-text"].textContent = rows.map((row) =>
+    `${row.level}: ${row.seconds === null ? "unresolved beyond 60 minutes" : seconds(row.seconds)}`).join("; ");
 }
 
-function renderNormalization(body) {
-  const changed = body.ready_time_status !== "AS_REQUESTED" || body.deadline_time_status !== "AS_REQUESTED";
-  elements.normalization.hidden = !changed;
-  elements["requested-ready"].textContent = formatTime(body.requested_ready_at);
-  elements["effective-ready"].textContent = formatTime(body.effective_ready_at);
-  elements["requested-deadline"].textContent = formatTime(body.requested_deadline_at);
-  elements["effective-deadline"].textContent = formatTime(body.effective_deadline_at);
-}
-
-function renderProbability(slot) {
-  clearChildren(elements["quantile-rows"]);
-  const probability = slot?.deadline_probability;
-  elements["probability-panel"].hidden = probability === null || probability === undefined;
-  if (probability !== null && probability !== undefined) {
-    const numeric = Number(probability);
-    elements["deadline-probability"].textContent = `${Math.round(numeric * 100)}% estimate`;
-    elements["probability-meter"].value = numeric;
-  }
-  const quantiles = Object.entries(slot?.arrival_quantiles || {});
-  elements["quantile-empty"].hidden = quantiles.length > 0;
-  for (const [level, arrival] of quantiles) {
-    const row = document.createElement("tr");
-    const label = document.createElement("th");
-    const value = document.createElement("td");
-    label.scope = "row";
-    label.textContent = level;
-    value.textContent = formatTime(arrival);
-    row.append(label, value);
-    elements["quantile-rows"].append(row);
-  }
-}
-
-function renderDetails(body) {
-  clearChildren(elements.timeline);
-  const recommendation = body.recommended_itinerary;
-  if (recommendation) {
-    appendListItem(elements.timeline, recommendation.transfer_count === 0 ? "Board the direct service." : "Board the first leg.");
-    if (recommendation.transfer_count === 1) appendListItem(elements.timeline, "Transfer once at the scheduled interchange.");
-    appendListItem(elements.timeline, `Scheduled arrival after ${minutes(recommendation.planned_time_seconds)}.`);
-  } else {
-    appendListItem(elements.timeline, "No itinerary timeline is available.");
-  }
-  elements["backup-summary"].textContent = body.backup_itinerary
-    ? `Backup: ${body.backup_itinerary.transfer_count === 0 ? "direct" : "one transfer"}, ${minutes(body.backup_itinerary.planned_time_seconds)} planned.`
-    : "No distinct backup itinerary is available.";
-  clearChildren(elements.explanations);
-  const codes = body.explanation_codes || [];
-  if (body.feed_status === "STALE") codes.push("LIVE_FEED_STALE");
-  if (codes.length === 0) appendListItem(elements.explanations, "The deterministic policy selected the earliest cap-eligible route meeting the requested target.");
-  for (const code of [...new Set(codes)]) appendListItem(elements.explanations, explanationText[code] || code.replaceAll("_", " ").toLowerCase());
-  if (body.limitations.length > 0) {
-    for (const limitation of body.limitations) appendListItem(elements.explanations, limitation.replaceAll("_", " ").toLowerCase());
-  }
-}
-
-function statusText(body) {
-  const labels = {
-    TARGET_MET: "Estimated target met",
-    TARGET_NOT_MET: "Target not met",
-    DEGRADED_SCHEDULE_ONLY: "Future request: schedule only",
-    STALE_LIVE_DATA: "Stale feed: schedule only",
-    MODEL_ABSTAINED: "Model abstained",
-    INSUFFICIENT_EVIDENCE: "Insufficient evidence",
-    NO_SUPPORTED_ITINERARY: "No supported itinerary",
-  };
-  const evidence = body.model_version.startsWith("SYNTHETIC_") ? "Synthetic fixture. " : "";
-  return `${evidence}${labels[body.target_status] || body.target_status}. Feed: ${body.feed_status.toLowerCase()}.`;
-}
-
-function renderSearch(body) {
-  resetSession();
-  session.decisionCapability = body.decision_id;
-  session.selectedItineraryId = body.recommended_itinerary?.itinerary_id || null;
-  session.selectedTransferCount = body.recommended_itinerary?.transfer_count || 0;
-  elements.results.hidden = false;
-  elements["decision-status"].textContent = statusText(body);
-  elements["decision-status"].classList.toggle("warning", body.target_status !== "TARGET_MET");
-  renderNormalization(body);
-  renderSlot("fastest", body.fastest_itinerary, false);
-  renderSlot("safer", body.recommended_itinerary, true);
-  renderProbability(body.recommended_itinerary);
-  renderDetails(body);
-  const startable = body.trip_start_supported && Boolean(body.decision_id);
-  elements["start-trip"].disabled = !startable;
-  elements["trip-guidance"].textContent = startable
-    ? "Trip state changes only after your explicit confirmation."
-    : body.support_status === "UNSUPPORTED_READY_HORIZON"
-      ? "Search again within 15 minutes of readiness before starting a trip."
-      : "Trip start is unavailable for this degraded or unsupported result.";
-  elements.results.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-async function api(path, options = {}) {
-  const response = await fetch(path, options);
-  const body = await response.json();
-  if (!response.ok) throw new Error(body.detail || "Request failed");
-  return body;
-}
-
-async function loadStations() {
-  const [stationBody, statusBody] = await Promise.all([api("/v1/stations"), api("/v1/system/status")]);
-  for (const station of stationBody.stations) {
-    for (const select of [elements.origin, elements.destination]) {
-      const option = document.createElement("option");
-      option.value = station.station_id;
-      option.textContent = station.name;
-      select.append(option);
+function renderCalibration(report) {
+  const chart = elements["calibration-chart"];
+  clear(chart);
+  const title = svgNode("title", { id: "calibration-chart-title" });
+  const desc = svgNode("desc", { id: "calibration-chart-desc" });
+  title.textContent = "Predicted probability compared with identified observed success rate";
+  desc.textContent = "A diagonal reference and one labeled point for each supported calibration bin.";
+  chart.append(title, desc);
+  chart.append(svgNode("line", { x1: 50, x2: 610, y1: 250, y2: 20, class: "calibration-reference" }));
+  clear(elements["calibration-rows"]);
+  for (const bin of report.bins) {
+    const x = 50 + bin.mean_predicted_probability * 560;
+    const y = 250 - bin.observed_success_rate * 230;
+    const circle = svgNode("circle", { cx: x, cy: y, r: 6, class: "calibration-point" });
+    const label = svgNode("title");
+    label.textContent = `Bin ${bin.bin_index + 1}: predicted ${percent(bin.mean_predicted_probability)}, observed ${percent(bin.observed_success_rate)}`;
+    circle.append(label);
+    chart.append(circle);
+    const tr = document.createElement("tr");
+    for (const value of [
+      `Supported bin ${bin.bin_index + 1}`,
+      percent(bin.mean_predicted_probability),
+      percent(bin.observed_success_rate),
+      `${percent(bin.population_success_rate_lower)} to ${percent(Math.min(1, bin.population_success_rate_upper))}`,
+    ]) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.append(td);
     }
+    elements["calibration-rows"].append(tr);
   }
-  if (stationBody.stations.length > 1) elements.destination.selectedIndex = stationBody.stations.length - 1;
-  elements["system-pill"].textContent = `${statusBody.status.toLowerCase()} · ${statusBody.release_mode.replaceAll("_", " ").toLowerCase()}`;
+  elements["calibration-summary"].textContent = `ECE ${percent(report.expected_calibration_error)} · maximum error ${percent(report.maximum_calibration_error)}`;
 }
 
-async function search(event) {
+function renderHistory(history) {
+  clear(elements["cutoff-history"]);
+  for (const [key, value] of Object.entries(history)) {
+    addDefinition(elements["cutoff-history"], key.replaceAll("_", " "), value === null ? "Missing, with an explicit missingness feature" : String(value));
+  }
+}
+
+function renderLineage(lineage, prediction) {
+  clear(elements.lineage);
+  addDefinition(elements.lineage, "Model bundle", prediction.model.bundle_id);
+  addDefinition(elements.lineage, "Distribution", `${prediction.model.distribution}, scale ${prediction.model.scale}`);
+  for (const [key, value] of Object.entries(lineage)) addDefinition(elements.lineage, key.replaceAll("_", " "), String(value));
+}
+
+async function scoreReplay(event) {
   event.preventDefault();
-  elements["form-error"].hidden = true;
-  elements["search-button"].disabled = true;
+  const replayId = elements.replay.value;
+  const horizon = elements.horizon.value;
+  if (!replayId) return;
+  elements["control-error"].hidden = true;
   try {
-    const body = await api("/v1/journeys/search", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Origin: window.location.origin },
-      body: JSON.stringify({
-        origin_station_id: elements.origin.value,
-        destination_station_id: elements.destination.value,
-        ready_at: new Date(elements["ready-at"].value).toISOString(),
-        deadline: new Date(elements.deadline.value).toISOString(),
-        reliability_target: elements.target.value,
-        maximum_extra_minutes: Number(elements.cap.value),
-      }),
-    });
-    renderSearch(body);
+    const [prediction, calibration] = await Promise.all([
+      api(`/v1/explorer/replays/${encodeURIComponent(replayId)}/prediction?horizon_seconds=${horizon}`),
+      api(`/v1/explorer/reliability?horizon_seconds=${horizon}`),
+    ]);
+    state.prediction = prediction;
+    state.replayId = replayId;
+    elements.results.hidden = false;
+    elements["replay-summary"].textContent = `${prediction.split} · evidence ${prediction.evidence_version} · ${prediction.replay.service_date} · ${prediction.replay.origin.name} to ${prediction.replay.destination.name} · direction ${prediction.replay.direction_id}`;
+    elements["schedule-value"].textContent = seconds(prediction.baselines.official_schedule.seconds);
+    elements["empirical-value"].textContent = seconds(prediction.baselines.empirical_midpoint.seconds);
+    elements["empirical-detail"].textContent = prediction.baselines.empirical_midpoint.backoff_level ? `Training support: ${prediction.baselines.empirical_midpoint.backoff_level.replaceAll("_", " ").toLowerCase()}.` : "No training cell met frozen support; this diagnostic abstains.";
+    elements["model-value"].textContent = percent(prediction.selected_horizon.probability);
+    elements["model-detail"].textContent = `Probability of arrival within ${seconds(prediction.selected_horizon.seconds)}. Distribution: ${prediction.model.distribution}.`;
+    renderCdf(prediction.fixed_horizon_probabilities);
+    renderQuantiles(prediction.quantiles);
+    renderCalibration(calibration);
+    renderHistory(prediction.cutoff_visible_history);
+    renderLineage(prediction.lineage, prediction);
+    elements["outcome-placeholder"].hidden = false;
+    elements["reveal-button"].hidden = false;
+    elements["outcome-result"].hidden = true;
+    clear(elements["outcome-result"]);
+    elements.results.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
-    elements["form-error"].textContent = error instanceof Error ? error.message : "Search failed";
-    elements["form-error"].hidden = false;
-  } finally {
-    elements["search-button"].disabled = false;
+    elements["control-error"].textContent = error.message;
+    elements["control-error"].hidden = false;
   }
 }
 
-function authHeaders() {
-  return {
-    Authorization: `Bearer ${session.tripBearer}`,
-    "Content-Type": "application/json",
-    Origin: window.location.origin,
-  };
-}
-
-async function refreshEvents() {
-  if (!session.tripId || !session.tripBearer) return;
-  const response = await fetch(`/v1/trips/${session.tripId}/events`, {
-    headers: {
-      Authorization: `Bearer ${session.tripBearer}`,
-      "Last-Event-ID": String(session.lastEventId),
-    },
-  });
-  if (!response.ok) return;
-  const text = await response.text();
-  for (const block of text.split("\n\n")) {
-    const dataLine = block.split("\n").find((line) => line.startsWith("data: "));
-    if (!dataLine) continue;
-    const event = JSON.parse(dataLine.slice(6));
-    session.lastEventId = Math.max(session.lastEventId, event.sequence || 0);
-    appendListItem(elements["event-log"], `${event.event_kind.replaceAll("_", " ").toLowerCase()} · ${event.value_provenance.replaceAll("_", " ").toLowerCase()}`);
+async function revealOutcome() {
+  if (!state.replayId) return;
+  try {
+    const payload = await api(`/v1/explorer/replays/${encodeURIComponent(state.replayId)}/outcome`);
+    const outcome = payload.outcome;
+    const heading = document.createElement("strong");
+    heading.textContent = outcome.outcome_state.replaceAll("_", " ");
+    const description = document.createElement("p");
+    if (outcome.lower_bound_seconds === null && outcome.upper_bound_seconds === null) {
+      description.textContent = "No finite travel-time bound is available for this later outcome.";
+    } else {
+      description.textContent = `Later outcome interval: ${seconds(outcome.lower_bound_seconds)} to ${seconds(outcome.upper_bound_seconds)}.`;
+    }
+    elements["outcome-result"].append(heading, description);
+    elements["outcome-result"].hidden = false;
+    elements["outcome-placeholder"].hidden = true;
+    elements["reveal-button"].hidden = true;
+  } catch (error) {
+    elements["outcome-result"].textContent = error.message;
+    elements["outcome-result"].hidden = false;
   }
 }
 
-async function startTrip() {
-  const body = await api("/v1/trips", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Origin: window.location.origin },
-    body: JSON.stringify({ decision_id: session.decisionCapability, selected_itinerary_id: session.selectedItineraryId }),
-  });
-  session.decisionCapability = null;
-  session.tripId = body.trip_id;
-  session.tripBearer = body.trip_bearer;
-  session.stateVersion = body.state_version;
-  elements["start-trip"].hidden = true;
-  elements["confirm-boarded"].hidden = false;
-  elements["stop-trip"].hidden = false;
-  elements["trip-state"].textContent = "Trip active. Awaiting boarding confirmation.";
-  await refreshEvents();
+async function initialize() {
+  const [status, metadata, inventory] = await Promise.all([
+    api("/v1/system/status"),
+    api("/v1/explorer/metadata"),
+    api("/v1/explorer/inventory"),
+  ]);
+  state.metadata = metadata;
+  state.inventory = inventory;
+  elements["system-status"].textContent = `${status.status.toLowerCase()} · verified local artifacts`;
+  elements["replay-count"].textContent = metadata.replay_count.toLocaleString();
+  elements["test-count"].textContent = metadata.final_test.row_count.toLocaleString();
+  fillSelect(elements.direction, inventory.directions, (value) => `Direction ${value}`);
+  fillSelect(elements.origin, inventory.origins, (value) => `${value.name} · ${value.stop_id}`);
+  fillSelect(elements.destination, inventory.destinations, (value) => `${value.name} · ${value.stop_id}`);
+  elements.origin.querySelectorAll("option").forEach((node, index) => { if (index > 0) node.value = inventory.origins[index - 1].stop_id; });
+  elements.destination.querySelectorAll("option").forEach((node, index) => { if (index > 0) node.value = inventory.destinations[index - 1].stop_id; });
+  refreshReplayOptions();
+  const comparison = metadata.point_results.PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE?.mean_absolute_interval_distance_difference_seconds;
+  const eligibility = metadata.point_diagnostics.models.PROMOTED_P50;
+  elements["measured-result"].textContent = comparison ? `On ${eligibility.metric_eligible.raw_row_count.toLocaleString()} point-eligible held-out rows, with ${eligibility.excluded_censored_or_unavailable.raw_row_count.toLocaleString()} censored or unavailable rows excluded, promoted-model mean interval distance minus official schedule was ${comparison.estimate.toFixed(1)} seconds with a complete-service-day bootstrap interval from ${comparison.lower_95.toFixed(1)} to ${comparison.upper_95.toFixed(1)} seconds.` : "The final point diagnostic is unavailable.";
+  for (const limitation of metadata.limitations) {
+    const li = document.createElement("li");
+    li.textContent = limitation;
+    elements["limitation-list"].append(li);
+  }
+  elements.attribution.textContent = metadata.attribution;
+  elements["model-footer"].textContent = `${metadata.model.bundle_id} · ${metadata.model.distribution} scale ${metadata.model.scale} · evidence ${metadata.evidence_version}`;
 }
 
-async function transition(nextState, boardedIdentifier = null, recoveryDecisionId = null) {
-  const body = await api(`/v1/trips/${session.tripId}/state`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({
-      idempotency_key: crypto.randomUUID(),
-      expected_state_version: session.stateVersion,
-      next_state: nextState,
-      boarded_itinerary_or_route_pattern_id: boardedIdentifier,
-      recovery_decision_id: recoveryDecisionId,
-    }),
-  });
-  session.stateVersion = body.state_version;
-  elements["trip-state"].textContent = `Confirmed state: ${body.state.replaceAll("_", " ").toLowerCase()}.`;
-  if (body.recovery_decision) renderRecovery(body.recovery_decision);
-  await refreshEvents();
-}
+for (const control of [elements.direction, elements.origin, elements.destination]) control.addEventListener("change", refreshReplayOptions);
+elements["replay-form"].addEventListener("submit", scoreReplay);
+elements["reveal-button"].addEventListener("click", revealOutcome);
 
-async function confirmBoarded() {
-  const next = session.selectedTransferCount === 0 ? "ON_FINAL_LEG" : "ON_FIRST_LEG";
-  await transition(next, session.selectedItineraryId);
-  elements["confirm-boarded"].hidden = true;
-  elements["confirm-transfer"].hidden = session.selectedTransferCount === 0;
-}
-
-async function confirmTransfer() {
-  await transition("AT_TRANSFER");
-  elements["confirm-transfer"].hidden = true;
-}
-
-function renderRecovery(recovery) {
-  session.recoveryDecision = recovery;
-  elements["recovery-card"].hidden = false;
-  elements["recovery-reason"].textContent = `Reason: ${recovery.reason.replaceAll("_", " ").toLowerCase()}. This guidance is conditional on the confirmed transfer state.`;
-  elements["recovery-route"].textContent = `Schedule option: ${recovery.recommendation.transfer_count === 0 ? "direct" : "one transfer"}, ${minutes(recovery.recommendation.planned_time_seconds)} planned. A distinct continuation comparator and cap reference remain recorded.`;
-}
-
-async function activateRecovery() {
-  const recovery = session.recoveryDecision;
-  if (!recovery) return;
-  await transition(
-    recovery.recommendation.transfer_count === 0 ? "ON_FINAL_LEG" : "ON_FIRST_LEG",
-    recovery.recommendation.itinerary_id,
-    recovery.recovery_decision_id,
-  );
-  elements["activate-recovery"].disabled = true;
-}
-
-async function stopTrip() {
-  const body = await api(`/v1/trips/${session.tripId}/stop`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({ idempotency_key: crypto.randomUUID(), expected_state_version: session.stateVersion }),
-  });
-  session.tripBearer = null;
-  session.tripId = null;
-  elements["trip-state"].textContent = `Trip stopped in state ${body.state.toLowerCase()}.`;
-  elements["confirm-boarded"].hidden = true;
-  elements["confirm-transfer"].hidden = true;
-  elements["stop-trip"].hidden = true;
-}
-
-const now = new Date();
-now.setSeconds(0, 0);
-elements["ready-at"].value = localInputValue(new Date(now.getTime() + 60_000));
-elements.deadline.value = localInputValue(new Date(now.getTime() + 31 * 60_000));
-elements.cap.addEventListener("input", () => { elements["cap-output"].value = elements.cap.value; });
-elements["search-form"].addEventListener("submit", search);
-elements["start-trip"].addEventListener("click", () => startTrip().catch((error) => { elements["trip-state"].textContent = error.message; }));
-elements["confirm-boarded"].addEventListener("click", () => confirmBoarded().catch((error) => { elements["trip-state"].textContent = error.message; }));
-elements["confirm-transfer"].addEventListener("click", () => confirmTransfer().catch((error) => { elements["trip-state"].textContent = error.message; }));
-elements["activate-recovery"].addEventListener("click", () => activateRecovery().catch((error) => { elements["trip-state"].textContent = error.message; }));
-elements["stop-trip"].addEventListener("click", () => stopTrip().catch((error) => { elements["trip-state"].textContent = error.message; }));
-
-loadStations().catch(() => {
-  elements["system-pill"].textContent = "Local service unavailable";
-  elements["form-error"].textContent = "Could not load station data.";
-  elements["form-error"].hidden = false;
+initialize().catch((error) => {
+  elements["system-status"].textContent = "Local evidence unavailable";
+  elements["control-error"].textContent = error.message;
+  elements["control-error"].hidden = false;
+  elements["replay-form"].querySelector("button").disabled = true;
 });

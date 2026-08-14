@@ -1,0 +1,8 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "empirical_baseline_path": "empirical-baseline.json",
+  "empirical_baseline_sha256": "5ed5252cc5bbe11312de6d7d6d2736c972f5165d835f0b550f86aa80b869442d",
+  "feature_transform_path": "feature-transform.json",
+  "feature_transform_sha256": "fb319bc0033c8ebdd34d5184d3b7ccb6a2d8ff1019a1cda605c3ca83574d6875",
+  "version": "travel-time-explorer-assets-v1"
+}
