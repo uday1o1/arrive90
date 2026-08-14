@@ -5,6 +5,12 @@ response_profile:
   content_length_bytes: 150725341
   etag: 1b0ca9ccff025f116939faadefccaafd-18
   last_modified_utc: "2025-01-01T12:04:22Z"
+content_lock:
+  sha256: de1ad0d6556683aadb4cba8af3cdfbceef2a4ea0bb4aa80ba4324d395ce29694
+  expanded_size_bytes: 968630272
+  expanded_sha256: 89b20d64e7decb200418c00394a3a84ce2e9bb2c7a176f6d1eabc9624c8a6341
+  expanded_schema_fingerprint: efd44bd03e4d08b660dea5788eafa211cf495175ae19a614d5fc87598be4a177
+  expansion_version: arrive90-python-3.12.13-gzip-v1
 format:
   compression: gzip
   payload: sqlite3

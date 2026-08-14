@@ -16,6 +16,7 @@ sample:
   size_bytes: 23432007
   sha256: e91537e12d7cb68fd06d467e70e33a8cda02c682102098a1ce9baad7692eac73
   row_count: 610834
+  schema_fingerprint: 30f604f9dc2703280cb891abe832d6619ac11e77b81840d4dde3d54b93d32a4a
   whole_object_min_local: "2024-05-14 13:30:54"
   whole_object_max_local: "2024-05-15 13:40:36"
   retained_heavy_rail_max_local: "2024-05-15 13:40:34"

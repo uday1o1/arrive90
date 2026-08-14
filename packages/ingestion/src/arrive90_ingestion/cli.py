@@ -6,6 +6,7 @@ import argparse
 import json
 import sys
 from collections.abc import Sequence
+from datetime import date
 from pathlib import Path
 
 from arrive90_data_contracts.gate_cli import run_gate
@@ -15,6 +16,15 @@ from arrive90_ingestion.inventory import (
     InventoryError,
     download_inventory,
     write_inventory_lock,
+)
+from arrive90_ingestion.pinned_sources import (
+    DEFAULT_ACQUISITION_LOCK,
+    DEFAULT_BUS_PROFILE,
+    DEFAULT_INVENTORY_LOCK,
+    DEFAULT_RAW_ROOT,
+    DEFAULT_SCHEDULE_PROFILE,
+    acquire_pinned_day,
+    result_payload,
 )
 
 
@@ -47,6 +57,20 @@ def _gate(args: argparse.Namespace) -> int:
     )
 
 
+def _source_download(args: argparse.Namespace) -> int:
+    result = acquire_pinned_day(
+        args.date,
+        include_schedule=args.include_schedule,
+        inventory_lock_path=args.inventory_lock,
+        bus_profile_path=args.bus_profile,
+        schedule_profile_path=args.schedule_profile,
+        raw_root=args.raw_root,
+        acquisition_lock_path=args.acquisition_lock,
+    )
+    print(json.dumps(result_payload(result), sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the frozen Milestone 0 CLI surface."""
 
@@ -69,6 +93,16 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("configs/source-locks/mbta-2024.json"),
     )
     lock.set_defaults(handler=_source_lock)
+
+    download = source_commands.add_parser("download")
+    download.add_argument("--date", type=date.fromisoformat, required=True)
+    download.add_argument("--include-schedule", action="store_true")
+    download.add_argument("--inventory-lock", type=Path, default=DEFAULT_INVENTORY_LOCK)
+    download.add_argument("--bus-profile", type=Path, default=DEFAULT_BUS_PROFILE)
+    download.add_argument("--schedule-profile", type=Path, default=DEFAULT_SCHEDULE_PROFILE)
+    download.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
+    download.add_argument("--acquisition-lock", type=Path, default=DEFAULT_ACQUISITION_LOCK)
+    download.set_defaults(handler=_source_download)
 
     gate = commands.add_parser("gate")
     gate.add_argument("--milestone", required=True, type=int)
