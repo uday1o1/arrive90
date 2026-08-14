@@ -1,4 +1,4 @@
-"""Write the fail-closed Milestone 7 rider-product gate report."""
+"""Build the fail-closed travel-time-v1.2 Milestone 7 acceptance report."""
 
 from __future__ import annotations
 
@@ -14,9 +14,16 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _load(path: Path) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"expected JSON object: {path}")
+    return payload
+
+
 def _combined_digest(paths: list[Path]) -> str:
     digest = hashlib.sha256()
-    for path in sorted(paths, key=lambda item: item.as_posix().encode()):
+    for path in sorted(paths, key=lambda item: item.relative_to(ROOT).as_posix().encode()):
         digest.update(path.relative_to(ROOT).as_posix().encode())
         digest.update(b"\0")
         digest.update(path.read_bytes())
@@ -25,86 +32,100 @@ def _combined_digest(paths: list[Path]) -> str:
 
 
 def build_report() -> dict[str, Any]:
-    acceptance = ROOT / "configs/acceptance/v1.yaml"
-    milestone_six_path = ROOT / "artifacts/reports/gates/milestone-6.json"
-    browser_path = ROOT / "artifacts/reports/qualification/milestone-7-browser.json"
-    milestone_six = json.loads(milestone_six_path.read_text(encoding="utf-8"))
-    browser = json.loads(browser_path.read_text(encoding="utf-8"))
-    html_path = ROOT / "packages/service/src/arrive90_service/web/index.html"
-    html = html_path.read_text(encoding="utf-8")
-    cli = (ROOT / "packages/service/src/arrive90_service/cli.py").read_text(encoding="utf-8")
-    local_checks = {
-        "accessible_no_map_and_keyboard_browser_path_passed": browser.get("status") == "PASSED",
-        "browser_direct_transfer_recovery_and_failure_paths_passed": browser.get("status")
-        == "PASSED",
-        "methodology_attribution_competitor_and_limitations_views_present": all(
-            marker in html
-            for marker in ("Methodology", "Limitations", "Competitor matrix", "MassDOT")
+    previous_path = ROOT / "artifacts/reports/gates/milestone-6.json"
+    qualification_path = ROOT / "artifacts/reports/qualification/milestone-7-package-v1.2.json"
+    clean_path = ROOT / "artifacts/reports/qualification/clean-checkout-v1.2.json"
+    audit_path = ROOT / "artifacts/reports/qualification/repository-audit-v1.2.json"
+    claims_path = ROOT / "artifacts/reports/qualification/public-claims-v1.2.json"
+    tracker_path = ROOT / "configs/acceptance/travel-time-v1.2-milestones.json"
+    previous = _load(previous_path)
+    qualification = _load(qualification_path)
+    clean = _load(clean_path)
+    audit = _load(audit_path)
+    claims = _load(claims_path)
+    tracker = _load(tracker_path)
+    tracked_states = {
+        int(item["milestone"]): item["state"] for item in tracker.get("milestones", [])
+    }
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    checks = {
+        "all_milestone_reports_zero_through_six_are_accepted": (
+            previous.get("state") == "ACCEPTED"
+            and all(
+                _load(ROOT / f"artifacts/reports/gates/milestone-{number}.json").get("state")
+                == "ACCEPTED"
+                for number in range(7)
+            )
+            and all(tracked_states.get(number) == "ACCEPTED" for number in range(7))
         ),
-        "milestone_6_evidence_link_present": "/milestone-6-card.json" in html,
-        "nonselected_model_outputs_visibly_unavailable": (
-            "Probability unavailable: this comparator output has not been validated."
-            in (ROOT / "packages/service/src/arrive90_service/web/app.js").read_text(
-                encoding="utf-8"
+        "clean_reader_demo_is_documented_and_passed": (
+            clean.get("status") == "PASSED"
+            and clean.get("checks", {}).get("network_free_demo_terminal_reproduced") is True
+        ),
+        "complete_quality_browser_robustness_and_reproduction_evidence_passes": (
+            qualification.get("status") == "PASSED"
+            and qualification.get("checks", {}).get("accepted_full_year_reproduction_remains_valid")
+            is True
+            and qualification.get("checks", {}).get("robustness_suite_has_nine_passing_pairs")
+            is True
+        ),
+        "every_readme_result_matches_immutable_evidence": claims.get("status") == "PASSED",
+        "publication_and_deployment_targets_remain_absent": all(
+            target not in makefile
+            for target in (
+                "publish:",
+                "deploy:",
+                "release:",
+                "open-pr:",
             )
         ),
-        "prospective_calibration_labeled_pending": "Prospective live calibration is pending"
-        in html,
-        "synthetic_interface_demonstration_present": (
-            ROOT / "artifacts/demos/milestone-7-synthetic-ui.png"
-        ).is_file(),
-        "trip_session_and_authenticated_sse_ui_implemented": "refreshEvents"
-        in (ROOT / "packages/service/src/arrive90_service/web/app.js").read_text(encoding="utf-8"),
-        "web_application_remains_loopback_only": "non-loopback startup is disabled" in cli,
+        "repository_audit_has_no_stale_or_unexplained_state": (
+            audit.get("status") == "PASSED"
+            and audit.get("checks", {}).get("no_stale_public_scope_claim") is True
+            and audit.get("checks", {}).get("worktree_is_clean") is True
+        ),
+        "source_attribution_and_noncommercial_notice_are_audited": audit.get("checks", {}).get(
+            "source_attribution_and_noncommercial_notice_present"
+        )
+        is True,
     }
-    acceptance_checks = {
-        "eight_participant_comprehension_gate_passed": False,
-        "immutable_historical_replay_demonstration_present": False,
-        "milestone_6_accepted": milestone_six.get("status") == "PASSED",
-        "offline_claims_authorized_by_accepted_milestone_6_artifact": False,
-    }
-    checks = {**local_checks, **acceptance_checks}
     failing = sorted(key for key, passed in checks.items() if not passed)
+    docs = [
+        ROOT / "README.md",
+        ROOT / "DATA_LICENSE.md",
+        *sorted((ROOT / "docs").glob("*.md")),
+        *sorted((ROOT / "docs/assets").glob("*.svg")),
+    ]
     return {
-        "acceptance_version": "v1",
-        "acceptance_version_hash": _digest(acceptance),
+        "acceptance_version": "travel-time-v1.2",
         "checks": checks,
         "command": (
-            "make check-all && make qualify-milestone7 && make milestone7-evidence "
-            "&& make gate MILESTONE=7"
+            "make check-all && make qualify-milestone6-robustness && "
+            "make qualify-milestone7 && make milestone7-evidence && make gate MILESTONE=7"
         ),
         "failing_checks": failing,
         "input_manifest_hashes": {
-            "acceptance_charter": _digest(acceptance),
-            "browser_qualification": _digest(browser_path),
-            "comprehension_protocol": _digest(ROOT / "docs/comprehension-protocol.md"),
-            "frontend": _combined_digest(
-                list((ROOT / "packages/service/src/arrive90_service/web").glob("*"))
-            ),
-            "milestone_6_report": _digest(milestone_six_path),
-            "synthetic_demonstration": _digest(
-                ROOT / "artifacts/demos/milestone-7-synthetic-ui.png"
-            ),
+            "build_plan": _digest(ROOT / "BUILD_PLAN.md"),
+            "clean_checkout": _digest(clean_path),
+            "documentation_and_charts": _combined_digest(docs),
+            "milestone_6_report": _digest(previous_path),
+            "portfolio_qualification": _digest(qualification_path),
+            "public_claims": _digest(claims_path),
+            "repository_audit": _digest(audit_path),
         },
         "milestone": 7,
-        "missing_prerequisite": (
-            "An accepted Milestone 6 empirical or model-free result, a retained historical replay, "
-            "and a passing independent eight-participant comprehension cohort are required."
-        ),
-        "resume_command": (
-            "Resume the source gate, complete Milestone 6, then run the protocol in "
-            "docs/comprehension-protocol.md."
-        ),
-        "status": "PASSED" if not failing else "INSUFFICIENT_EVIDENCE",
+        "observed": qualification.get("observed", {}),
+        "state": "ACCEPTED" if not failing else "FAILED",
     }
 
 
 def main() -> int:
     output = ROOT / "artifacts/reports/gates/milestone-7.json"
+    report = build_report()
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(build_report(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(output.relative_to(ROOT))
-    return 0
+    return 0 if report["state"] == "ACCEPTED" else 1
 
 
 if __name__ == "__main__":

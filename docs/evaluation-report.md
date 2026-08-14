@@ -2,112 +2,117 @@
 
 ## Evidence boundary
 
-This report separates source feasibility, software correctness, synthetic protocol qualification, browser behavior, performance, security, and empirical transit outcomes.
-Only the first six categories have local evidence.
-There is no accepted empirical MBTA reliability result.
+The immutable evaluation artifact is [travel-time-v1.2.json](../artifacts/reports/final/travel-time-v1.2.json) with SHA-256 `8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453`.
+It evaluates only downstream Blue Line train time on the frozen November and December 2024 split.
+The values below do not measure platform waiting, passenger outcomes, live feed latency, or deployment behavior.
 
-The acceptance charter is `v1` with SHA-256 `0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c`.
-Its status remains `UNFROZEN_SOURCE_GATE_FAILED`.
+The final test contains 199,364 selected destination examples, 36,600 distinct anchors, and all 61 service days.
+Exactly 155,962 rows contribute to interval likelihood, while every selected row remains in availability and outcome-mass reporting.
 
-## Milestone status
+## Distributional comparison
 
-| Milestone | Gate status | What passed locally | What prevents acceptance |
-| --- | --- | --- | --- |
-| 0 | `FAILED` | Public index, schema, transformation, and license audit. | Primary Vehicle Position boarding evidence and product-availability provenance are not identifiable. |
-| 1 | `INSUFFICIENT_EVIDENCE` | Immutable archives, collectors, temporal views, alert revisions, and completeness mechanics. | Milestone 0 and primitive historical Vehicle Positions. |
-| 2 | `INSUFFICIENT_EVIDENCE` | Candidate contracts, query generation, audit enumeration, simulation, pinned OTP, and synthetic graph smoke. | Accepted historical archive, frozen scope, full graph, and empirical recall. |
-| 3 | `INSUFFICIENT_EVIDENCE` | Interval outcomes, censoring bounds, baselines, feature parity, and leakage rejection. | Accepted candidates, primary outcome, full resolution gate, and fitted baselines. |
-| 4 | `INSUFFICIENT_EVIDENCE` | AFT mechanics, CDF and quantiles, monotone calibration, support discovery, transfer candidates, and immutable registry. | Chronological population, selected fitted models, calibration, support, and fresh-process production artifact. |
-| 5 | `INSUFFICIENT_EVIDENCE` | Decision kernel, recovery kernel, API, capabilities, trip state, SSE, and bounded latency workload. | Accepted production model and empirical scenarios. |
-| 6 | `INSUFFICIENT_EVIDENCE` | Frozen evaluation mechanics, fresh-process synthetic reproduction, censoring bounds, bootstrap, Pareto output, and bounded performance. | Accepted source, final output support, and unopened empirical final test. |
-| 7 | `INSUFFICIENT_EVIDENCE` | Four Chromium workflows, accessible no-map path, synthetic screenshot, trip workflow, and explicit degraded states. | Accepted Milestone 6, immutable historical replay, and independent eight-person comprehension gate. |
-| 8 | `INSUFFICIENT_EVIDENCE` | Create-only 28-day shakeout and 56-day panel mechanics, complete synthetic denominator, lineage, uncertainty, and nonserving shadow policy. | Accepted source and model plus real 28-service-day and 56-service-day collection. |
-| 9 | Not accepted | Local reliability, security, backup, restore, license, documentation, and clean-checkout work packages. | Every prior gate plus the final repository and clean-checkout evidence report. |
+| Frozen bundle | Role | Interval NLL |
+| --- | --- | ---: |
+| `FULL-normal-scale-0p5` | Promoted full model | 1.6470 |
+| `NO_POSITION_OBSERVATION-normal` | Ablation | 1.6541 |
+| `NO_PREFIX_HISTORY-normal` | Ablation | 1.6588 |
+| `SCHEDULE_CALENDAR-normal` | Strongest comparable AFT baseline | 1.6735 |
+| `INTERCEPT_ONLY-normal` | Intercept-only baseline | 2.9816 |
+| `FULL-extreme-scale-1p0` | Alternative full distribution | 37.3954 |
+| `FULL-logistic-scale-1p0` | Alternative full distribution | 341.6238 |
 
-The machine-readable gate reports are under [artifacts/reports/gates](../artifacts/reports/gates).
-Each report retains its own failing checks, input hashes, exact missing prerequisite, and resume procedure.
+The promoted NLL bootstrap interval is 1.6069 to 1.6865 using complete service-day blocks.
+The final protocol retains the poor alternative distributions instead of hiding them after test access.
 
-## Correctness evidence
+![Interval likelihood comparison](assets/model-comparison.svg)
 
-The local Python suite contains 234 tests and passes with 91.20 percent branch-aware coverage under the repository configuration.
-It includes unit, property-like invariant, integration, concurrency, seeded-failure, causal-boundary, model-mechanics, API, persistence, and evaluation tests.
+## Point diagnostics
 
-The targeted Milestone 9 reliability qualification runs 36 tests and passes all declared controls.
-It covers source and model fallback, router failure, database failure, SSE slot recovery, clock regression, immutable resource maxima, expiry cleanup, authorization flooding, audit redaction, sink failure, backup, restore, tamper rejection, rate-limit concurrency, and the public API path.
-The retained artifact is [milestone-9-reliability.json](../artifacts/reports/qualification/milestone-9-reliability.json).
+Point diagnostics use the 157,112 common rows with finite upper bounds and exclude 42,252 censored or unavailable rows.
+They are narrower than the primary interval-likelihood comparison.
 
-The Chromium qualification passes four workflows with no unexpected, skipped, or flaky result.
-It covers direct target-not-met behavior, transfer and schedule-only recovery, stale and abstained states, sparse and unsupported targets, future-ready suppression, ready-time normalization, keyboard landmarks, and no-map use.
-The retained artifact is [milestone-7-browser.json](../artifacts/reports/qualification/milestone-7-browser.json).
-
-## Seeded negative controls
-
-| Seeded defect | Intended failure | Nearby control |
-| --- | --- | --- |
-| Future event requested before product availability | Temporal boundary rejects leakage. | Same event is available at or after its evidenced availability time. |
-| Outcome module imported by feature construction | Architecture boundary fails. | Registered causal features build without outcome imports. |
-| Reversed or inconsistent arrival bounds | Outcome contract rejects the row. | Valid interval and right-censored rows pass. |
-| CDF reversal larger than `1e-12` | Model validation fails. | Monotone grid and permitted numerical correction pass. |
-| Model, candidate, support, or API hash mismatch | Immutable registry load fails. | Exact bundle hashes load in a fresh process. |
-| Replayed or concurrent decision capability | At most one trip can be created. | First exact recommendation consumption succeeds. |
-| Unauthorized public trip identifier flood | Authorized rate budget is unchanged. | Matching bearer request succeeds. |
-| Database or SSE persistence fault | Constant-shape failure and stream slot release. | Restored database path accepts the next request. |
-| Regressed wall clock | Service returns a safe 503. | Monotonic clock recovery restores service. |
-| One scheduled prospective query omitted | Complete-denominator check fails. | All 3,096 synthetic scheduled queries pass. |
-| Seeded high-severity scan result | Security qualification returns `FAILED` for the repository finding. | Empty high and critical finding set passes. |
-
-## Performance evidence
-
-Correctness tests and performance measurements are separate.
-The numbers below are bounded mechanics measurements rather than empirical transit results or production capacity claims.
-
-The reference allocation is Linux ARM64 with four cgroup CPUs and 8,307,167,232 cgroup memory bytes.
-The exact Python base is `python@sha256:78098ea6a3a9c6a7727a5d4674e4a44e57e01fac878ee9cb4d24a86bd93916ff`.
-The measured image used Python 3.12.14.
-
-| Workload | p95 | Iterations or scale |
+| Point estimate | Mean absolute interval distance | 95% bootstrap interval |
 | --- | ---: | --- |
-| Warm cached schedule-only API search | 7.095403 ms | 200 requests. |
-| Slowest initial-decision cell | 0.722044 ms | 500 iterations for each candidate-count and feed-state cell. |
-| Recovery selection | 0.710128 ms | 500 iterations over ten candidates. |
-| Ten-candidate normalization | 0.172168 ms | 500 iterations. |
-| One-day replay generation | 0.515503 ms | 1 base query and 36 deadline variants. |
-| One-month replay generation | 8.561916 ms | 31 base queries and 1,116 deadline variants. |
-| One-year replay generation | 112.893748 ms | 365 base queries and 13,140 deadline variants. |
+| Promoted model p50 | 30.405 seconds | 28.505 to 32.359 |
+| Empirical midpoint | 35.279 seconds | 33.694 to 36.949 |
+| Official schedule | 37.715 seconds | 36.018 to 39.535 |
 
-The API report is [milestone-5-latency.json](../artifacts/reports/qualification/milestone-5-latency.json).
-The candidate and replay report is [milestone-6-performance.json](../artifacts/reports/qualification/milestone-6-performance.json).
+The paired promoted-minus-schedule difference is -7.310 seconds with a 95 percent interval from -7.783 to -6.872.
+The paired promoted-minus-empirical difference is -4.874 seconds with a 95 percent interval from -5.455 to -4.307.
+Negative values favor the promoted model.
 
-The replay workload contains one origin-destination pair, one query time per service day, one readiness horizon, and 36 deadline slacks.
-It does not represent the complete MBTA query population.
+![Point diagnostic comparison](assets/point-comparison.svg)
 
-## Synthetic evaluation mechanics
+## Calibration and horizon metrics
 
-The Milestone 6 synthetic fixture validates a 2,000-replicate complete-service-day bootstrap, partially identified outcome bounds, fixed eligible cells, Holm correction, Pareto output, explorer fallback, and byte-identical fresh-process reproduction.
-Its release mode is `HISTORICAL_EXPLORER` and its empirical status is `INSUFFICIENT_EVIDENCE` by construction.
+| Horizon | Identified Brier score | Expected calibration error | Supported |
+| --- | ---: | ---: | --- |
+| 5 minutes | 0.02671 | 0.00762 | Yes |
+| 10 minutes | 0.02670 | 0.02574 | Yes |
+| 15 minutes | 0.02487 | 0.00916 | Yes |
+| 20 minutes | 0.00515 | 0.00247 | Yes |
+| 30 minutes | 0.00025 | 0.00018 | Yes |
+| 45 minutes | 0.00001 | 0.00001 | Yes |
+| 60 minutes | approximately 0 | approximately 0 | Yes |
 
-The Milestone 8 synthetic protocol records all 3,096 scheduled queries across 56 constructed service-day blocks.
-Its serving-band control contains 2,200 decisions and 1,100 distinct base queries.
-Its nonserving 0.95 shadow control contains 896 decisions and 448 distinct base queries.
-The measured synthetic policy half-width is `0.005917159763313609`, below the protocol control threshold of `0.03`.
+The fixed-horizon report also publishes complete-population lower and upper Brier bounds that retain unresolved outcomes.
+Low error at long horizons mostly reflects near-certain completion within the long time window and should not be read as difficult long-range forecasting skill.
 
-Those values validate denominator, support, lineage, maturity, bootstrap, and precision code only.
-They do not authorize historical or prospective calibration claims.
-The artifact is [milestone-8-synthetic.json](../artifacts/reports/qualification/milestone-8-synthetic.json).
+## Quantiles and uncertainty
 
-## Security and dependency evidence
+The promoted p50 has median absolute interval distance 5.346 seconds, with a bootstrap interval from 4.827 to 5.829.
+Its mean p90 minus p50 width is 94.057 seconds and its 95th percentile width is 223.727 seconds.
+The p90 empirical coverage is partially identified between 0.814 and 0.928 because some outcomes remain interval censored.
 
-Trivy 0.73.0 scanned Python and Node lock dependencies, repository secrets, Dockerfile configuration, licenses, and the exact release-candidate image.
-Ruff security rules scanned packages, scripts, tools, and benchmarks.
-The final retained qualification at this documentation checkpoint reported zero critical or high vulnerabilities, zero critical or high misconfigurations, zero secrets, and a non-root image user of `65532:65532`.
+All uncertainty estimates use exactly 2,000 complete-service-day bootstrap replicates with seed 902024 and linear quantiles.
+No individual destination row is resampled independently of its service day.
 
-The compact report is [milestone-9-security.json](../artifacts/reports/qualification/milestone-9-security.json).
-The license inventory resolves 40 Python lock packages and four Node lock packages in [licenses-v1.json](../artifacts/reports/qualification/licenses-v1.json).
+## Slice and drift evidence
 
-## Empirical result
+The final report contains every predeclared slice for line direction, peak period, day type, month, season, destination class, scheduled remaining bucket, observation gap, schedule deviation, platform match, stop-sequence match, trip match, and outcome class.
+Every slice includes raw rows, analysis weight, distinct anchors, and distinct service days.
 
-There is no empirical result to report.
-No frozen historical query population, accepted production bundle, unopened final test, immutable historical replay, independent usability cohort, live shakeout, or real prospective shadow panel exists.
+The highest anchor schedule-deviation bucket has interval NLL 1.853, compared with the overall 1.647, making it a visible weakness rather than an omitted subgroup.
+December NLL is 1.663 versus 1.630 in November, a descriptive increase of 0.032.
+The mean predicted 15-minute probability changed by only 0.00088 between the two months.
 
-The only defensible conclusion is that Arrive90 implements and tests the required mechanics while having insufficient source evidence for a reliability recommendation claim.
-The exact data prerequisite is documented in [source-feasibility.md](source-feasibility.md).
+## Retained outcome mass
+
+| Outcome state | Raw rows | Analysis weight |
+| --- | ---: | ---: |
+| Interval resolved | 148,297 | 126,287.30 |
+| Left censored | 7,154 | 9,717.92 |
+| Missing stop observation | 40,499 | 28,735.32 |
+| No follow-up | 247 | 155.68 |
+| Over-width interval | 1,661 | 1,742.58 |
+| Right censored | 511 | 421.50 |
+| Session discontinuity | 995 | 631.70 |
+
+Schedule-unmatched rows have zero mass in the selected Blue final population because exact schedule matching is a preselection requirement.
+
+## Robustness and performance
+
+Nine paired defect and control scenarios cover interrupted resume, partial objects, changed ETags, schema drift, malformed Parquet, duplicate conflicts, low disk, corrupt model bytes, and missing explorer artifacts.
+All nine pairs pass for their intended reason and preserve the final-report, replay-fixture, and terminal-manifest hashes.
+
+| Stage | Frozen workload | p95 | Peak RSS |
+| --- | --- | ---: | ---: |
+| Acquisition verification | 368 vehicle objects plus schedule lock | 5.269 s | 269,516,800 bytes |
+| One-object normalization | 377,143 source rows | 1.518 s | 371,113,984 bytes |
+| Episode construction | 25,717 normalized observations | 84.5 ms | 371,113,984 bytes |
+| Full-year dataset generation | 1,151,892 selected rows | 648.1 s | 1,145,915,806 bytes |
+| Seven-bundle training and calibration | 507,976 training rows | 113.0 s | 1,145,915,806 bytes |
+| Batch scoring | 200 held-out replays | 922.0 ms | 371,113,984 bytes |
+| API scoring | One warm replay | 5.17 ms | 371,113,984 bytes |
+| Explorer startup | Cold verification and model load | 58.1 ms | 371,113,984 bytes |
+
+The full-year normalizer peaked at 634,109,952 bytes while reading an 8,804,061,429-byte raw store.
+Performance and correctness evidence are separate, and no optimization was performed because no measured acceptance bottleneck required one.
+
+## Reproducibility
+
+The clean full-year qualification rebuilt normalization, episode and dataset generation, training, and final report reconstruction from the immutable raw lock.
+The first pass matched the committed terminal manifest.
+The second pass verified all derived stages as no-ops and did not change the size or nanosecond modification time of any of 4,827 derived files.
+
+See [reproduction.md](reproduction.md) for commands and exact prerequisites.

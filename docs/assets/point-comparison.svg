@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 520">
+  <title>Mean absolute interval distance comparison</title>
+  <desc>The promoted p50 has a lower mean absolute interval distance than the empirical midpoint and official schedule on common eligible rows.</desc>
+  <style>
+    .title { fill: #102a43; font: 700 26px system-ui, sans-serif; }
+    .subtitle { fill: #486581; font: 15px system-ui, sans-serif; }
+    .label { fill: #243b53; font: 15px system-ui, sans-serif; }
+    .value { fill: #102a43; font: 700 15px ui-monospace, monospace; }
+    .axis { stroke: #9fb3c8; stroke-width: 1; }
+    .grid { stroke: #d9e2ec; stroke-width: 1; }
+  </style>
+  <rect width="960" height="520" fill="#f7f9fc" rx="18"/>
+<text class="title" x="48.0" y="54.0">Point diagnostic on common eligible rows</text><text class="subtitle" x="48.0" y="82.0">Mean absolute distance to the observed arrival interval, seconds</text>  <line class="grid" x1="330.0" x2="330.0" y1="118" y2="388"/>
+<text class="subtitle" x="322.0" y="418.0">25</text>  <line class="grid" x1="488.8" x2="488.8" y1="118" y2="388"/>
+<text class="subtitle" x="480.8" y="418.0">30</text>  <line class="grid" x1="647.6" x2="647.6" y1="118" y2="388"/>
+<text class="subtitle" x="639.6" y="418.0">35</text>  <line class="grid" x1="806.5" x2="806.5" y1="118" y2="388"/>
+<text class="subtitle" x="798.5" y="418.0">40</text><text class="label" x="48.0" y="161.0">Promoted model p50</text>  <line x1="441.3" x2="563.8" y1="155.0" y2="155.0" stroke="#1565c0" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="501.7" cy="155.0" r="9" fill="#1565c0"/>
+<text class="value" x="575.8" y="161.0">30.41</text><text class="label" x="48.0" y="243.0">Empirical midpoint</text>  <line x1="606.2" x2="709.6" y1="237.0" y2="237.0" stroke="#7293a0" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="656.5" cy="237.0" r="9" fill="#7293a0"/>
+<text class="value" x="721.6" y="243.0">35.28</text><text class="label" x="48.0" y="325.0">Official schedule</text>  <line x1="680.0" x2="791.7" y1="319.0" y2="319.0" stroke="#a8b8c4" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="733.9" cy="319.0" r="9" fill="#a8b8c4"/>
+<text class="value" x="803.7" y="325.0">37.72</text><text class="subtitle" x="48.0" y="474.0">Whiskers are 95% complete-service-day bootstrap intervals.</text><text class="subtitle" x="48.0" y="498.0">All three estimates use 157,112 common finite-upper rows.</text></svg>

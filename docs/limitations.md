@@ -1,72 +1,72 @@
 # Limitations
 
-## Evidence limitations
+## Scope
 
-The controlling limitation is source provenance.
-The public historical rail export exposes a stop timestamp formed by coalescing Vehicle Position and Trip Update fields but omits the discriminator needed to identify which source supplied a row.
-It also does not provide independent historical product-availability lineage.
+Arrive90 models elapsed time from one historical train observation to a selected downstream Blue Line platform.
+It does not include platform waiting, passenger readiness, access or egress walking, other rail lines, buses, commuter rail, ferries, fares, or personal mobility needs.
 
-As a result, Arrive90 cannot truthfully construct the required primary boarding outcomes, freeze a supported scope, train the intended historical bundle, open the final test, or report a real reliability result.
-Milestone 0 is `FAILED`, Milestones 1 through 9 are not accepted, and the project is not portfolio-ready under its own build plan.
+The replay explorer is a local evidence browser.
+It does not ingest a live feed, refresh a real train prediction, send notifications, or provide operational advice.
 
-## Product limitations
+## Source evidence
 
-The default application is a loopback schedule-only demonstration.
-It returns null arrival probability and quantiles, does not issue a trip-start capability, and cannot provide a real recovery recommendation.
-The Chromium fixture injects synthetic score bundles solely to exercise the user-facing contract.
+The Bus Observatory compacted Parquet files preserve parsed Vehicle Position fields and vehicle observation timestamps.
+They do not preserve the original collector fetch timestamp, GTFS Realtime feed-header timestamp, or every source-fetch boundary.
 
-Arrive90 plans station-to-station journeys with at most one subway transfer.
-It does not include access or egress walking, buses, commuter rail, ferries, paratransit, fares, two-transfer itineraries, native notifications, or accessibility-aware timing.
-OpenTripPlanner pedestrian edges, when used, connect station platforms and do not establish a complete accessibility claim.
+The project therefore conditions features on the archived observation cutoff and exact schedule publication evidence.
+It excludes cross-train live state and does not claim that every historical primitive was available to a rider-facing product at the observation timestamp.
 
-## Modeling limitations
+Bus Observatory may contain gaps, parser behavior, or upstream errors not observable from the compacted archive.
+The acquisition lock proves the bytes evaluated, not perfect source completeness.
 
-The intended AFT and transfer models have not been trained or selected on an accepted MBTA population.
-Synthetic calibration, output-support, and prospective controls validate software mechanics only.
-They do not estimate future production calibration, rare-disruption behavior, or rider benefit.
+## Target uncertainty
 
-Arrival observations are intervals rather than exact passenger events.
-Even with primitive Vehicle Positions, a stop observation upper-bounds latent arrival unless stronger audited semantics exist.
-Virtual boarding models observed train presence after readiness, not doors opening or an individual passenger entering.
+A `STOPPED_AT` observation proves that a sampled train was observed at a platform.
+It does not reveal the exact physical arrival time, door opening time, or an individual passenger event.
+Targets remain intervals or explicit censoring states.
 
-Fixed walking and transfer assumptions do not reflect individual mobility, crowding, platform access, or accessibility needs.
-No rider demographic data is collected, so demographic performance and fairness are unknown.
+The point diagnostic gives zero error when a point falls inside the arrival interval.
+It is useful for comparing predictions on common eligible rows, but it should not be interpreted as exact-second arrival error.
 
-## Evaluation limitations
+## Generalization
 
-The recorded performance workloads are bounded synthetic mechanics on one ARM64 environment.
-They are not city-scale throughput, concurrent rider load, wide-area network latency, or production capacity measurements.
-The one-year replay benchmark uses one origin-destination pair, one query time per service day, one readiness horizon, and 36 deadline variants.
+Training uses January through July 2024, selection uses August and September, calibration uses October, and final evaluation uses November and December.
+The final result does not establish performance for another year, a schedule redesign, rare severe disruptions, live operational feed behavior, or another line.
 
-The browser qualification contains four scripted Chromium workflows and no independent participant evidence.
-The required eight-person comprehension protocol has not been run.
-The synthetic screenshot is not an immutable historical replay.
+The full model improves interval likelihood only slightly over the strong schedule-and-calendar AFT baseline.
+Its held-out point advantage is clearer, but that diagnostic excludes censored and unavailable rows.
+Both facts are retained to avoid overstating the contribution.
 
-The prospective qualification contains 3,096 synthetic scheduled queries across a constructed 56-service-day panel.
-No real 28-service-day shakeout or 56-service-day shadow panel has begun.
-The nonserving 0.95 shadow policy remains ineligible for user-facing use.
+The worst schedule-deviation bucket has materially higher NLL than the overall population.
+December NLL is 0.032 higher than November NLL.
+These results are descriptive warnings about harder operating conditions and possible drift.
 
-## Operational limitations
+## Calibration and uncertainty
 
-The service is not authorized for non-loopback deployment.
-The intended TLS proxy topology has tests and a threat model but no deployed-environment qualification.
-The local SQLite design is appropriate for the bounded V1 state lifecycle, not a multi-region or high-availability service.
+Fixed-horizon calibration is assessed only on the frozen 2024 Blue Line population.
+Long horizons are close to certain completion, so very small long-horizon Brier and calibration errors provide limited discrimination evidence.
 
-Backups protect bounded runtime state but do not replace immutable source, graph, feature, model, or evaluation artifact storage.
-Ephemeral default HMAC keys invalidate sessions across restarts.
-Operators must supply and rotate protected keys for any future persistent environment.
+Bootstrap intervals use 61 service-day blocks.
+They represent sampling variation across days in the frozen final interval and do not account for source-system changes, future-year drift, or a different line.
 
-## Security limitations
+## Sampling and weighting
 
-The security report is a dated scan against the exact repository, lockfiles, vulnerability database, and local container image recorded in its artifact.
-A later advisory or base-image change requires a new scan.
-No automated scan proves absence of unknown vulnerabilities.
+The model population caps anchors by service date, route, and direction through outcome-blind hash ordering.
+Inverse-probability weights recover the defined selected-population estimand under that sampling contract.
+They do not correct source missingness, schedule-match failures outside Blue, or unobserved operating conditions.
 
-The project has no external penetration test or managed production secret store.
-Browser extension compromise and host compromise are outside the application boundary.
+## Local system boundary
 
-## Required next evidence
+The committed demo bundle and 200-row fixture are deliberately small and sanitized.
+The explorer has no persistent user state and accepts only loopback hosts.
+It has not been qualified for public hosting, concurrent production traffic, managed secrets, multi-region availability, or external service-level objectives.
 
-Resume with archived primitive Vehicle Position observations that preserve stable identity, platform, status, observation time, separate Vehicle Position stop provenance, product-availability lineage, and per-train continuity.
-Then rerun Milestone 0 and proceed sequentially through every frozen gate.
-Do not reuse the current synthetic artifacts as empirical evidence or modify the existing acceptance version after outcome access.
+The recorded performance values come from one Apple ARM64 machine with 10 logical CPUs and 25,769,803,776 bytes of physical memory.
+They are workload evidence for this repository, not cloud capacity claims.
+
+## Data and use restrictions
+
+The data-backed project is noncommercial under the Bus Observatory CC BY-NC 4.0 terms.
+The model must not be used for safety guarantees, accessibility guarantees, dispatch control, policing, employment, fare decisions, or claims about individual riders.
+
+Any extension to a new route, year, source, target definition, feature family, or public deployment requires a new source audit, frozen acceptance version, untouched evaluation period, and terms review.

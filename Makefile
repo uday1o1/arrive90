@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test demo demo-serve check check-all source-lock qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 qualify-milestone5 qualify-milestone6-robustness qualify-milestone6-reproduction qualify-milestone7 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence reproduce-full-year benchmark-milestone6 license-evidence repository-audit public-claims-evidence clean-checkout gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test docs-assets docs-assets-check demo demo-serve check check-all source-lock qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 qualify-milestone5 qualify-milestone6-robustness qualify-milestone6-reproduction qualify-milestone7 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence reproduce-full-year benchmark-milestone6 license-evidence repository-audit public-claims-evidence clean-checkout gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -45,8 +45,15 @@ demo-serve:
 	$(UV_RUN) arrive90-api
 
 check: lock-check format-check lint typecheck test
+	$(UV_RUN) python scripts/build_docs_assets.py --check
 
 check-all: check browser-test
+
+docs-assets:
+	$(UV_RUN) python scripts/build_docs_assets.py
+
+docs-assets-check:
+	$(UV_RUN) python scripts/build_docs_assets.py --check
 
 source-lock:
 	$(UV_RUN) arrive90 source lock

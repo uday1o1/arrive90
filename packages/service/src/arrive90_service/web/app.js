@@ -221,7 +221,7 @@ async function scoreReplay(event) {
     renderCalibration(calibration);
     renderHistory(prediction.cutoff_visible_history);
     renderLineage(prediction.lineage, prediction);
-    elements["outcome-placeholder"].hidden = false;
+    elements["outcome-status"].hidden = false;
     elements["reveal-button"].hidden = false;
     elements["outcome-result"].hidden = true;
     clear(elements["outcome-result"]);
@@ -247,7 +247,7 @@ async function revealOutcome() {
     }
     elements["outcome-result"].append(heading, description);
     elements["outcome-result"].hidden = false;
-    elements["outcome-placeholder"].hidden = true;
+    elements["outcome-status"].hidden = true;
     elements["reveal-button"].hidden = true;
   } catch (error) {
     elements["outcome-result"].textContent = error.message;

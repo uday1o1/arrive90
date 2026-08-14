@@ -1,49 +1,73 @@
-# Immutable ingestion and temporal source handling
+# Ingestion and source lineage
 
-Arrive90 stores GTFS Realtime fetch attempts separately from their response bytes.
-Identical response bytes share one content-addressed `FeedBlob`, while every scheduled fetch, failure, timeout, and retry retains its own immutable `FetchAttempt`.
-The attempt ledger uses separate transport, parse, semantic, and freshness states so an empty valid feed cannot be confused with an unavailable or malformed feed.
+## Public inputs
 
-The collector rejects payloads above 64 MiB and entity counts above 500,000.
-Parsing has a ten-second upper bound, and source timestamps more than 30 seconds in the future receive an explicit clock-skew state.
-New immutable objects are subject to configured daily and total quotas.
-Quota exhaustion records a bodyless `QUOTA_EXCEEDED` attempt instead of deleting older evidence.
+The 2024 observation source is the public Cornell Tech Bus Observatory compacted MBTA Vehicle Position archive.
+The schedule source is the official MBTA LAMP historical GTFS database for 2024.
+Neither download requires an AWS account, credentials, a payment card, or the AWS CLI.
 
-Historical GTFS Schedule archives use the `HistoricalSourceObject` contract.
-Their publication or listing time remains separate from the later acquisition time.
-When no earlier publication evidence exists, schedule knowledge begins at acquisition rather than being inferred from the schedule's active dates.
+The committed inventory lock covers every 2024 calendar date plus the 2023-12-31 and 2025-01-01 boundary objects.
+The acquired-content lock contains 368 Parquet objects with 208,444,419 source rows and one compressed schedule object.
+The raw storage footprint measured during qualification was 8,804,061,429 bytes after the schedule database was expanded.
 
-Run the schedule ingestion workflow with an empty output directory and a repository-external source store:
+## Acquisition contract
 
-```console
-uv run arrive90-ingest-schedule \
-  --archive /path/to/gtfs.zip \
-  --output /path/to/normalized-service-date \
-  --store /path/to/immutable-source-store \
-  --source-object-id mbta-gtfs-2025-01-01 \
-  --source-uri https://example.invalid/gtfs.zip \
-  --service-date 2025-01-01 \
-  --published-at 2024-12-20T00:00:00Z \
-  --downloaded-at 2025-01-02T00:00:00Z
-```
+`arrive90 source lock` downloads or reads the public JSON inventory, sorts it canonically, and writes a content-addressed snapshot.
+`arrive90 source download --year 2024` resolves only locked objects and verifies their response size, ETag, SHA-256, Parquet row count, and physical schema.
+The schedule path also verifies the compressed SHA-256, bounded expansion, expanded database SHA-256, database size, and SQLite schema fingerprint.
 
-The command safely extracts the archive under a 512 MiB compressed limit, an 8 GiB expanded limit, and a 64-to-1 expansion-ratio limit.
-It rejects absolute paths, traversal, links, device files, duplicate normalized paths, and reuse of a nonempty extraction or output directory.
-The output manifest and sorted JSON Lines partition are byte-deterministic for identical inputs.
-GTFS times above `24:00:00` remain service-day-local seconds and are not silently converted to the next civil date.
+Interrupted downloads use exact byte ranges.
+A resumed response is accepted only if its status, `Content-Range`, ETag, final size, and final digest all match the lock.
+Existing verified objects are reused without a network request.
+Low available disk fails before download begins.
 
-Primitive Vehicle Position and Trip Update observations remain distinguishable during normalization.
-Only a direct Vehicle Position `STOPPED_AT` observation can set the primary boarding-evidence flag.
-A `STOPPED_AT` timestamp is stored as an arrival upper bound and is never converted into a zero-width exact physical arrival.
-A later Vehicle Position movement toward the next stop may provide a conservative departure upper bound, but it cannot prove rider boarding.
-Predicted and verified-past Trip Update evidence retain their own evidence classes and cannot be silently promoted.
+Four workers may acquire independent objects concurrently, but every final path remains content verified.
+Normalization opens only one full source object at a time, which bounds memory independently of the full archive size.
 
-Alert revisions are append-only and point-in-time readable by `product_available_at_utc`.
-Temporal views filter every primitive by product availability at the frozen query cutoff and raise a distinct error for an explicit request for a future-only record.
+## Normalization
 
-Historical observation completeness requires every eligible train to reach an explicit terminal reconciliation state with required stop intervals and row lineage.
-Prospective completeness requires every scheduled attempt, fresh monotonic headers, relevant entity visibility, and bounded source gaps.
-Aggregate route density cannot satisfy either rule.
+Bus Observatory stores `vehicle.timestamp` as a timezone-naive value.
+The pinned schedule-alignment discriminator proves that these MBTA files must be interpreted as naive UTC rather than Boston local time.
+The adapter attaches UTC without clock arithmetic.
 
-Milestone 1 local code and synthetic verification are complete, but its acceptance gate remains `INSUFFICIENT_EVIDENCE` while the newly discovered official 2022 event archive undergoes the complete Milestone 0 audit.
-The blocked report is generated with `make milestone1-evidence`, and `make gate MILESTONE=1` intentionally exits nonzero until that prerequisite is resolved.
+The normalizer filters Red, Orange, and Blue rail observations, validates required and optional Arrow fields, parses status values, and constructs a stable observation identity.
+Exact duplicates collapse while retaining every source-row lineage entry.
+Conflicting duplicates and conflicting overlaps are quarantined instead of being resolved by input order.
+
+The accepted full-year run produced:
+
+| Normalization measure | Observed value |
+| --- | ---: |
+| Source rows | 208,444,419 |
+| Retained raw rows | 15,449,407 |
+| Canonical observations | 11,007,856 |
+| Exact duplicate rows | 4,283,843 |
+| Quarantined rows | 75,705 |
+| Date and line partitions | 1,098 |
+| Normalized partition bytes | 677,225,116 |
+
+The partition contract requires the complete Cartesian set of 366 service dates and three audited lines.
+Each partition binds its source lineage, row count, schema, content digest, and time range.
+
+## Schedule matching and episodes
+
+Schedule matching requires exact platform, trip, route, direction, start date, start time, and stop sequence agreement against a schedule version published no later than the observation cutoff.
+Parent stations support display grouping only and cannot substitute for an exact platform match.
+
+After deduplication, canonical observations are ordered deterministically by episode identity, event time, stop sequence, status, source object, source row, and duplicate ordinal.
+An episode splits on backward event time, a gap longer than 600 seconds, or a schedule-matched stop-sequence regression.
+The recovery fragment after a regression cannot contribute prior-fragment history.
+
+The one-day qualification generated 1,664 episodes and 45,931 downstream examples across the three audited lines.
+The full-year population retained every fragment in quality denominators before Blue was selected as the only modeled line.
+
+## Generated data policy
+
+Raw objects live under `data/raw`.
+Normalized partitions live under `data/normalized`.
+Dataset populations live under `data/datasets`.
+Full model registries live under `data/models`.
+All four roots are ignored and rebuilt from locks.
+
+Only compact source locks, aggregate qualification reports, and explicitly allow-listed demo artifacts enter Git.
+See [DATA_LICENSE.md](../DATA_LICENSE.md) for the attribution and redistribution policy.

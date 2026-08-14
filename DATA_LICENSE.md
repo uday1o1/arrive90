@@ -1,38 +1,42 @@
-# Transit data license and attribution
+# Transit data terms and attribution
 
-MassDOT provides the transportation data used by Arrive90.
-Arrive90 is independent and is not affiliated with, endorsed by, or acting for MassDOT or MBTA.
+Arrive90 uses the Cornell Tech Bus Observatory archive of parsed MBTA GTFS Realtime Vehicle Positions and the official MBTA historical GTFS schedule archive.
+The data-backed project is intended for noncommercial research and portfolio demonstration.
 
-The official MassDOT Developers License Agreement grants non-exclusive, limited, and revocable rights to use, reproduce, and redistribute the data after acceptance of its terms.
-It requires clear acknowledgment of MassDOT as the data provider.
-It prohibits representing the project as MassDOT or a partner, using protected logos or trademarks with the data, misrepresenting the data, making guarantees about the data, or claiming ownership of the data.
+Bus Observatory documents its public archive under the Creative Commons Attribution-NonCommercial 4.0 International license.
+Attribute the archive to the Jacobs Urban Tech Hub at Cornell Tech.
+The upstream transportation data remains subject to the applicable MassDOT and MBTA terms and attribution.
 
-The source document reviewed for Milestone 0 was the four-page PDF currently returned by the official download URL on 2026-08-13.
-Its SHA-256 digest was `6962a9dd3abac0ce700af47da0136739615af621fee21a4ef8a8cf693b540a95`.
-The document labels its terms as updated on 2009-11-13 and reserves MassDOT's right to change or revoke them.
+Arrive90 is independent and is not affiliated with, endorsed by, or acting for Cornell Tech, MassDOT, or MBTA.
+The project does not use their logos or protected marks as branding and makes no guarantee about source completeness, accuracy, or fitness for operational use.
 
-## Redistribution and retention matrix
+## Sources
 
-| Artifact | Repository policy | Basis |
+- Bus Observatory documentation: <https://api.busobservatory.org/>
+- Public MBTA archive inventory: <https://busobservatory-lake.s3.amazonaws.com/index/data-inventory.json>
+- Official 2024 GTFS archive: <https://performancedata.mbta.com/lamp/gtfs_archive/2024/GTFS_ARCHIVE.db.gz>
+- CC BY-NC 4.0: <https://creativecommons.org/licenses/by-nc/4.0/>
+- MassDOT developer resources: <https://www.mass.gov/info-details/massdot-developer-resources>
+
+The exact source object identities, byte sizes, ETags, content hashes, schema fingerprints, and acquisition results are pinned under `configs/source-locks`.
+The public documentation links are explanatory references and are not substitutes for those immutable locks.
+
+## Repository artifact policy
+
+| Artifact | Repository policy | Reason |
 | --- | --- | --- |
-| Original MassDOT or MBTA feed bytes | Regenerate outside Git | Redistribution is permitted by the reviewed license, but mutable and large source data does not belong in source control. |
-| MBTA Rapid Transit Events 2022 archive | Regenerate outside Git | The official ArcGIS item is marked public and CC0, but the pinned 272 MiB archive remains in ignored immutable storage. |
-| Historical LAMP Parquet files | Regenerate outside Git | Redistribution is permitted by the reviewed license, but files are mutable public exports and are retained by content hash outside Git. |
-| Normalized transit rows | Regenerate outside Git | Derived rows remain data and are stored outside Git with source lineage. |
-| Trained model binaries | Regenerate outside Git | Models can encode source-derived information and are retained in the external immutable artifact store. |
-| Aggregate metrics without restricted or identifying content | May be committed | The reviewed license permits use and redistribution with attribution and truthful representation. |
-| Small synthetic fixtures | May be committed | Fixtures contain no MassDOT source rows. |
-| MBTA or MassDOT logos and marks | Never commit as branding | The reviewed license prohibits logo and trademark use in connection with the data. |
-| Product screenshots | May be committed after review | Screenshots must contain attribution, no protected marks, no rider identity, and only accepted claims. |
+| Original Parquet and schedule bytes | Download into ignored `data/raw` | Large third-party source data does not belong in Git. |
+| Normalized observations and model populations | Rebuild under ignored `data/normalized` and `data/datasets` | These derived datasets preserve source lineage and remain bulk data. |
+| Full trained registry | Rebuild under ignored `data/models` | The full registry is a generated result. |
+| Allow-listed demo bundle and 200-row replay fixture | Commit under `artifacts/demo` | The final evaluation explicitly sanitizes and size-bounds these portfolio artifacts. |
+| Aggregate reports and public charts | Commit after evidence audit | They contain no raw vehicle identifier, trip identifier, coordinate, or source row. |
+| Source locks and acceptance configs | Commit | They are required to reproduce source identity and project gates. |
 
-The license may change without notice.
-Release verification must re-download, hash, and review the current terms.
+The committed replay fixture contains no raw vehicle identifier, vehicle label, trip identifier, coordinates, or original source row.
+Redistribution of other data-derived artifacts should be reviewed against the current source terms before any external publication.
 
-## Software dependency inventory
+## Software licenses
 
-The deterministic lockfile audit is retained at [artifacts/reports/qualification/licenses-v1.json](artifacts/reports/qualification/licenses-v1.json).
-It resolves license metadata for every one of the 40 Python lock packages and all four Node lock packages, records Node integrity values, and binds the project license, data-license document, and lockfiles by SHA-256.
-
-The release-candidate container also includes operating-system components under their respective licenses.
-The Trivy qualification records the detected license findings and exact container image but does not replace the upstream license texts or notices.
-No container image, package, model, or external artifact has been published by this project.
+Project source is available under the [MIT License](LICENSE).
+The deterministic dependency inventory is recorded at [artifacts/reports/qualification/licenses-v1.json](artifacts/reports/qualification/licenses-v1.json).
+It binds the project license, data terms, Python lock, and Node lock by SHA-256 and verifies license metadata for every locked package.

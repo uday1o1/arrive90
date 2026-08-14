@@ -2,86 +2,95 @@
 
 ## System boundary
 
-Arrive90 is a station-to-station subway research system.
-It accepts an origin station, destination station, ready-to-board time, deadline, reliability target, and maximum extra travel time.
-It does not perform door-to-door routing, bus or commuter-rail planning, fare optimization, native notifications, or personal accessibility guarantees.
+Arrive90 is a local research pipeline and replay explorer for downstream Blue Line train travel-time distributions.
+Its input is a historical train observation cutoff, an exact matched trip, and a downstream scheduled platform.
+Its output is one calibrated travel-time distribution with p50, p80, p90, and fixed-horizon probabilities.
 
-The currently executable service is loopback-only and schedule-only because the primary historical source gate has failed.
-The learned path exists as tested software mechanics but cannot be activated without an accepted immutable model, calibration, support, and decision bundle.
+The system does not model platform waiting, individual passenger events, access or egress walking, multi-line trips, fares, or operational dispatch.
+The browser is a held-out evidence explorer rather than an online prediction service.
 
-## Data and decision flow
+## Component architecture
 
 ```mermaid
-flowchart LR
-    A[GTFS schedule] --> B[Immutable source archive]
-    C[Realtime snapshots and alerts] --> B
-    D[Historical primitive events] -. missing prerequisite .-> B
-    B --> E[Temporal access boundary]
-    E --> F[Canonical replay and candidate generation]
-    F --> G[Virtual-rider interval outcomes]
-    E --> H[Causal feature rows]
-    G --> I[Baselines and AFT model]
-    H --> I
-    I --> J[Immutable model and support registry]
-    F --> K[Decision service]
-    J --> K
-    K --> L[FastAPI boundary]
-    L --> M[No-map browser client]
-    M --> N[Trip state and authenticated SSE]
-    N --> K
+flowchart TB
+    CLI[Public arrive90 CLI] --> ING[arrive90_ingestion]
+    ING --> CONTRACTS[arrive90_data_contracts]
+    ING --> NORM[(Ignored normalized partitions)]
+    NORM --> EVAL[arrive90_evaluation]
+    CONTRACTS --> EVAL
+    FEATURES[arrive90_features] --> EVAL
+    TARGETS[arrive90_outcomes] --> EVAL
+    EVAL --> MODELS[arrive90_models]
+    EVAL --> REPORTS[Immutable reports and claim registry]
+    MODELS --> ALLOWLIST[Allow-listed demo bundle]
+    REPORTS --> SERVICE[arrive90_service]
+    ALLOWLIST --> SERVICE
+    SERVICE --> BROWSER[Loopback replay explorer]
 ```
-
-The dotted source edge is the controlling blocker.
-The public historical rail export cannot distinguish a Vehicle Position stop observation from a Trip Update arrival prediction after those fields are coalesced.
-Without that distinction, the virtual-rider outcome and downstream empirical model path remain closed.
-
-## Packages
 
 | Package | Responsibility |
 | --- | --- |
-| `arrive90_data_contracts` | Canonical schedule, realtime, candidate, and gate contracts. |
-| `arrive90_ingestion` | Immutable archives, collectors, completeness, alert revisions, storage, and temporal views. |
-| `arrive90_routing` | Query populations, deterministic candidates, schedule simulation, graph builds, audit enumeration, and recall. |
-| `arrive90_features` | Versioned causal feature registry and point-in-time feature construction. |
-| `arrive90_outcomes` | Virtual-rider resolution, interval-censored labels, bounds, and baselines. |
-| `arrive90_models` | AFT distributions, calibration, support discovery, transfer models, and immutable bundle registry. |
-| `arrive90_decision` | Initial itinerary selection, explanation codes, and deterministic recovery. |
-| `arrive90_service` | API, authorization, bounded persistence, middleware, fallback behavior, backup, and browser assets. |
-| `arrive90_evaluation` | Frozen protocols, uncertainty, prediction and policy metrics, promotion, and prospective panels. |
+| `arrive90_data_contracts` | Acceptance versions, dataset boundaries, source identities, target states, and fail-closed milestone reports. |
+| `arrive90_ingestion` | Inventory locking, resumable verified downloads, schema profiles, schedule extraction, normalization, deterministic episode construction, and immutable manifests. |
+| `arrive90_features` | Frozen feature registry, observation-cutoff construction, train-only categorical vocabulary, and CSR transformation. |
+| `arrive90_outcomes` | Downstream interval targets and schedule or empirical baselines. |
+| `arrive90_models` | AFT distributions, calibrators, XGBoost wrapper, predictive bundle, and immutable registry validation. |
+| `arrive90_evaluation` | Population construction, model selection, final-test controls, metrics, bootstrap uncertainty, reports, and replay packaging. |
+| `arrive90_service` | Read-only repository validation, real bundle scoring, evidence endpoints, and the browser client. |
 
-Imports preserve the causal direction.
-Feature code does not import outcome code, and the corresponding architecture test fails if that boundary is crossed.
+Feature construction does not import the outcome package.
+The controlled join happens inside evaluation after both partitions are independently manifested.
 
-## Time model
+## Data flow
 
-Every usable primitive distinguishes the time an event describes from the time the product could have known it.
-The ordering and correction rules are defined in [temporal-semantics.md](temporal-semantics.md).
-Queries capture one server-owned cutoff, and all candidates, features, feeds, alerts, support decisions, and model outputs bind to that cutoff.
+```mermaid
+flowchart LR
+    A[Public Bus Observatory inventory] --> B[368 content-verified Parquet objects]
+    C[Official 2024 GTFS archive] --> D[Verified read-only SQLite schedule]
+    B --> E[Schema-aware normalization]
+    D --> E
+    E --> F[Canonical observations and quarantines]
+    F --> G[Deterministic trip episodes]
+    D --> G
+    G --> H[Unsampled downstream candidates]
+    H --> I[Feature partitions at anchor cutoff]
+    H --> J[Later interval-valued outcomes]
+    I --> K[Outcome-blind sampled population]
+    J --> K
+    K --> L[Chronological train, validation, calibration, final splits]
+    L --> M[Seven frozen AFT and ablation bundles]
+    M --> N[Single frozen final evaluation]
+    N --> O[Final report and claim registry]
+    N --> P[Sanitized 200-row replay fixture]
+    P --> Q[Network-free explorer]
+    O --> Q
+```
 
-After trip start, Arrive90 never recomputes the initial arrival CDF with observations outside its temporal support.
-State-conditioned recovery is a deterministic schedule action with null deadline probability and null arrival quantiles.
+All bulk source and derived data remains ignored.
+Only locks, compact reports, the promoted allow-listed bundle, and the sanitized replay fixture are committed.
 
-## Persistence and authorization
+## Immutable boundaries
 
-The local service uses SQLite for single-use decision capabilities, trip snapshots, optimistic state versions, idempotency records, recovery decisions, and the SSE outbox.
-Decision capabilities and trip bearers contain 256 bits of randomness and are persisted only as versioned keyed HMAC digests.
-The state row and event outbox update in one transaction.
+The acquisition lock binds the public inventory identity to acquired size, ETag, SHA-256, row count, and schema fingerprint.
+The normalization manifest binds source objects to deterministic date and line partitions plus quarantine output.
+The model-population manifest binds split boundaries, feature schema, selected anchors, inclusion probabilities, and analysis weights.
+The model registry binds source, dataset, split, feature order, dependency lock, model bytes, and calibrator bytes.
+The final protocol binds model bundles, horizons, slices, metrics, bootstrap seed, and claims before final-test outcomes are opened.
 
-Trip state expires within six hours.
-The schema intentionally stores no rider identity or coordinates.
-Station and itinerary details needed for an active trip remain sensitive and are excluded from audit logs and error bodies.
+Each boundary rejects changed bytes instead of accepting a mutable `latest` artifact.
 
-## Runtime topology
+## Runtime path
 
-The default CLI binds to `127.0.0.1` and rejects a non-loopback host.
-The release-candidate image runs as UID and GID `65532:65532`, keeps application source read-only, and reserves `/state/arrive90.sqlite3` as its mutable path.
-Its default command still binds to loopback.
+The FastAPI process loads the committed model and fixture only after every allow-listed hash verifies.
+Prediction requests receive cutoff-visible features and never receive outcome bounds or outcome state.
+The outcome reveal endpoint reads the separately stored later observation only after a prediction has been displayed.
 
-An intended non-loopback topology would place an authenticated TLS reverse proxy in front of the API and configure exact Host, HTTPS Origin, and trusted proxy IP allow-lists.
-That topology is documented for threat analysis only and is not authorized while Milestone 9 is not accepted.
+The CLI accepts only loopback hosts.
+The service performs no external network request and stores no user state.
+An unsupported line, missing bundle, corrupt model, unknown replay, or unavailable artifact produces a specific fail-closed response.
 
-## Evidence namespaces
+## Evidence path
 
-Historical replay, prospective shadow evaluation, synthetic protocol qualification, browser demonstration, and performance measurement use separate evidence kinds.
-No artifact may be relabeled across those namespaces.
-The current statuses and immutable artifact links are listed in [evaluation-report.md](evaluation-report.md).
+Milestone reports under `artifacts/reports/gates` contain the acceptance state and hashes for their complete input evidence.
+The public claim registry points back into the immutable final report.
+The repository audit verifies that the README values, charts, documentation links, tracked source, ignored data policy, attribution, and clean-checkout evidence remain coherent.

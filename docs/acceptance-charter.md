@@ -16,4 +16,5 @@ Every episode remains visible in the report and in later full-population quality
 Milestone reports use the exact state key `state` and one of `NOT_STARTED`, `IN_PROGRESS`, `ACCEPTED`, `BLOCKED`, or `FAILED`.
 Only `ACCEPTED` unlocks the next milestone.
 The active milestone tracker is `configs/acceptance/travel-time-v1.2-milestones.json`.
-The tracker reopens Milestones 0 through 2 so the new charter is requalified before model work resumes.
+Milestones 0 through 6 are accepted under this charter.
+Milestone 7 closes only after the public documentation, clean-reader workflow, repository audit, and claim audit all pass without changing the frozen result.

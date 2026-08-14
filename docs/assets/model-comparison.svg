@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 520">
+  <title>Held-out interval negative log likelihood</title>
+  <desc>The promoted full model has the lowest interval negative log likelihood among the five shown frozen bundles.</desc>
+  <style>
+    .title { fill: #102a43; font: 700 26px system-ui, sans-serif; }
+    .subtitle { fill: #486581; font: 15px system-ui, sans-serif; }
+    .label { fill: #243b53; font: 15px system-ui, sans-serif; }
+    .value { fill: #102a43; font: 700 15px ui-monospace, monospace; }
+    .axis { stroke: #9fb3c8; stroke-width: 1; }
+    .grid { stroke: #d9e2ec; stroke-width: 1; }
+  </style>
+  <rect width="960" height="520" fill="#f7f9fc" rx="18"/>
+<text class="title" x="48.0" y="54.0">Held-out interval likelihood</text><text class="subtitle" x="48.0" y="82.0">November and December 2024, lower is better</text>  <line class="grid" x1="330.0" x2="330.0" y1="112" y2="450"/>
+<text class="subtitle" x="320.0" y="476.0">1.5</text>  <line class="grid" x1="498.8" x2="498.8" y1="112" y2="450"/>
+<text class="subtitle" x="488.8" y="476.0">2.0</text>  <line class="grid" x1="667.5" x2="667.5" y1="112" y2="450"/>
+<text class="subtitle" x="657.5" y="476.0">2.5</text>  <line class="grid" x1="836.2" x2="836.2" y1="112" y2="450"/>
+<text class="subtitle" x="826.2" y="476.0">3.0</text><text class="label" x="48.0" y="153.0">Promoted full model</text>  <rect x="330.0" y="128.0" width="49.6" height="34" fill="#1565c0" rx="6"/>
+<text class="value" x="389.6" y="152.0">1.647</text><text class="label" x="48.0" y="219.0">Without position features</text>  <rect x="330.0" y="194.0" width="52.0" height="34" fill="#8da9c4" rx="6"/>
+<text class="value" x="392.0" y="218.0">1.654</text><text class="label" x="48.0" y="285.0">Without prefix history</text>  <rect x="330.0" y="260.0" width="53.6" height="34" fill="#8da9c4" rx="6"/>
+<text class="value" x="393.6" y="284.0">1.659</text><text class="label" x="48.0" y="351.0">Schedule and calendar baseline</text>  <rect x="330.0" y="326.0" width="58.6" height="34" fill="#8da9c4" rx="6"/>
+<text class="value" x="398.6" y="350.0">1.673</text><text class="label" x="48.0" y="417.0">Intercept-only baseline</text>  <rect x="330.0" y="392.0" width="500.0" height="34" fill="#8da9c4" rx="6"/>
+<text class="value" x="840.0" y="416.0">2.982</text>  <line class="axis" x1="330.0" x2="870.0" y1="450" y2="450"/>
+</svg>

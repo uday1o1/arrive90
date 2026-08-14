@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 960 520">
+  <title>Promoted model expected calibration error</title>
+  <desc>Expected calibration error is below 0.026 at every frozen horizon and approaches zero for long horizons.</desc>
+  <style>
+    .title { fill: #102a43; font: 700 26px system-ui, sans-serif; }
+    .subtitle { fill: #486581; font: 15px system-ui, sans-serif; }
+    .label { fill: #243b53; font: 15px system-ui, sans-serif; }
+    .value { fill: #102a43; font: 700 15px ui-monospace, monospace; }
+    .axis { stroke: #9fb3c8; stroke-width: 1; }
+    .grid { stroke: #d9e2ec; stroke-width: 1; }
+  </style>
+  <rect width="960" height="520" fill="#f7f9fc" rx="18"/>
+<text class="title" x="48.0" y="54.0">Promoted-model calibration error</text><text class="subtitle" x="48.0" y="82.0">Expected calibration error at each frozen horizon</text>  <line class="grid" x1="100.0" x2="880.0" y1="405.0" y2="405.0"/>
+<text class="subtitle" x="48.0" y="410.0">0.00</text>  <line class="grid" x1="100.0" x2="880.0" y1="311.7" y2="311.7"/>
+<text class="subtitle" x="48.0" y="316.7">0.01</text>  <line class="grid" x1="100.0" x2="880.0" y1="218.3" y2="218.3"/>
+<text class="subtitle" x="48.0" y="223.3">0.02</text>  <line class="grid" x1="100.0" x2="880.0" y1="125.0" y2="125.0"/>
+<text class="subtitle" x="48.0" y="130.0">0.03</text><text class="subtitle" x="80.0" y="438.0">5m</text><text class="subtitle" x="210.0" y="438.0">10m</text><text class="subtitle" x="340.0" y="438.0">15m</text><text class="subtitle" x="470.0" y="438.0">20m</text><text class="subtitle" x="600.0" y="438.0">30m</text><text class="subtitle" x="730.0" y="438.0">45m</text><text class="subtitle" x="860.0" y="438.0">60m</text>  <path d="M 100.0 333.9 L 230.0 164.7 L 360.0 319.5 L 490.0 382.0 L 620.0 403.3 L 750.0 404.9 L 880.0 405.0" fill="none" stroke="#1565c0" stroke-width="5"/>
+  <circle cx="100.0" cy="333.9" r="7" fill="#1565c0"/>
+<text class="value" x="80.0" y="319.9">0.008</text>  <circle cx="230.0" cy="164.7" r="7" fill="#1565c0"/>
+<text class="value" x="210.0" y="150.7">0.026</text>  <circle cx="360.0" cy="319.5" r="7" fill="#1565c0"/>
+<text class="value" x="340.0" y="305.5">0.009</text>  <circle cx="490.0" cy="382.0" r="7" fill="#1565c0"/>
+<text class="value" x="470.0" y="368.0">0.002</text>  <circle cx="620.0" cy="403.3" r="7" fill="#1565c0"/>
+<text class="value" x="600.0" y="389.3">0.000</text>  <circle cx="750.0" cy="404.9" r="7" fill="#1565c0"/>
+<text class="value" x="730.0" y="390.9">0.000</text>  <circle cx="880.0" cy="405.0" r="7" fill="#1565c0"/>
+<text class="value" x="860.0" y="391.0">0.000</text><text class="subtitle" x="48.0" y="492.0">All seven horizons are supported in the immutable final report.</text></svg>

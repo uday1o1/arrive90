@@ -27,6 +27,9 @@ The modeled unit is one exact-schedule Blue episode anchor paired with a downstr
 | Selected Blue anchors | 211,200 |
 | Selected Blue destination examples | 1,151,892 |
 
+The acquisition lock contains 368 Vehicle Position objects with 208,444,419 source rows.
+Normalization produces 11,007,856 canonical observations across 1,098 date and line partitions, while 75,705 conflicting rows remain quarantined with explicit reasons.
+
 ## Blue retention evidence
 
 The schedule-match denominator contains only source episodes whose GTFS Realtime schedule relationship is `SCHEDULED`.
@@ -81,4 +84,5 @@ Both are content addressed, and the Milestone 2 gate separately requires a byte-
 The compacted public archive preserves Vehicle Position observation timestamps but not original fetch-batch timestamps or GTFS Realtime feed-header timestamps.
 The project therefore does not claim historically exact online product availability for cross-train live state and excludes such features.
 The model scope is Blue Line station-to-station train time, not platform waiting time, transfers, buses, commuter rail, ferries, door-to-door travel, or individual rider mobility.
-Support and interval quality do not guarantee predictive accuracy, which is measured only after the model and evaluation protocol are frozen.
+Predictive accuracy was measured only after the model and evaluation protocol were frozen.
+See the [evaluation report](evaluation-report.md) for the accepted final-test result and denominators.

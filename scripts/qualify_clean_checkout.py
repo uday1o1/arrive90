@@ -1,4 +1,4 @@
-"""Verify the documented workflow from one exact remote commit in a fresh clone."""
+"""Verify the documented Arrive90 workflow from one exact remote commit."""
 
 from __future__ import annotations
 
@@ -18,28 +18,21 @@ if not GIT:
     raise RuntimeError("git is required for clean-checkout qualification")
 
 FULL_COMMANDS = (
-    ("install_python", ("uv", "python", "install")),
-    ("sync_python", ("uv", "sync", "--frozen")),
+    ("sync_python", ("uv", "sync", "--frozen", "--all-groups")),
+    ("network_free_demo", ("make", "demo")),
     ("install_node", ("npm", "ci")),
     ("install_chromium", ("npx", "playwright", "install", "chromium")),
     ("local_and_browser_checks", ("make", "check-all")),
-    ("security_scan", ("make", "security-scan")),
     (
-        "security_evidence",
+        "robustness_qualification",
         (
             "uv",
             "run",
             "--no-sync",
             "python",
-            "scripts/qualify_milestone_9_security.py",
-            "--repository-report",
-            "artifacts/runtime/security/repository.json",
-            "--image-report",
-            "artifacts/runtime/security/image.json",
-            "--version-report",
-            "artifacts/runtime/security/trivy-version.json",
+            "scripts/qualify_milestone_6_robustness.py",
             "--output",
-            "artifacts/runtime/clean-checkout-security.json",
+            "artifacts/runtime/clean-checkout-robustness.json",
         ),
     ),
     (
@@ -55,18 +48,6 @@ FULL_COMMANDS = (
         ),
     ),
     (
-        "reliability_qualification",
-        (
-            "uv",
-            "run",
-            "--no-sync",
-            "python",
-            "scripts/qualify_milestone_9_reliability.py",
-            "--output",
-            "artifacts/runtime/clean-checkout-reliability.json",
-        ),
-    ),
-    (
         "repository_audit",
         (
             "uv",
@@ -78,19 +59,16 @@ FULL_COMMANDS = (
             "artifacts/runtime/clean-checkout-repository-audit.json",
         ),
     ),
+    *((f"milestone_{number}_gate", ("make", "gate", f"MILESTONE={number}")) for number in range(7)),
 )
-
-DEMO_COMMANDS = (
-    ("sync_python", ("uv", "sync", "--frozen")),
-    ("network_free_demo", ("make", "demo")),
-)
+DEMO_COMMANDS = FULL_COMMANDS[:2]
 
 
 def _run(
     command: tuple[str, ...], *, cwd: Path, env: dict[str, str]
 ) -> subprocess.CompletedProcess[str]:
     try:
-        return subprocess.run(  # noqa: S603 - fixed repository-owned allow-list
+        return subprocess.run(  # noqa: S603 - fixed repository-owned command allow-list
             command,
             cwd=cwd,
             env=env,
@@ -107,14 +85,19 @@ def _version(command: tuple[str, ...], *, cwd: Path, env: dict[str, str]) -> str
     return completed.stdout.strip() or completed.stderr.strip()
 
 
+def _load_optional(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return payload if isinstance(payload, dict) else {}
+
+
 def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str, Any]:
-    # Docker Desktop and Colima share the project filesystem, but do not necessarily
-    # share the operating system's default temporary directory with the daemon.
     with tempfile.TemporaryDirectory(
         prefix="arrive90-clean-checkout-", dir=ROOT.parent
     ) as temporary:
         clone = Path(temporary) / "repository"
-        clone_process = subprocess.run(  # noqa: S603 - fixed git clone operation
+        clone_process = subprocess.run(  # noqa: S603 - fixed Git clone operation
             [GIT, "clone", "--no-checkout", repository, str(clone)],
             check=False,
             capture_output=True,
@@ -136,7 +119,7 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
                 "results": results,
                 "status": "FAILED",
             }
-        checkout = subprocess.run(  # noqa: S603 - fixed git checkout operation in temporary clone
+        checkout = subprocess.run(  # noqa: S603 - fixed detached checkout in temporary clone
             [GIT, "checkout", "--detach", commit],
             cwd=clone,
             check=False,
@@ -175,59 +158,94 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
                 "status": completed.returncode,
             }
             if completed.returncode != 0:
-                result["stderr_tail"] = completed.stderr[-2_000:]
+                result["stderr_tail"] = (completed.stdout + completed.stderr)[-4_000:]
             results.append(result)
             if completed.returncode != 0:
                 failing_command = name
                 break
-            if name == "local_and_browser_checks":
+            if name == "network_free_demo":
+                manifest = _load_optional(clone / "artifacts/runtime/demo-terminal-manifest.json")
+                expected = _load_optional(
+                    clone / "artifacts/demo/travel-time-v1/terminal-manifest.json"
+                )
+                observations["demo_state"] = manifest.get("state")
+                observations["terminal_manifest_reproduced"] = manifest == expected
+            elif name == "local_and_browser_checks":
                 passed_counts = [
                     int(value) for value in re.findall(r"(\d+) passed", completed.stdout)
                 ]
                 coverage = re.search(r"Total coverage: ([0-9.]+)%", completed.stdout)
-                observations["browser_tests_passed"] = passed_counts[-1] if passed_counts else None
+                observations["python_tests_passed"] = passed_counts[0] if passed_counts else None
+                observations["browser_tests_passed"] = (
+                    passed_counts[-1] if len(passed_counts) > 1 else None
+                )
                 observations["python_coverage_percent"] = (
                     float(coverage.group(1)) if coverage else None
                 )
-                observations["python_tests_passed"] = passed_counts[0] if passed_counts else None
-            if name == "network_free_demo":
-                manifest_path = clone / "artifacts/runtime/demo-terminal-manifest.json"
-                expected_path = clone / "artifacts/demo/travel-time-v1/terminal-manifest.json"
-                observations["terminal_manifest_reproduced"] = (
-                    manifest_path.is_file()
-                    and expected_path.is_file()
-                    and manifest_path.read_bytes() == expected_path.read_bytes()
+            elif name == "robustness_qualification":
+                robustness = _load_optional(
+                    clone / "artifacts/runtime/clean-checkout-robustness.json"
                 )
+                observations["robustness_status"] = robustness.get("status")
+                observations["robustness_scenario_count"] = len(robustness.get("scenarios", {}))
+            elif name == "license_audit":
+                observations["licenses_status"] = _load_optional(
+                    clone / "artifacts/runtime/clean-checkout-licenses.json"
+                ).get("status")
+            elif name == "repository_audit":
+                observations["repository_audit_status"] = _load_optional(
+                    clone / "artifacts/runtime/clean-checkout-repository-audit.json"
+                ).get("status")
+        reproduction = _load_optional(
+            clone / "artifacts/reports/qualification/milestone-6-reproduction-v1.2.json"
+        )
+        observations["accepted_reproduction_status"] = reproduction.get("status")
+        observations["accepted_reproduction_file_count"] = reproduction.get(
+            "immutable_output_file_count"
+        )
         status = _run((GIT, "status", "--porcelain"), cwd=clone, env=env)
         head = _version((GIT, "rev-parse", "HEAD"), cwd=clone, env=env)
-        for name in ("security", "licenses", "reliability", "repository-audit"):
-            report_path = clone / "artifacts" / "runtime" / f"clean-checkout-{name}.json"
-            if report_path.is_file():
-                observations[f"{name}_status"] = json.loads(
-                    report_path.read_text(encoding="utf-8")
-                ).get("status")
         checks = {
             "all_documented_commands_passed": failing_command is None,
             "exact_commit_checked_out": head == commit,
             "fresh_clone_remained_clean": status.returncode == 0 and not status.stdout.strip(),
-        }
-        if workflow == "demo":
-            checks["expected_terminal_manifest_reproduced"] = bool(
+            "network_free_demo_terminal_reproduced": bool(
                 observations.get("terminal_manifest_reproduced")
+            ),
+        }
+        if workflow == "full":
+            checks.update(
+                {
+                    "accepted_full_year_reproduction_evidence_present": (
+                        observations.get("accepted_reproduction_status") == "PASSED"
+                        and observations.get("accepted_reproduction_file_count") == 4827
+                    ),
+                    "browser_workflows_passed": observations.get("browser_tests_passed") == 4,
+                    "python_quality_gate_passed": (
+                        int(observations.get("python_tests_passed") or 0) > 0
+                        and float(observations.get("python_coverage_percent") or 0.0) >= 90.0
+                    ),
+                    "repository_and_license_audits_passed": (
+                        observations.get("repository_audit_status") == "PASSED"
+                        and observations.get("licenses_status") == "PASSED"
+                    ),
+                    "robustness_pairs_passed": (
+                        observations.get("robustness_status") == "PASSED"
+                        and observations.get("robustness_scenario_count") == 9
+                    ),
+                }
             )
         return {
+            "acceptance_version": "travel-time-v1.2",
             "checks": checks,
             "commit": commit,
             "environment": {
-                "docker": _version(
-                    ("docker", "version", "--format", "{{.Server.Version}}/{{.Server.Arch}}"),
-                    cwd=clone,
-                    env=env,
-                ),
                 "node": _version(("node", "--version"), cwd=clone, env=env),
                 "npm": _version(("npm", "--version"), cwd=clone, env=env),
                 "python": _version(
-                    (str(clone / ".venv" / "bin" / "python"), "--version"), cwd=clone, env=env
+                    (str(clone / ".venv" / "bin" / "python"), "--version"),
+                    cwd=clone,
+                    env=env,
                 ),
                 "uv": _version(("uv", "--version"), cwd=clone, env=env),
             },
@@ -236,6 +254,7 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
             "repository": repository,
             "results": results,
             "status": "PASSED" if all(checks.values()) else "FAILED",
+            "version": "clean-checkout-v1.2",
             "workflow": workflow,
         }
 

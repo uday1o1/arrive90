@@ -1,218 +1,155 @@
 # Reproduction guide
 
-## Scope
+## Reproduction levels
 
-This guide reproduces the locally executable software, browser, security, fault, license, and synthetic protocol evidence.
-It does not download restricted data, create an empirical model, or turn a failing milestone into a pass.
+The repository separates a small portfolio demonstration from the large full-year rebuild.
+The demo and software suite need only committed artifacts.
+The full pipeline additionally needs about 8.8 GB of verified raw and expanded source data, about 3.7 GB of derived data, and the accepted frozen final-prediction runtime.
 
-The primary workflow works without a GPU.
-OpenTripPlanner graph construction and the performance containers require Docker.
-The historical source gate requires external data described separately below.
+No GPU, AWS account, AWS CLI, payment card, or private credential is required.
 
 ## Toolchain
 
-The verified local toolchain uses:
+The accepted environment uses Python 3.12, uv 0.11.23, Node.js 24.16.0, npm 11.13.0, and Playwright 1.61.0.
+Python dependencies are locked by `uv.lock`, and browser dependencies are locked by `package-lock.json`.
+The model uses CPU-only XGBoost 3.3.0 with one training thread.
 
-- Git.
-- Python 3.12 selected by `.python-version`.
-- uv 0.11.23.
-- Node.js 24.16.0 and npm 11.13.0 for browser verification.
-- Docker 29.5.2 with a Linux ARM64 runtime for the retained performance and image-scan evidence.
-
-Python dependencies are resolved by `uv.lock`.
-Node dependencies are resolved by `package-lock.json`.
-Container bases, OpenTripPlanner, and Trivy use exact image digests.
-
-## Fresh checkout
-
-Clone the repository and install the frozen Python environment.
+## Clean reader workflow
 
 ```sh
 git clone https://github.com/uday1o1/arrive90.git
 cd arrive90
-uv python install
 uv sync --frozen
+make demo
+make demo-serve
 ```
 
-Install the exact browser dependency and Chromium binary.
+Open `http://127.0.0.1:8000` and complete one prediction and reveal.
+`make demo` must print a `PASSED` terminal manifest and exit zero before the server is started.
+
+## Complete local software verification
+
+Install the exact Node dependency and Chromium binary once.
 
 ```sh
-npm ci
-npx playwright install chromium
+make browser-install
 ```
 
-Run the complete local and browser suite.
+Run formatting checks, lint, strict type checking, the Python coverage suite, deterministic chart verification, and all four browser workflows.
 
 ```sh
 make check-all
 ```
 
-Run the repository and release-image security gate.
+Run the nine paired seeded-defect and nearby-control scenarios.
 
 ```sh
-make security-scan
-make security-evidence
+make qualify-milestone6-robustness
 ```
 
-Run the dependency-license and fault qualifications.
+Run the dependency and attribution inventory.
 
 ```sh
 make license-evidence
-make reliability-evidence
 ```
 
-Run the repository audit only from a clean worktree.
+Run the active repository audit only when the worktree is clean.
 
 ```sh
 make repository-audit
 ```
 
-The audit writes a tracked report by default, so a maintainer generating new evidence should review and commit that report afterward.
-The clean-checkout automation writes its audit under ignored runtime storage so its fresh clone remains clean.
+## Download the immutable 2024 inputs
 
-## Start the user-facing path
-
-```sh
-uv run arrive90-api \
-  --host 127.0.0.1 \
-  --port 8000 \
-  --state artifacts/runtime/arrive90.sqlite3
-```
-
-Open `http://127.0.0.1:8000`.
-The current expected state is explicit schedule-only abstention with null model output and no trip-start capability.
-
-## Reproduce synthetic qualifications
+The public source workflow reads the committed inventory and acquired-content locks.
+It downloads one object at a time per worker, resumes exact byte ranges, and rejects any changed ETag, size, digest, row count, or schema.
 
 ```sh
-make qualify-milestone6
-make qualify-milestone8
+uv run arrive90 source download --year 2024 --workers 4
 ```
 
-Milestone 6 intentionally remains `INSUFFICIENT_EVIDENCE` because a synthetic fixture cannot satisfy the empirical gate.
-Milestone 8 should report `PASSED` only for `SYNTHETIC_PROTOCOL_MECHANICS_ONLY` and must not create a prospective claim.
+Expected acquired content:
 
-Run the browser qualification after Playwright finishes.
+| Source measure | Expected value |
+| --- | ---: |
+| Vehicle objects | 368 |
+| Vehicle source rows | 208,444,419 |
+| Bus Observatory bytes | 7,684,705,816 |
+| Expanded schedule database bytes | 968,630,272 |
+| Acquisition lock SHA-256 | `af6b8967a422f18d0ccb35dd206c9a533daf91ed4eaac81faa7ba70109adc2f9` |
+
+The command writes only ignored raw data and must reproduce the committed acquired-content lock.
+If a public object has changed or is unavailable, the correct result is failure rather than a rewritten expected hash.
+
+## Rebuild normalized data and the model population
 
 ```sh
-make browser-test
-make qualify-milestone7
+uv run arrive90 data normalize --year 2024
+uv run arrive90 data build-dataset
 ```
 
-## Reproduce performance measurements
+The normalization command must reproduce dataset-manifest SHA-256 `add71239ed0a81d146e18390958db66708304821800acb4b332a1b1b16a429b3`.
+The population command must reproduce unsampled manifest SHA-256 `e02e40b899bfa02f441aa5e2f7352e7871961eb079b5867755c4872bef8b91d7` and selected-population manifest SHA-256 `568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4`.
 
-The retained performance evidence uses an ARM64 Docker runtime with four allocated CPUs and 8,307,167,232 memory bytes.
-Do not compare results from another allocation as if they were the same benchmark.
+The accepted full-year normalization took 1,371 to 1,459 seconds on the recorded ARM64 machine.
+The complete selected-population build took about 648 seconds and peaked at 1,145,915,806 bytes of process RSS.
+
+## Rebuild the frozen model registry
 
 ```sh
-make benchmark-milestone5
-M5_IMAGE_ID=$(docker image inspect arrive90/milestone5-benchmark:v1 --format '{{.Id}}')
-docker run --rm \
-  --cpuset-cpus 0-3 \
-  --cpus 4 \
-  --memory 8307167232 \
-  --network none \
-  -e ARRIVE90_BENCHMARK_IMAGE_ID="$M5_IMAGE_ID" \
-  -v "$(pwd)/artifacts/reports/qualification:/out" \
-  arrive90/milestone5-benchmark:v1 \
-  --output /out/milestone-5-latency.json
+uv run arrive90 model train
 ```
 
-Then run the candidate and replay workload, which binds the new API report hash.
+The command trains and independently calibrates seven final-compared bundles.
+It must reproduce the promoted identifier `FULL-normal-scale-0p5`, the frozen feature schema, prediction tolerance, and registry manifests.
+The accepted training and calibration run took about 113 seconds.
+
+## Final-evaluation boundary
+
+The original metric-producing final evaluation was opened once after the protocol and models were frozen.
+Do not rerun `arrive90 evaluate final` as an exploratory command or use a changed implementation to overwrite the accepted report.
+
+The supported reproducibility path rebuilds the deterministic report from the frozen prediction manifest and protocol through `scripts/reproduce_full_year.py`.
+That script verifies the raw lock, normalized and population manifests, seven model bundles, accepted final report, public claims, and demo terminal before producing the expected terminal manifest.
+
+The repository-owned clean-reproduction qualifier requires:
+
+- A local Git repository containing the exact qualified commit.
+- The ignored raw-data root with all locked inputs.
+- A new nonexistent rebuild root.
+- The accepted frozen Milestone 4 runtime containing the prediction manifest and evaluation protocol.
 
 ```sh
-make benchmark-milestone6
-M6_IMAGE_ID=$(docker image inspect arrive90/milestone6-benchmark:v1 --format '{{.Id}}')
-docker run --rm \
-  --cpuset-cpus 0-3 \
-  --cpus 4 \
-  --memory 8307167232 \
-  --network none \
-  -e ARRIVE90_BENCHMARK_IMAGE_ID="$M6_IMAGE_ID" \
-  -v "$(pwd)/artifacts/reports/qualification:/app/artifacts/reports/qualification" \
-  arrive90/milestone6-benchmark:v1 \
-  --output /app/artifacts/reports/qualification/milestone-6-performance.json
+COMMIT=85824356cd433b2054f21c62e55d476ca5155ce4
+REBUILD_ROOT=/absolute/path/to/new-arrive90-rebuild
+
+make qualify-milestone6-reproduction \
+  REPOSITORY="$(pwd)" \
+  COMMIT="$COMMIT" \
+  DATA_ROOT="$(pwd)/data" \
+  FROZEN_RUNTIME="$(pwd)/artifacts/runtime/milestone-4-recovery" \
+  REBUILD_ROOT="$REBUILD_ROOT"
 ```
 
-Performance outputs vary with scheduling and hardware.
-Review the exact environment and gate fields before committing a refreshed artifact.
+The accepted qualification cloned commit `85824356cd433b2054f21c62e55d476ca5155ce4`, rebuilt every derived stage, matched terminal SHA-256 `0a01c5f96561e9925eef2f419d670dd11e76e666aedf0b0003ae5ba605ecf3c1`, and then verified a no-op second pass without rewriting 4,827 files.
 
-## Automated second-environment qualification
+## Repository-owned clean-checkout verification
 
-After the commit exists on the remote, run the repository-owned fresh-clone workflow from a clean checkout.
+After a documentation or implementation commit has been pushed, run the complete reader path against that exact remote commit.
 
 ```sh
 QUALIFIED_COMMIT=$(git rev-parse HEAD)
 make clean-checkout \
   REPOSITORY=https://github.com/uday1o1/arrive90.git \
   COMMIT="$QUALIFIED_COMMIT" \
-  OUTPUT=artifacts/reports/qualification/clean-checkout-v1.json
+  OUTPUT=artifacts/reports/qualification/clean-checkout-v1.2.json
 ```
 
-The runner clones into a temporary directory, checks out the exact detached commit, installs locked environments, runs Python and Chromium verification, builds and scans the release image, reruns security, license, reliability, and repository audits, confirms the exact SHA, and verifies that the clone remains clean.
-It returns `FAILED` at the first failed command and never converts an infrastructure failure into success.
-
-## Historical source gate
-
-The official MBTA Rapid Transit Events 2022 archive is the pinned historical label candidate.
-Do not substitute a newer coalesced LAMP arrival field for this source.
-
-Download and validate the official source through the public workflow:
-
-```sh
-make source-discovery-live
-```
-
-The command accepts only the pinned ArcGIS host and item paths, applies the repository archive limits, verifies the exact archive SHA-256, streams all 24 CSV members, and keeps the downloaded files under ignored `data/raw` storage.
-It writes the full manifest under ignored `artifacts/runtime` and the compact non-gate report at `artifacts/reports/qualification/source-discovery-v1.json`.
-
-To verify previously downloaded immutable inputs without network access, run:
-
-```sh
-make source-discovery \
-  SOURCE_METADATA=/absolute/path/to/item-metadata.json \
-  SOURCE_ARCHIVE=/absolute/path/to/Events_2022.zip \
-  SOURCE_ACQUIRED_AT=2026-08-13T21:09:00+00:00
-```
-
-`SOURCE_ACQUIRED_AT` must be the recorded UTC completion time for those immutable local bytes.
-The command never substitutes its invocation time because doing so would make the evidence manifest nondeterministic.
-
-Discovery passing only confirms that the official source matches its pinned identity and provenance contract.
-Run the complete Milestone 0 audit with the immutable official event archive, LAMP schedule archive, pinned producer checkouts, and reviewed MassDOT license:
-
-```sh
-make audit-milestone0 \
-  EVENT_METADATA=/absolute/path/to/item-metadata.json \
-  EVENT_ARCHIVE=/absolute/path/to/Events_2022.zip \
-  EVENT_ACQUIRED_AT=2026-08-13T21:09:00+00:00 \
-  SCHEDULE_ARCHIVE=/absolute/path/to/GTFS_ARCHIVE.db.gz \
-  SCHEDULE_DATABASE=/absolute/path/to/GTFS_ARCHIVE.db \
-  SCHEDULE_ACQUIRED_AT=2026-08-13T21:59:07+00:00 \
-  LAMP_ROOT=/absolute/path/to/mbta-lamp \
-  PRODUCER_ROOT=/absolute/path/to/transit-performance \
-  LICENSE_PDF=/absolute/path/to/massdot-developer-license.pdf
-```
-
-The current pinned inputs produce a truthful `FAILED` result.
-The full audit resolves 25 of 975 candidate policies and recommends no supported line.
-The detailed query reproductions are written under ignored `artifacts/runtime`, while the compact aggregate gate remains tracked.
-
-Verify the actual gate with:
-
-```sh
-make gate MILESTONE=0
-```
-
-Proceed to later empirical commands only if that gate is `PASSED`.
-The exact missing evidence is complete archived MBTA GTFS-Realtime data that terminally reconciles potentially eligible trains, including cancellations, skips, fetch timestamps, and feed headers.
-The public Cornell Tech Bus Observatory archive does not contain those fields.
-Until authorized archive evidence, a sufficiently long prospective collection, or a BUILD_PLAN-authorized product pivot exists, `FAILED` is the expected truthful result.
+The runner clones the exact detached commit, installs locked dependencies, runs the demo, complete quality and browser suites, robustness qualification, license audit, repository audit, and accepted milestone gates, and verifies that the clone remains clean.
+It records infrastructure failures as failures.
 
 ## Generated output policy
 
-Keep raw feeds under `data/raw`, normalized rows under `data/normalized`, model binaries under `artifacts/models`, graphs under `artifacts/graphs`, profiler output under `artifacts/profiler`, and runtime state and raw scan output under `artifacts/runtime`.
-Those paths are ignored and must not be added to Git.
-
-Commit only reviewed source, configuration, compact aggregate reports, public-safe cards, and synthetic demonstration artifacts.
-Never commit credentials, HMAC keys, rider information, coordinates, restricted data, mutable SQLite state, raw model artifacts, or scanner databases.
+Keep raw feeds, normalized rows, model populations, full registries, profilers, and runtime output in their ignored directories.
+Do not add a changed source hash, expected output, metric table, or terminal manifest merely to make a failing command pass.
+Only reviewed compact reports, charts, source locks, acceptance configs, the allow-listed demo bundle, and the sanitized replay fixture belong in Git.
