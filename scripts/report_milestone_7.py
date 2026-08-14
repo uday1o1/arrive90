@@ -119,7 +119,7 @@ def build_report() -> dict[str, Any]:
         *sorted((ROOT / "docs/assets").glob("*.svg")),
     ]
     implementation_and_tests = [
-        ROOT / ".github/workflows/ci.yml",
+        *sorted((ROOT / ".github/workflows").glob("*.y*ml")),
         ROOT / "Makefile",
         ROOT / "scripts/audit_repository.py",
         ROOT / "scripts/build_public_claims.py",

@@ -76,9 +76,11 @@ def test_milestone_7_environment_binds_the_qualified_implementation_commit() -> 
 
 
 def test_current_workflows_reference_only_defined_make_targets() -> None:
-    workflow = ROOT / ".github/workflows/ci.yml"
-    relative = (workflow.relative_to(ROOT).as_posix(),)
-    assert _undefined_workflow_make_targets(ROOT, relative) == []
+    workflows = tuple(
+        path.relative_to(ROOT).as_posix()
+        for path in sorted((ROOT / ".github/workflows").glob("*.y*ml"))
+    )
+    assert _undefined_workflow_make_targets(ROOT, workflows) == []
 
 
 def test_public_claim_report_contains_exhaustive_readme_claim_map() -> None:
