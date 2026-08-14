@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -92,6 +94,10 @@ def _load_optional(path: Path) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
+def _text_digest(value: str) -> str:
+    return hashlib.sha256(value.encode()).hexdigest()
+
+
 def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str, Any]:
     with tempfile.TemporaryDirectory(
         prefix="arrive90-clean-checkout-", dir=ROOT.parent
@@ -107,7 +113,9 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
             {
                 "command": "git clone --no-checkout <repository>",
                 "name": "clone",
+                "stderr_sha256": _text_digest(clone_process.stderr),
                 "status": clone_process.returncode,
+                "stdout_sha256": _text_digest(clone_process.stdout),
             }
         ]
         if clone_process.returncode != 0:
@@ -130,7 +138,9 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
             {
                 "command": "git checkout --detach <commit>",
                 "name": "checkout",
+                "stderr_sha256": _text_digest(checkout.stderr),
                 "status": checkout.returncode,
+                "stdout_sha256": _text_digest(checkout.stdout),
             }
         )
         if checkout.returncode != 0:
@@ -155,7 +165,9 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
             result: dict[str, Any] = {
                 "command": " ".join(command),
                 "name": name,
+                "stderr_sha256": _text_digest(completed.stderr),
                 "status": completed.returncode,
+                "stdout_sha256": _text_digest(completed.stdout),
             }
             if completed.returncode != 0:
                 result["stderr_tail"] = (completed.stdout + completed.stderr)[-4_000:]
@@ -240,8 +252,10 @@ def qualify(*, repository: str, commit: str, workflow: str = "full") -> dict[str
             "checks": checks,
             "commit": commit,
             "environment": {
+                "machine": platform.machine(),
                 "node": _version(("node", "--version"), cwd=clone, env=env),
                 "npm": _version(("npm", "--version"), cwd=clone, env=env),
+                "platform": platform.platform(),
                 "python": _version(
                     (str(clone / ".venv" / "bin" / "python"), "--version"),
                     cwd=clone,

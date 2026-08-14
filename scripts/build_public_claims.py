@@ -35,6 +35,200 @@ def _load(relative: str) -> dict[str, Any]:
     return value
 
 
+def _readme_section(markdown: str, heading: str) -> str:
+    marker = f"## {heading}\n"
+    start = markdown.index(marker)
+    end = markdown.find("\n## ", start + len(marker))
+    return markdown[start : len(markdown) if end < 0 else end].rstrip()
+
+
+def _find_horizon(model: dict[str, Any], seconds: int) -> dict[str, Any]:
+    return next(item for item in model["horizons"] if item["horizon_seconds"] == seconds)
+
+
+def _expected_measured_result(final: dict[str, Any], final_hash: str) -> str:
+    promoted = final["models"]["FULL-normal-scale-0p5"]
+    schedule = final["models"]["SCHEDULE_CALENDAR-normal"]
+    population = promoted["availability"]["all_selected"]
+    schedule_comparison = final["point_diagnostics"]["comparisons"][
+        "PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE"
+    ]
+    empirical_comparison = final["point_diagnostics"]["comparisons"][
+        "PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
+    ]
+    schedule_difference = schedule_comparison["mean_absolute_interval_distance_difference_seconds"]
+    empirical_difference = empirical_comparison[
+        "mean_absolute_interval_distance_difference_seconds"
+    ]
+    promoted_point = final["point_diagnostics"]["models"]["PROMOTED_P50"]
+    promoted_median = promoted_point["median_absolute_interval_distance_seconds"]
+    brier = _find_horizon(promoted, 900)
+    width = promoted["prediction_interval_width_seconds"]
+    drift = final["drift"]["interval_nll_difference"]
+    return "\n".join(
+        (
+            "## Measured result",
+            "",
+            (
+                "The immutable final evaluation covers "
+                f"{int(population['raw_row_count']):,} destination examples from "
+                f"{int(population['distinct_anchor_count']):,} anchors across all "
+                f"{int(population['distinct_service_day_count'])} service days in November "
+                "and December 2024."
+            ),
+            (
+                "The promoted `FULL-normal-scale-0p5` bundle achieved interval negative log "
+                f"likelihood of {float(promoted['interval_negative_log_likelihood']):.3f}, "
+                "compared with "
+                f"{float(schedule['interval_negative_log_likelihood']):.3f} for the strongest "
+                "schedule-and-calendar AFT baseline."
+            ),
+            "",
+            (
+                f"On the {int(schedule_comparison['common_rows']['raw_row_count']):,} common "
+                "rows with finite upper bounds, the promoted p50 reduced mean absolute distance "
+                "to the observed arrival interval by "
+                f"{-float(schedule_difference['estimate']):.3f} seconds versus the official "
+                "schedule, with a complete-service-day bootstrap 95 percent interval from "
+                f"{-float(schedule_difference['upper_95']):.3f} to "
+                f"{-float(schedule_difference['lower_95']):.3f} seconds."
+            ),
+            (
+                "It reduced the same diagnostic by "
+                f"{-float(empirical_difference['estimate']):.3f} seconds versus the empirical "
+                "midpoint baseline, with a 95 percent interval from "
+                f"{-float(empirical_difference['upper_95']):.3f} to "
+                f"{-float(empirical_difference['lower_95']):.3f} seconds."
+            ),
+            "",
+            "| Final-test measure | Promoted result | Evidence boundary |",
+            "| --- | ---: | --- |",
+            (
+                "| Interval negative log likelihood | "
+                f"{float(promoted['interval_negative_log_likelihood']):.3f} | "
+                f"{int(population['raw_row_count']):,} held-out destination examples |"
+            ),
+            (
+                "| p50 median absolute interval distance | "
+                f"{float(promoted_median['estimate']):.3f} seconds | Finite-upper rows, 95% CI "
+                f"{float(promoted_median['lower_95']):.3f} to "
+                f"{float(promoted_median['upper_95']):.3f} |"
+            ),
+            (
+                "| Identified 15-minute Brier score | "
+                f"{float(brier['brier_identified']):.4f} | "
+                f"{int(brier['identified']['raw_row_count']):,} identified rows |"
+            ),
+            (
+                "| Mean p90 minus p50 width | "
+                f"{float(width['mean']):.3f} seconds | All "
+                f"{int(population['raw_row_count']):,} resolved predictions |"
+            ),
+            (
+                "| December minus November NLL drift | "
+                f"{float(drift):+.3f} | Descriptive temporal comparison |"
+            ),
+            "",
+            (
+                "Every value above maps to the "
+                "[immutable final report](artifacts/reports/final/travel-time-v1.2.json) with "
+                f"SHA-256 `{final_hash}`."
+            ),
+            (
+                "The [machine-readable claim registry]"
+                "(artifacts/reports/claims/travel-time-v1.2.json) preserves the exact "
+                "denominators, confidence intervals, and report pointers."
+            ),
+            "",
+            "![Frozen model comparison](docs/assets/model-comparison.svg)",
+        )
+    )
+
+
+def _readme_claim_map(final: dict[str, Any], final_hash: str) -> list[dict[str, Any]]:
+    promoted = final["models"]["FULL-normal-scale-0p5"]
+    population = promoted["availability"]["all_selected"]
+    schedule_comparison = final["point_diagnostics"]["comparisons"][
+        "PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE"
+    ]
+    empirical_comparison = final["point_diagnostics"]["comparisons"][
+        "PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
+    ]
+    promoted_median = final["point_diagnostics"]["models"]["PROMOTED_P50"][
+        "median_absolute_interval_distance_seconds"
+    ]
+    brier = _find_horizon(promoted, 900)
+    return [
+        {
+            "id": "final-test-population",
+            "report_pointers": [
+                "/models/FULL-normal-scale-0p5/availability/all_selected/raw_row_count",
+                "/models/FULL-normal-scale-0p5/availability/all_selected/distinct_anchor_count",
+                "/models/FULL-normal-scale-0p5/availability/all_selected/distinct_service_day_count",
+            ],
+            "values": {
+                "anchors": population["distinct_anchor_count"],
+                "rows": population["raw_row_count"],
+                "service_days": population["distinct_service_day_count"],
+            },
+        },
+        {
+            "id": "aft-interval-nlls",
+            "report_pointers": [
+                "/models/FULL-normal-scale-0p5/interval_negative_log_likelihood",
+                "/models/SCHEDULE_CALENDAR-normal/interval_negative_log_likelihood",
+            ],
+            "values": {
+                "promoted": promoted["interval_negative_log_likelihood"],
+                "schedule_calendar": final["models"]["SCHEDULE_CALENDAR-normal"][
+                    "interval_negative_log_likelihood"
+                ],
+            },
+        },
+        {
+            "id": "official-schedule-point-difference",
+            "report_pointers": [
+                "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_OFFICIAL_SCHEDULE"
+            ],
+            "values": schedule_comparison,
+        },
+        {
+            "id": "empirical-midpoint-point-difference",
+            "report_pointers": [
+                "/point_diagnostics/comparisons/PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
+            ],
+            "values": empirical_comparison,
+        },
+        {
+            "id": "p50-median-interval-distance",
+            "report_pointers": [
+                "/point_diagnostics/models/PROMOTED_P50/median_absolute_interval_distance_seconds"
+            ],
+            "values": promoted_median,
+        },
+        {
+            "id": "identified-15-minute-brier",
+            "report_pointers": ["/models/FULL-normal-scale-0p5/horizons/2"],
+            "values": brier,
+        },
+        {
+            "id": "prediction-width",
+            "report_pointers": ["/models/FULL-normal-scale-0p5/prediction_interval_width_seconds"],
+            "values": promoted["prediction_interval_width_seconds"],
+        },
+        {
+            "id": "monthly-nll-drift",
+            "report_pointers": ["/drift/interval_nll_difference"],
+            "values": final["drift"]["interval_nll_difference"],
+        },
+        {
+            "id": "immutable-final-report",
+            "report_pointers": ["/"],
+            "values": {"sha256": final_hash},
+        },
+    ]
+
+
 def build_report() -> dict[str, Any]:
     final = _load(FINAL)
     final_claims = _load(FINAL_CLAIMS)
@@ -55,6 +249,8 @@ def build_report() -> dict[str, Any]:
     empirical_difference = final["point_diagnostics"]["comparisons"][
         "PROMOTED_P50_MINUS_EMPIRICAL_MIDPOINT"
     ]["mean_absolute_interval_distance_difference_seconds"]
+    expected_result_section = _expected_measured_result(final, final_hash)
+    observed_result_section = _readme_section(readme, "Measured result")
     checks = {
         "accepted_full_year_reproduction_is_retained": reproduction.get("status") == "PASSED",
         "all_previous_milestone_reports_are_accepted": all(
@@ -75,25 +271,8 @@ def build_report() -> dict[str, Any]:
             promoted["interval_negative_log_likelihood"]
             < schedule["interval_negative_log_likelihood"]
         ),
-        "readme_identifies_exact_final_report_hash": final_hash in readme,
-        "readme_point_claims_match_final_artifact": all(
-            marker in readme
-            for marker in (
-                "7.310 seconds",
-                "6.872 to 7.783 seconds",
-                "4.874 seconds",
-                "4.307 to 5.455 seconds",
-            )
-        ),
-        "readme_population_and_nll_match_final_artifact": all(
-            marker in readme
-            for marker in (
-                f"{int(final['final_test']['row_count']):,}",
-                "36,600",
-                "61 service days",
-                f"{float(promoted['interval_negative_log_likelihood']):.3f}",
-                f"{float(schedule['interval_negative_log_likelihood']):.3f}",
-            )
+        "readme_measured_result_section_matches_artifact_exactly": (
+            observed_result_section == expected_result_section
         ),
         "repository_audit_passed": audit.get("status") == "PASSED",
         "robustness_evidence_passed": robustness.get("status") == "PASSED",
@@ -193,6 +372,10 @@ def build_report() -> dict[str, Any]:
         "claims": claims,
         "failing_checks": sorted(key for key, value in checks.items() if not value),
         "final_report_sha256": final_hash,
+        "readme_claims": _readme_claim_map(final, final_hash),
+        "readme_measured_result_section_sha256": hashlib.sha256(
+            observed_result_section.encode()
+        ).hexdigest(),
         "status": "PASSED" if all(checks.values()) else "FAILED",
         "version": "public-claims-v1.2",
     }

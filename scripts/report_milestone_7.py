@@ -31,7 +31,19 @@ def _combined_digest(paths: list[Path]) -> str:
     return digest.hexdigest()
 
 
+def _qualification_environment(clean: dict[str, Any]) -> dict[str, Any]:
+    environment = dict(clean.get("environment", {}))
+    environment["implementation_commit"] = clean.get("commit")
+    return environment
+
+
 def build_report() -> dict[str, Any]:
+    charter_path = ROOT / "configs/acceptance/travel-time-v1.2.yaml"
+    source_lock_path = ROOT / "configs/source-locks/mbta-2024-acquired.json"
+    dataset_path = ROOT / "artifacts/reports/qualification/milestone-2-dataset-v1.2.json"
+    model_path = ROOT / "artifacts/reports/qualification/milestone-3-model-v1.2.json"
+    final_path = ROOT / "artifacts/reports/final/travel-time-v1.2.json"
+    claim_registry_path = ROOT / "artifacts/reports/claims/travel-time-v1.2.json"
     previous_path = ROOT / "artifacts/reports/gates/milestone-6.json"
     qualification_path = ROOT / "artifacts/reports/qualification/milestone-7-package-v1.2.json"
     clean_path = ROOT / "artifacts/reports/qualification/clean-checkout-v1.2.json"
@@ -58,6 +70,9 @@ def build_report() -> dict[str, Any]:
             )
             and all(tracked_states.get(number) == "ACCEPTED" for number in range(7))
         ),
+        "final_tracker_postcondition_is_accepted": all(
+            tracked_states.get(number) == "ACCEPTED" for number in range(8)
+        ),
         "clean_reader_demo_is_documented_and_passed": (
             clean.get("status") == "PASSED"
             and clean.get("checks", {}).get("network_free_demo_terminal_reproduced") is True
@@ -82,6 +97,7 @@ def build_report() -> dict[str, Any]:
         "repository_audit_has_no_stale_or_unexplained_state": (
             audit.get("status") == "PASSED"
             and audit.get("checks", {}).get("no_stale_public_scope_claim") is True
+            and audit.get("checks", {}).get("workflow_make_targets_are_defined") is True
             and audit.get("checks", {}).get("worktree_is_clean") is True
         ),
         "source_attribution_and_noncommercial_notice_are_audited": audit.get("checks", {}).get(
@@ -96,7 +112,18 @@ def build_report() -> dict[str, Any]:
         *sorted((ROOT / "docs").glob("*.md")),
         *sorted((ROOT / "docs/assets").glob("*.svg")),
     ]
+    implementation_and_tests = [
+        ROOT / ".github/workflows/ci.yml",
+        ROOT / "Makefile",
+        ROOT / "scripts/audit_repository.py",
+        ROOT / "scripts/build_public_claims.py",
+        ROOT / "scripts/qualify_clean_checkout.py",
+        ROOT / "scripts/qualify_milestone_7.py",
+        ROOT / "scripts/report_milestone_7.py",
+        ROOT / "packages/evaluation/tests/test_portfolio_audits.py",
+    ]
     return {
+        "acceptance_charter_sha256": _digest(charter_path),
         "acceptance_version": "travel-time-v1.2",
         "checks": checks,
         "command": (
@@ -105,16 +132,26 @@ def build_report() -> dict[str, Any]:
         ),
         "failing_checks": failing,
         "input_manifest_hashes": {
+            "acceptance_charter": _digest(charter_path),
             "build_plan": _digest(ROOT / "BUILD_PLAN.md"),
+            "claim_registry": _digest(claim_registry_path),
             "clean_checkout": _digest(clean_path),
+            "code_and_tests": _combined_digest(implementation_and_tests),
+            "dataset_qualification": _digest(dataset_path),
             "documentation_and_charts": _combined_digest(docs),
+            "final_report": _digest(final_path),
             "milestone_6_report": _digest(previous_path),
+            "model_qualification": _digest(model_path),
             "portfolio_qualification": _digest(qualification_path),
             "public_claims": _digest(claims_path),
             "repository_audit": _digest(audit_path),
+            "source_lock": _digest(source_lock_path),
+            "tracker": _digest(tracker_path),
         },
+        "environment": _qualification_environment(clean),
         "milestone": 7,
         "observed": qualification.get("observed", {}),
+        "qualified_commit": clean.get("commit"),
         "state": "ACCEPTED" if not failing else "FAILED",
     }
 

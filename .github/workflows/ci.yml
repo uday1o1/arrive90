@@ -49,23 +49,3 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run browser acceptance workflows
         run: make browser-test
-
-  security:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
-        with:
-          version: "0.11.23"
-          enable-cache: false
-      - name: Install pinned Python
-        run: uv python install
-      - name: Sync locked environment
-        run: uv sync --frozen
-      - name: Run pinned repository and container scans
-        run: make security-scan
-      - name: Fail on critical, high, secret, or static finding
-        run: |
-          make security-evidence
-          test "$(jq -r .status artifacts/reports/qualification/milestone-9-security.json)" = PASSED

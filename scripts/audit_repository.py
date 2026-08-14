@@ -70,14 +70,21 @@ RETIRED_PATH_PREFIXES = (
     "packages/decision/",
     "packages/routing/",
 )
+PUBLIC_TEXT_PREFIXES = (
+    "docs/",
+    "packages/service/src/arrive90_service/web/",
+)
+PUBLIC_TEXT_FILES = ("README.md", "DATA_LICENSE.md")
 TEXT_SUFFIXES = (".css", ".html", ".js", ".json", ".md", ".py", ".toml", ".yaml", ".yml")
 SOURCE_SUFFIXES = (".css", ".html", ".js", ".md", ".py", ".svg", ".toml", ".yaml", ".yml")
+MAKE_INVOCATION = re.compile(r"\bmake\s+([A-Za-z0-9_.-]+)")
+MAKE_TARGET = re.compile(r"^([A-Za-z0-9_.-]+)\s*:", re.MULTILINE)
 
 
-def _git(*args: str) -> str:
+def _git(*args: str, root: Path = ROOT) -> str:
     completed = subprocess.run(  # noqa: S603 - fixed Git executable and repository arguments
         [GIT, *args],
-        cwd=ROOT,
+        cwd=root,
         check=True,
         capture_output=True,
         text=True,
@@ -85,11 +92,43 @@ def _git(*args: str) -> str:
     return completed.stdout
 
 
-def _public_text(tracked: tuple[str, ...]) -> str:
-    public = ["README.md", "DATA_LICENSE.md", *REQUIRED_DOCUMENTS[2:]]
-    return "\n".join(
-        (ROOT / relative).read_text(encoding="utf-8") for relative in public if relative in tracked
+def _is_public_text(relative: str) -> bool:
+    return relative in PUBLIC_TEXT_FILES or any(
+        relative.startswith(prefix) for prefix in PUBLIC_TEXT_PREFIXES
     )
+
+
+def _public_text(root: Path, tracked: tuple[str, ...]) -> str:
+    return "\n".join(
+        (root / relative).read_text(encoding="utf-8")
+        for relative in tracked
+        if _is_public_text(relative)
+        and relative.endswith(TEXT_SUFFIXES)
+        and (root / relative).is_file()
+    )
+
+
+def _old_public_claims(root: Path, tracked: tuple[str, ...]) -> list[str]:
+    public_text = _public_text(root, tracked)
+    return [claim for claim in OLD_PUBLIC_CLAIMS if claim.casefold() in public_text.casefold()]
+
+
+def _undefined_workflow_make_targets(root: Path, tracked: tuple[str, ...]) -> list[dict[str, str]]:
+    makefile = (root / "Makefile").read_text(encoding="utf-8")
+    defined_targets = set(MAKE_TARGET.findall(makefile))
+    findings: list[dict[str, str]] = []
+    for relative in tracked:
+        if not relative.startswith(".github/workflows/") or not relative.endswith(
+            (".yml", ".yaml")
+        ):
+            continue
+        content = (root / relative).read_text(encoding="utf-8")
+        findings.extend(
+            {"path": relative, "target": target}
+            for target in sorted(set(MAKE_INVOCATION.findall(content)), key=str.encode)
+            if target not in defined_targets
+        )
+    return findings
 
 
 def build_report() -> dict[str, Any]:
@@ -137,10 +176,8 @@ def build_report() -> dict[str, Any]:
         for line in status_lines
         if line.startswith("?? ") and line[3:].endswith(SOURCE_SUFFIXES)
     ]
-    public_text = _public_text(tracked)
-    old_claims = [
-        claim for claim in OLD_PUBLIC_CLAIMS if claim.casefold() in public_text.casefold()
-    ]
+    old_claims = _old_public_claims(ROOT, tracked)
+    undefined_workflow_make_targets = _undefined_workflow_make_targets(ROOT, tracked)
     attribution = (ROOT / "DATA_LICENSE.md").read_text(encoding="utf-8")
     gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
     checks = {
@@ -174,6 +211,7 @@ def build_report() -> dict[str, Any]:
         ),
         "tracked_public_text_has_no_stale_markers": not stale_markers,
         "untracked_required_source_is_absent": not untracked_source,
+        "workflow_make_targets_are_defined": not undefined_workflow_make_targets,
         "worktree_is_clean": not status_lines,
     }
     return {
@@ -192,6 +230,7 @@ def build_report() -> dict[str, Any]:
         "status": "PASSED" if all(checks.values()) else "FAILED",
         "tracked_file_count": len(tracked),
         "untracked_source": untracked_source,
+        "undefined_workflow_make_targets": undefined_workflow_make_targets,
         "version": "repository-audit-v1.2",
         "worktree_status": list(status_lines),
     }
