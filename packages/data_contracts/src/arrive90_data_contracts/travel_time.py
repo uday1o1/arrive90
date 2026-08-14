@@ -50,6 +50,7 @@ class EpisodeQualityFlag(StrEnum):
     """Episode-level quality conditions preserved for reporting."""
 
     AMBIGUOUS_STOP_SEQUENCE = "AMBIGUOUS_STOP_SEQUENCE"
+    EXCESSIVE_GAP = "EXCESSIVE_GAP"
     RAW_TIMESTAMP_REGRESSION = "RAW_TIMESTAMP_REGRESSION"
     STOP_SEQUENCE_REGRESSION = "STOP_SEQUENCE_REGRESSION"
 
