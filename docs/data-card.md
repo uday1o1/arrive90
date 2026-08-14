@@ -13,12 +13,15 @@ Small committed fixtures are synthetic.
 | Source | Intended role | Current status |
 | --- | --- | --- |
 | MBTA GTFS schedule | Stops, routes, trips, stop times, calendars, and canonical schedule simulation. | Contract and archive path implemented. |
-| MBTA GTFS Realtime Vehicle Positions | Primary boarding, transfer, destination, movement, and presence evidence. | Primitive historical archive unavailable. |
+| MBTA Rapid Transit Events 2022 | Primary historical label candidate with separate actual and prediction event types. | Official CC0 source discovered; complete Milestone 0 audit pending. |
+| MBTA GTFS Realtime Vehicle Positions | Prospective boarding, transfer, destination, movement, and presence evidence. | Immutable collector implemented; future collection gates remain. |
 | MBTA GTFS Realtime Trip Updates | Rider-visible prediction baseline and sensitivity analysis only. | Forbidden as a substitute for primary Vehicle Position evidence. |
 | MBTA Service Alerts | Causal disruption features and route closure state. | Revision-aware archive path implemented. |
 | Public MBTA LAMP historical rail export | Historical feasibility candidate. | Rejected for V1 primary boarding evidence because stop timestamp provenance is coalesced. |
 
-The exact audited LAMP commit, public index digest, representative Parquet digest, and license digest are recorded in [source-feasibility.md](source-feasibility.md).
+The exact official archive identity, producer commit, semantics, LAMP comparison, and limitations are recorded in [source-feasibility.md](source-feasibility.md).
+The full scan records 59 same-second semantic duplicates and 1,627 producer service-second discrepancies.
+Evaluation uses the epoch event time and deterministic duplicate resolution, while retaining the anomaly counts in qualification evidence.
 
 ## Unit of analysis
 
@@ -48,7 +51,7 @@ The leakage suite deliberately requests future events and fails those requests.
 
 ## Scope and exclusions
 
-The acceptance charter currently has no supported lines, stations, or transfer stations because the source gate failed before scope freeze.
+The acceptance charter proposes all subway routes, but it has no supported lines, stations, or transfer stations until the frozen aggregate audit rules are applied.
 No empirical row is eligible for model selection, calibration, final testing, or a public reliability result.
 The synthetic qualifications test contracts and failure behavior only.
 
@@ -78,5 +81,5 @@ The locked software dependency inventory is in [../artifacts/reports/qualificati
 
 ## Current gate
 
-Milestone 0 is `FAILED` because the public rail export does not preserve separate Vehicle Position stop provenance or historical product-availability lineage.
-The exact prerequisite is an authorized primitive Vehicle Position archive or an updated public export with independently identifiable `vp_stop_timestamp` and availability evidence.
+Milestone 0 remains `FAILED` because source discovery does not prove the required coverage, interval widths, continuity, reconciliation, censoring, schedule knowledge, and deterministic query reproduction.
+The official 2022 archive resolves the original provenance-discovery blocker, while its missing file time forces historical features to remain schedule-only.

@@ -16,6 +16,7 @@ The document labels its terms as updated on 2009-11-13 and reserves MassDOT's ri
 | Artifact | Repository policy | Basis |
 | --- | --- | --- |
 | Original MassDOT or MBTA feed bytes | Regenerate outside Git | Redistribution is permitted by the reviewed license, but mutable and large source data does not belong in source control. |
+| MBTA Rapid Transit Events 2022 archive | Regenerate outside Git | The official ArcGIS item is marked public and CC0, but the pinned 272 MiB archive remains in ignored immutable storage. |
 | Historical LAMP Parquet files | Regenerate outside Git | Redistribution is permitted by the reviewed license, but files are mutable public exports and are retained by content hash outside Git. |
 | Normalized transit rows | Regenerate outside Git | Derived rows remain data and are stored outside Git with source lineage. |
 | Trained model binaries | Regenerate outside Git | Models can encode source-derived information and are retained in the external immutable artifact store. |

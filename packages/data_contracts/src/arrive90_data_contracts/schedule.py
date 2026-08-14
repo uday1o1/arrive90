@@ -94,7 +94,10 @@ class ScheduleStopTime:
 class PrimitiveStopObservation:
     source_row_key: str
     feed_type: FeedType
+    service_date: date
+    start_time: str | None
     observed_trip_id: str
+    observed_vehicle_id: str
     route_id: str
     direction_id: int
     stop_id: str
@@ -109,6 +112,10 @@ class PrimitiveStopObservation:
     previous_stop_id: str | None = None
 
     def __post_init__(self) -> None:
+        if not self.observed_trip_id or not self.observed_vehicle_id:
+            raise ValueError("observation requires stable trip and vehicle identity")
+        if self.start_time is not None and not self.start_time:
+            raise ValueError("start_time cannot be empty")
         for field, value in (
             ("event_time_utc", self.event_time_utc),
             ("pipeline_known_at_utc", self.pipeline_known_at_utc),
@@ -128,7 +135,9 @@ class PrimitiveStopObservation:
 @dataclass(frozen=True)
 class NormalizedStopEvidence:
     source_row_key: str
+    service_date: date
     observed_trip_id: str
+    observed_vehicle_id: str
     stop_id: str
     stop_sequence: int
     arrival_lower_bound_utc: datetime | None
@@ -141,6 +150,8 @@ class NormalizedStopEvidence:
     usable_for_primary_boarding: bool
 
     def __post_init__(self) -> None:
+        if not self.observed_trip_id or not self.observed_vehicle_id:
+            raise ValueError("normalized evidence requires stable trip and vehicle identity")
         require_utc(self.product_available_at_utc, "product_available_at_utc")
         for field, value in (
             ("arrival_lower_bound_utc", self.arrival_lower_bound_utc),
@@ -154,6 +165,12 @@ class NormalizedStopEvidence:
             and self.arrival_evidence is not ArrivalEvidence.VP_STOPPED_AT
         ):
             raise ValueError("only direct Vehicle Position stop evidence can support boarding")
+        if (
+            self.arrival_lower_bound_utc is not None
+            and self.arrival_upper_bound_utc is not None
+            and self.arrival_upper_bound_utc < self.arrival_lower_bound_utc
+        ):
+            raise ValueError("arrival evidence interval is inverted")
 
 
 @dataclass(frozen=True)

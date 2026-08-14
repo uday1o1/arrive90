@@ -154,27 +154,39 @@ It returns `FAILED` at the first failed command and never converts an infrastruc
 
 ## Historical source gate
 
-Do not run the empirical pipeline against the current coalesced rail export and treat it as accepted evidence.
-First obtain an authorized primitive Vehicle Position archive or updated export meeting [source-feasibility.md](source-feasibility.md).
+The official MBTA Rapid Transit Events 2022 archive is the pinned historical label candidate.
+Do not substitute a newer coalesced LAMP arrival field for this source.
 
-Set explicit absolute paths to the immutable downloaded inputs and run:
+Download and validate the official source through the public workflow:
 
 ```sh
-make audit-source \
-  INDEX="$ARRIVE90_LAMP_INDEX" \
-  PARQUET="$ARRIVE90_LAMP_PARQUET" \
-  LAMP_ROOT="$ARRIVE90_LAMP_SOURCE" \
-  LICENSE_PDF="$ARRIVE90_MASSDOT_LICENSE"
+make source-discovery-live
 ```
 
-Verify the resulting source hashes and run:
+The command accepts only the pinned ArcGIS host and item paths, applies the repository archive limits, verifies the exact archive SHA-256, streams all 24 CSV members, and keeps the downloaded files under ignored `data/raw` storage.
+It writes the full manifest under ignored `artifacts/runtime` and the compact non-gate report at `artifacts/reports/qualification/source-discovery-v1.json`.
+
+To verify previously downloaded immutable inputs without network access, run:
+
+```sh
+make source-discovery \
+  SOURCE_METADATA=/absolute/path/to/item-metadata.json \
+  SOURCE_ARCHIVE=/absolute/path/to/Events_2022.zip \
+  SOURCE_ACQUIRED_AT=2026-08-13T21:09:00+00:00
+```
+
+`SOURCE_ACQUIRED_AT` must be the recorded UTC completion time for those immutable local bytes.
+The command never substitutes its invocation time because doing so would make the evidence manifest nondeterministic.
+
+Discovery passing only confirms that the official source matches its pinned identity and provenance contract.
+After the complete Milestone 0 audit evidence is generated, verify the actual gate with:
 
 ```sh
 make gate MILESTONE=0
 ```
 
 Proceed to later empirical commands only if that gate is `PASSED`.
-The current public inputs produce `FAILED`, which is the expected truthful result.
+Until then, `FAILED` is the expected truthful result.
 
 ## Generated output policy
 

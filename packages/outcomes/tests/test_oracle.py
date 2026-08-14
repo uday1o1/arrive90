@@ -79,12 +79,14 @@ def _evidence(
 ) -> NormalizedStopEvidence:
     return NormalizedStopEvidence(
         key,
+        date(2025, 1, 1),
         "observed-trip",
+        "vehicle",
         stop,
         1,
-        observed_at if direct else None,
+        None,
         observed_at,
-        IntervalClosure.EXACT if direct else IntervalClosure.LEFT_OPEN_RIGHT_CLOSED,
+        IntervalClosure.LEFT_OPEN_RIGHT_CLOSED,
         (
             ArrivalEvidence.VP_STOPPED_AT
             if direct

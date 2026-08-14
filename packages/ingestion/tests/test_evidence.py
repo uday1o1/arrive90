@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 from arrive90_data_contracts.realtime import FeedType
 from arrive90_data_contracts.schedule import (
@@ -19,7 +19,10 @@ def _observation() -> PrimitiveStopObservation:
     return PrimitiveStopObservation(
         "direct",
         FeedType.VEHICLE_POSITIONS,
+        date(2025, 1, 1),
+        "07:00:00",
         "trip",
+        "vehicle",
         "Red",
         0,
         "stop-a",
@@ -58,6 +61,8 @@ def test_direct_conservative_and_trip_update_evidence_remain_distinct() -> None:
     by_key = {item.source_row_key: item for item in result}
     assert by_key["direct"].arrival_evidence is ArrivalEvidence.VP_STOPPED_AT
     assert by_key["direct"].usable_for_primary_boarding
+    assert by_key["direct"].arrival_lower_bound_utc is None
+    assert by_key["direct"].arrival_upper_bound_utc == NOW
     assert by_key["move"].arrival_evidence is ArrivalEvidence.VP_DEPARTED_STATION_UPPER_BOUND
     assert by_key["move"].departure_evidence is DepartureEvidence.DOWNSTREAM_MOVE_UPPER_BOUND
     assert not by_key["move"].usable_for_primary_boarding

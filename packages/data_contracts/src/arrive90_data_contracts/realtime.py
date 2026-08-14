@@ -46,6 +46,7 @@ class SourceKind(StrEnum):
     LAMP_SUBWAY = "LAMP_SUBWAY"
     LAMP_ALERTS = "LAMP_ALERTS"
     GTFS_ARCHIVE = "GTFS_ARCHIVE"
+    MBTA_RAPID_TRANSIT_EVENTS = "MBTA_RAPID_TRANSIT_EVENTS"
 
 
 class CompletenessStatus(StrEnum):

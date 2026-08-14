@@ -34,6 +34,7 @@ GTFS times above `24:00:00` remain service-day-local seconds and are not silentl
 
 Primitive Vehicle Position and Trip Update observations remain distinguishable during normalization.
 Only a direct Vehicle Position `STOPPED_AT` observation can set the primary boarding-evidence flag.
+A `STOPPED_AT` timestamp is stored as an arrival upper bound and is never converted into a zero-width exact physical arrival.
 A later Vehicle Position movement toward the next stop may provide a conservative departure upper bound, but it cannot prove rider boarding.
 Predicted and verified-past Trip Update evidence retain their own evidence classes and cannot be silently promoted.
 
@@ -44,5 +45,5 @@ Historical observation completeness requires every eligible train to reach an ex
 Prospective completeness requires every scheduled attempt, fresh monotonic headers, relevant entity visibility, and bounded source gaps.
 Aggregate route density cannot satisfy either rule.
 
-Milestone 1 local code and synthetic verification are complete, but its acceptance gate remains `INSUFFICIENT_EVIDENCE` while Milestone 0 lacks separately identifiable historical Vehicle Position stop primitives.
+Milestone 1 local code and synthetic verification are complete, but its acceptance gate remains `INSUFFICIENT_EVIDENCE` while the newly discovered official 2022 event archive undergoes the complete Milestone 0 audit.
 The blocked report is generated with `make milestone1-evidence`, and `make gate MILESTONE=1` intentionally exits nonzero until that prerequisite is resolved.

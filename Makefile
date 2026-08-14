@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -44,6 +44,18 @@ browser-test: frontend-check
 check: lock-check format-check lint typecheck test
 
 check-all: check browser-test
+
+source-discovery:
+	@test -n "$(SOURCE_METADATA)" || (echo "SOURCE_METADATA is required" >&2; exit 2)
+	@test -n "$(SOURCE_ARCHIVE)" || (echo "SOURCE_ARCHIVE is required" >&2; exit 2)
+	@test -n "$(SOURCE_ACQUIRED_AT)" || (echo "SOURCE_ACQUIRED_AT is required" >&2; exit 2)
+	$(UV_RUN) arrive90-discover-rapid-transit-source \
+		--metadata "$(SOURCE_METADATA)" \
+		--archive "$(SOURCE_ARCHIVE)" \
+		--acquired-at-utc "$(SOURCE_ACQUIRED_AT)"
+
+source-discovery-live:
+	$(UV_RUN) arrive90-discover-rapid-transit-source --download
 
 audit-source:
 	@test -n "$(INDEX)" || (echo "INDEX is required" >&2; exit 2)

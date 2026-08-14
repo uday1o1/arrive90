@@ -1,0 +1,62 @@
+{
+  "archive_member_inventory_sha256": "a7bca82bcebd16aefc206cd7c156a5268874ac5fd1004e9bd103030171fce1e9",
+  "archive_sha256": "b47440b1886bc9d08463ac2b7e3c7fa173d982c62af0616916a59bec9c9fa478",
+  "attribution": "Massachusetts Bay Transportation Authority",
+  "blocker_state": "PUBLIC_OFFICIAL_SOURCE_DISCOVERED_M0_AUDIT_PENDING",
+  "checks": {
+    "archive_contract_passed": true,
+    "event_time_not_used_as_product_availability": true,
+    "metadata_cc0_verified": true,
+    "metadata_identity_pinned": true,
+    "metadata_public_access_verified": true,
+    "producer_semantics_pinned": true,
+    "raw_archive_repository_policy_defined": true
+  },
+  "duplicate_semantic_events": 59,
+  "event_type_counts": {
+    "ARR": 12348336,
+    "DEP": 11816325,
+    "PRA": 263535,
+    "PRD": 137160
+  },
+  "failing_checks": [],
+  "first_service_date": "2022-01-01",
+  "last_service_date": "2022-12-31",
+  "license": "CC0-1.0",
+  "metadata_sha256": "32d1c5f62c1e57ba5b476494010ca2cc01c9c17cb1843cd16e666af24aa8415c",
+  "milestone_0_accepted": false,
+  "producer_service_second_delta_counts": {
+    "-3600": 525,
+    "0": 24563729,
+    "1": 8,
+    "3600": 1094
+  },
+  "producer_service_second_mismatches": 1627,
+  "qualification": "source-discovery-v1",
+  "raw_archive_committed": false,
+  "repeated_event_units": 89681,
+  "route_counts": {
+    "Blue": 2253964,
+    "Green-B": 3975048,
+    "Green-C": 3429962,
+    "Green-D": 3605362,
+    "Green-E": 3131647,
+    "Mattapan": 1143851,
+    "Orange": 3054015,
+    "Red": 3971507
+  },
+  "row_count": 24565356,
+  "runtime_manifest_sha256": "b2a78196389330438beb7acb8d74ad58f35300063adf2cb6cbb231aa19de5c45",
+  "service_date_count": 365,
+  "source_id": "mbta-rapid-transit-events-2022",
+  "source_item_id": "99094a0c59e443cdbdaefa071c6df609",
+  "source_limitations": [
+    "The public CSV omits the producer's feed/file timestamp.",
+    "Historical events are label-only and unavailable as 2022 query-time features.",
+    "ARR is the first observed VehiclePosition STOPPED_AT upper bound, not an exact physical arrival.",
+    "PRA and PRD are prediction fallbacks and are forbidden as primary labels.",
+    "Discovery passing does not satisfy the Milestone 0 acceptance gate."
+  ],
+  "source_profile_version": "mbta-rapid-transit-events-2022-v1",
+  "status": "PASSED"
+}

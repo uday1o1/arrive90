@@ -37,12 +37,14 @@ def normalize_stop_observations(
             output.append(
                 NormalizedStopEvidence(
                     source_row_key=observation.source_row_key,
+                    service_date=observation.service_date,
                     observed_trip_id=observation.observed_trip_id,
+                    observed_vehicle_id=observation.observed_vehicle_id,
                     stop_id=observation.stop_id,
                     stop_sequence=observation.stop_sequence,
-                    arrival_lower_bound_utc=observation.event_time_utc,
+                    arrival_lower_bound_utc=None,
                     arrival_upper_bound_utc=observation.event_time_utc,
-                    arrival_interval_closed=IntervalClosure.EXACT,
+                    arrival_interval_closed=IntervalClosure.LEFT_OPEN_RIGHT_CLOSED,
                     arrival_evidence=ArrivalEvidence.VP_STOPPED_AT,
                     departure_upper_bound_utc=None,
                     departure_evidence=DepartureEvidence.UNKNOWN,
@@ -59,7 +61,9 @@ def normalize_stop_observations(
             output.append(
                 NormalizedStopEvidence(
                     source_row_key=observation.source_row_key,
+                    service_date=observation.service_date,
                     observed_trip_id=observation.observed_trip_id,
+                    observed_vehicle_id=observation.observed_vehicle_id,
                     stop_id=observation.previous_stop_id,
                     stop_sequence=max(0, observation.stop_sequence - 1),
                     arrival_lower_bound_utc=None,
@@ -82,7 +86,9 @@ def normalize_stop_observations(
             output.append(
                 NormalizedStopEvidence(
                     source_row_key=observation.source_row_key,
+                    service_date=observation.service_date,
                     observed_trip_id=observation.observed_trip_id,
+                    observed_vehicle_id=observation.observed_vehicle_id,
                     stop_id=observation.stop_id,
                     stop_sequence=observation.stop_sequence,
                     arrival_lower_bound_utc=observation.event_time_utc,

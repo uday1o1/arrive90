@@ -60,7 +60,10 @@ def test_primitive_observation_rejects_noncausal_temporal_lineage() -> None:
     observation = PrimitiveStopObservation(
         "row",
         FeedType.VEHICLE_POSITIONS,
+        date(2025, 1, 1),
+        "07:00:00",
         "trip",
+        "vehicle",
         "Red",
         0,
         "stop",
@@ -80,7 +83,9 @@ def test_primitive_observation_rejects_noncausal_temporal_lineage() -> None:
 def test_normalized_evidence_only_allows_direct_stop_boarding() -> None:
     evidence = NormalizedStopEvidence(
         "row",
+        date(2025, 1, 1),
         "trip",
+        "vehicle",
         "stop",
         1,
         NOW,

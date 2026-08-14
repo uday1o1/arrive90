@@ -1,10 +1,19 @@
 # Acceptance charter status
 
-`configs/acceptance/v1.yaml` records the non-negotiable V1 rules and the proposed historical interval.
-It is intentionally marked unfrozen because the primary source-provenance gate fails before supported lines, stations, split boundaries, or an outcome semantic can be selected.
+`configs/acceptance/v1.yaml` records the non-negotiable V1 rules and the frozen source-audit policy.
+The candidate historical interval is 2022-01-01 through 2022-12-31 because the official provenance-preserving event archive covers that complete year.
 
+The conservative station-departure interval is frozen as the primary outcome-time semantic before the full outcome audit.
+Direct Vehicle Position arrival intervals remain a required diagnostic.
+Prediction fallback sensitivity remains separate.
+
+The initial proposed routes are Red, Orange, Blue, Green-B, Green-C, Green-D, Green-E, and Mattapan.
+The exact aggregate whole-line or whole-station exclusion rules are frozen before outcome inspection.
+No individual service date, query, disruption, source outage, ambiguous trip, or incomplete outcome window may be removed.
+
+Historical operational feature families are frozen empty because the public event archive omits query-time file availability.
+Historical V1 is schedule-only.
+
+The supported scope remains unfrozen until the predeclared aggregate rules are applied to the full audit evidence.
 The charter does not lower a threshold or convert missing evidence into a pass.
-The supported scope remains empty until a source audit can identify direct Vehicle Position stop presence independently from Trip Update predictions and can meet the plan's coverage thresholds.
-
-The proposed 2025-01-01 through 2025-12-31 interval is long enough to allocate at least 50 service-day blocks to a 15 percent final-test window.
-It is not accepted and may not be used for a public claim until complete source inventory, schedule knowledge time, sampling, manual reproduction, and every Milestone 0 gate pass.
+Milestone 0 remains failed until every coverage, interval, presence, reconciliation, censoring, schedule, license, and reproduction gate passes.
