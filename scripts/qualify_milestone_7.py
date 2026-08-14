@@ -14,6 +14,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.build_docs_assets import build_outputs  # noqa: E402
+from scripts.build_public_claims import (  # noqa: E402
+    public_claim_report_matches_current_evidence,
+)
 
 DOCUMENTS = (
     "README.md",
@@ -85,7 +88,10 @@ def build_report() -> dict[str, Any]:
             and observations.get("terminal_manifest_reproduced") is True
         ),
         "license_and_attribution_audit_passed": licenses.get("status") == "PASSED",
-        "public_claim_audit_passed": claims.get("status") == "PASSED",
+        "public_claim_artifact_matches_current_evidence": (
+            claims.get("status") == "PASSED"
+            and public_claim_report_matches_current_evidence(claims)
+        ),
         "python_quality_gate_passed_in_clean_checkout": (
             int(observations.get("python_tests_passed") or 0) > 0
             and float(observations.get("python_coverage_percent") or 0.0) >= 90.0

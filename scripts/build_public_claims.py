@@ -392,6 +392,10 @@ def build_report() -> dict[str, Any]:
     }
 
 
+def public_claim_report_matches_current_evidence(report: dict[str, Any]) -> bool:
+    return report == build_report()
+
+
 def parser() -> argparse.ArgumentParser:
     command = argparse.ArgumentParser(description=__doc__)
     command.add_argument("--output", type=Path, required=True)

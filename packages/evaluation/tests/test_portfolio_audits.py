@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+import json
 import sys
 from pathlib import Path
 
@@ -20,6 +22,10 @@ from scripts.build_public_claims import (  # noqa: E402
     _readme_claim_map,
     _readme_claim_map_is_exhaustive,
     _readme_section,
+    public_claim_report_matches_current_evidence,
+)
+from scripts.build_public_claims import (  # noqa: E402
+    build_report as build_public_claim_report,
 )
 from scripts.report_milestone_7 import _qualification_environment  # noqa: E402
 
@@ -94,3 +100,25 @@ def test_public_claim_report_contains_exhaustive_readme_claim_map() -> None:
         "p50-median-interval-distance",
         "prediction-width",
     }
+
+
+def test_persisted_public_claim_report_exactly_matches_current_evidence() -> None:
+    path = ROOT / PUBLIC_CLAIMS
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+
+    assert persisted == build_public_claim_report()
+    assert public_claim_report_matches_current_evidence(persisted) is True
+
+
+def test_public_claim_report_rejects_missing_changed_or_misbinding_evidence() -> None:
+    report = build_public_claim_report()
+    missing_claim = copy.deepcopy(report)
+    missing_claim["readme_claims"].pop()
+    changed_pointer_value = copy.deepcopy(report)
+    changed_pointer_value["readme_claims"][0]["evidence"][0]["value"] = "changed"
+    wrong_artifact_hash = copy.deepcopy(report)
+    wrong_artifact_hash["readme_claims"][0]["artifact_sha256"] = "0" * 64
+
+    assert public_claim_report_matches_current_evidence(missing_claim) is False
+    assert public_claim_report_matches_current_evidence(changed_pointer_value) is False
+    assert public_claim_report_matches_current_evidence(wrong_artifact_hash) is False

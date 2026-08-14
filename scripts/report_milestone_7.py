@@ -84,7 +84,13 @@ def build_report() -> dict[str, Any]:
             and qualification.get("checks", {}).get("robustness_suite_has_nine_passing_pairs")
             is True
         ),
-        "every_readme_result_matches_immutable_evidence": claims.get("status") == "PASSED",
+        "every_readme_result_matches_immutable_evidence": (
+            claims.get("status") == "PASSED"
+            and qualification.get("checks", {}).get(
+                "public_claim_artifact_matches_current_evidence"
+            )
+            is True
+        ),
         "publication_and_deployment_targets_remain_absent": all(
             target not in makefile
             for target in (
