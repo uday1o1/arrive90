@@ -63,37 +63,3 @@ class FeatureRegistry:
             return self.specs[name]
         except KeyError as error:
             raise ValueError(f"feature is not registered: {name}") from error
-
-
-def _schedule(name: str, value_type: str, units: str | None = None) -> FeatureSpec:
-    return FeatureSpec(
-        name=name,
-        owner="routing",
-        value_type=value_type,
-        units=units,
-        source=FeatureSource.STATIC_SCHEDULE,
-        event_time_rule="selected schedule version and canonical simulation",
-        product_availability_rule="schedule known_at_utc must not exceed feature cutoff",
-        online_equivalent_derivation="shared canonical schedule simulation",
-        default_behavior="required",
-        seeded_leakage_fixture=f"schedule-{name}-cutoff",
-    )
-
-
-HISTORICAL_V1_REGISTRY = FeatureRegistry(
-    "historical_v1",
-    (
-        _schedule("day_of_week_cos", "float"),
-        _schedule("day_of_week_sin", "float"),
-        _schedule("direction_ids", "string"),
-        _schedule("destination_station_id", "string"),
-        _schedule("origin_station_id", "string"),
-        _schedule("route_ids", "string"),
-        _schedule("scheduled_duration_seconds", "integer", "seconds"),
-        _schedule("scheduled_leg_duration_seconds", "string", "seconds"),
-        _schedule("scheduled_transfer_buffer_seconds", "integer_or_null", "seconds"),
-        _schedule("time_of_day_cos", "float"),
-        _schedule("time_of_day_sin", "float"),
-        _schedule("transfer_station_id", "string_or_null"),
-    ),
-)

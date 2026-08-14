@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "arrive90"
 version = "0.0.1"
-description = "Calibrated and risk-aware MBTA subway journey planning"
+description = "Reproducible interval-censored MBTA Blue Line travel-time modeling"
 readme = "README.md"
 requires-python = "==3.12.*"
 license = { file = "LICENSE" }
@@ -24,11 +24,6 @@ dependencies = [
 [project.scripts]
 arrive90 = "arrive90_ingestion.cli:main"
 arrive90-api = "arrive90_service.cli:main"
-arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
-arrive90-discover-rapid-transit-source = "arrive90_ingestion.rapid_transit_archive:main"
-arrive90-ingest-schedule = "arrive90_ingestion.schedule:main"
-arrive90-generate-query-population = "arrive90_routing.population:main"
-arrive90-audit-milestone0 = "arrive90_evaluation.milestone0:main"
 
 [dependency-groups]
 dev = [
@@ -44,18 +39,16 @@ dev = [
 packages = [
   "packages/data_contracts/src/arrive90_data_contracts",
   "packages/ingestion/src/arrive90_ingestion",
-  "packages/routing/src/arrive90_routing",
   "packages/features/src/arrive90_features",
   "packages/outcomes/src/arrive90_outcomes",
   "packages/models/src/arrive90_models",
-  "packages/decision/src/arrive90_decision",
   "packages/service/src/arrive90_service",
   "packages/evaluation/src/arrive90_evaluation",
 ]
 
 [tool.pytest.ini_options]
-addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov=arrive90_decision --cov=arrive90_service --cov=arrive90_evaluation --cov-report=term-missing --cov-fail-under=90"
-testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests", "packages/decision/tests", "packages/service/tests", "packages/evaluation/tests"]
+addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov=arrive90_service --cov=arrive90_evaluation --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests", "packages/service/tests", "packages/evaluation/tests"]
 
 [tool.coverage.run]
 branch = true
@@ -80,10 +73,6 @@ files = [
   "packages/outcomes/tests",
   "packages/models/src",
   "packages/models/tests",
-  "packages/routing/src",
-  "packages/routing/tests",
-  "packages/decision/src",
-  "packages/decision/tests",
   "packages/service/src",
   "packages/service/tests",
   "packages/evaluation/src",
@@ -106,7 +95,5 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "PERF", "RUF", "S", "SIM", "UP", "
 "packages/features/tests/**" = ["S101"]
 "packages/outcomes/tests/**" = ["S101"]
 "packages/models/tests/**" = ["S101"]
-"packages/routing/tests/**" = ["S101"]
-"packages/decision/tests/**" = ["S101"]
 "packages/service/tests/**" = ["S101"]
 "packages/evaluation/tests/**" = ["S101"]
