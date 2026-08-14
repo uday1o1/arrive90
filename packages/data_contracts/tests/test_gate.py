@@ -53,26 +53,61 @@ def test_validate_gate_report_rejects_mismatches_unknown_and_legacy_reports() ->
     ]
 
 
-def test_gate_runner_exits_zero_only_for_accepted_current_report(
+@pytest.mark.parametrize(
+    "state",
+    [GateState.NOT_STARTED, GateState.IN_PROGRESS, GateState.BLOCKED, GateState.FAILED],
+)
+def test_gate_runner_exits_nonzero_for_every_nonaccepted_state(
+    state: GateState, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    report_root = tmp_path / "gates"
+    report_root.mkdir()
+    path = report_root / "milestone-0.json"
+    path.write_text(
+        json.dumps({**_BASE_REPORT, "milestone": 0, "state": state.value}),
+        encoding="utf-8",
+    )
+    assert run_gate(0, report_root=report_root) == 1
+    assert "not accepted" in capsys.readouterr().err
+
+
+def test_gate_runner_accepts_only_current_accepted_report(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     report_root = tmp_path / "gates"
     report_root.mkdir()
     path = report_root / "milestone-0.json"
-
-    path.write_text(
-        json.dumps({**_BASE_REPORT, "milestone": 0}),
-        encoding="utf-8",
-    )
+    path.write_text(json.dumps({**_BASE_REPORT, "milestone": 0}), encoding="utf-8")
     assert run_gate(0, report_root=report_root) == 0
     assert "ACCEPTED" in capsys.readouterr().out
 
-    path.write_text(
-        json.dumps({**_BASE_REPORT, "milestone": 0, "state": "BLOCKED"}),
-        encoding="utf-8",
-    )
+
+@pytest.mark.parametrize(
+    "report",
+    [
+        {"milestone": 0, "acceptance_version": "travel-time-v1.1"},
+        {**_BASE_REPORT, "milestone": 0, "state": "UNKNOWN"},
+        {"milestone": 0, "acceptance_version": "travel-time-v1.1", "status": "PASSED"},
+        {**_BASE_REPORT, "milestone": 1},
+        {**_BASE_REPORT, "milestone": 0, "acceptance_version": "legacy"},
+    ],
+)
+def test_gate_runner_rejects_every_invalid_report_shape(
+    report: dict[str, object],
+    tmp_path: Path,
+) -> None:
+    report_root = tmp_path / "gates"
+    report_root.mkdir()
+    (report_root / "milestone-0.json").write_text(json.dumps(report), encoding="utf-8")
     assert run_gate(0, report_root=report_root) == 1
-    assert "not accepted" in capsys.readouterr().err
+
+
+def test_gate_runner_rejects_malformed_json(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    report_root = tmp_path / "gates"
+    report_root.mkdir()
+    path = report_root / "milestone-0.json"
 
     path.write_text("{", encoding="utf-8")
     assert run_gate(0, report_root=report_root) == 1
