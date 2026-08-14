@@ -20,4 +20,5 @@ artifacts/models/
 artifacts/profiler/
 artifacts/runtime/
 artifacts/graphs/
+*.sqlite3
 tmp/

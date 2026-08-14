@@ -179,6 +179,14 @@ def test_trip_state_graph_for_direct_transfer_recovery_and_stop() -> None:
     assert (
         next_trip_state(
             TripState.AT_TRANSFER,
+            TripState.ON_FINAL_LEG,
+            active_transfer_count=1,
+        )
+        is TripState.ON_FINAL_LEG
+    )
+    assert (
+        next_trip_state(
+            TripState.AT_TRANSFER,
             TripState.ON_FIRST_LEG,
             active_transfer_count=1,
             activating_recovery_transfer_count=1,

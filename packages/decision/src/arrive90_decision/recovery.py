@@ -184,12 +184,14 @@ def next_trip_state(
     elif current is TripState.ON_FIRST_LEG:
         expected = TripState.AT_TRANSFER
     elif current is TripState.AT_TRANSFER:
-        transfer_count = (
-            activating_recovery_transfer_count
-            if activating_recovery_transfer_count is not None
-            else active_transfer_count
-        )
-        expected = TripState.ON_FIRST_LEG if transfer_count == 1 else TripState.ON_FINAL_LEG
+        if activating_recovery_transfer_count is None:
+            expected = TripState.ON_FINAL_LEG
+        else:
+            expected = (
+                TripState.ON_FIRST_LEG
+                if activating_recovery_transfer_count == 1
+                else TripState.ON_FINAL_LEG
+            )
     else:
         raise ValueError("trip state transition is not allowed")
     if requested is not expected:

@@ -11,19 +11,23 @@ requires-python = "==3.12.*"
 license = { file = "LICENSE" }
 authors = [{ name = "Uday Arora" }]
 dependencies = [
+  "fastapi==0.141.1",
   "gtfs-realtime-bindings==2.1.0",
   "pyarrow>=21.0.0,<22",
   "pyyaml>=6.0.2,<7",
+  "uvicorn==0.51.0",
   "xgboost==3.3.0",
 ]
 
 [project.scripts]
+arrive90-api = "arrive90_service.cli:main"
 arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
 arrive90-ingest-schedule = "arrive90_ingestion.schedule:main"
 arrive90-generate-query-population = "arrive90_routing.population:main"
 
 [dependency-groups]
 dev = [
+  "httpx2==2.10.0",
   "mypy>=1.17.1,<2",
   "pytest>=8.4.1,<9",
   "pytest-cov>=6.2.1,<7",
@@ -40,11 +44,12 @@ packages = [
   "packages/outcomes/src/arrive90_outcomes",
   "packages/models/src/arrive90_models",
   "packages/decision/src/arrive90_decision",
+  "packages/service/src/arrive90_service",
 ]
 
 [tool.pytest.ini_options]
-addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov=arrive90_decision --cov-report=term-missing --cov-fail-under=90"
-testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests", "packages/decision/tests"]
+addopts = "--strict-config --strict-markers --cov=arrive90_data_contracts --cov=arrive90_ingestion --cov=arrive90_routing --cov=arrive90_features --cov=arrive90_outcomes --cov=arrive90_models --cov=arrive90_decision --cov=arrive90_service --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["packages/data_contracts/tests", "packages/ingestion/tests", "packages/routing/tests", "packages/features/tests", "packages/outcomes/tests", "packages/models/tests", "packages/decision/tests", "packages/service/tests"]
 
 [tool.coverage.run]
 branch = true
@@ -73,6 +78,8 @@ files = [
   "packages/routing/tests",
   "packages/decision/src",
   "packages/decision/tests",
+  "packages/service/src",
+  "packages/service/tests",
   "scripts",
   "tools",
 ]
@@ -92,3 +99,4 @@ select = ["A", "B", "C4", "E", "F", "I", "N", "PERF", "RUF", "S", "SIM", "UP", "
 "packages/models/tests/**" = ["S101"]
 "packages/routing/tests/**" = ["S101"]
 "packages/decision/tests/**" = ["S101"]
+"packages/service/tests/**" = ["S101"]
