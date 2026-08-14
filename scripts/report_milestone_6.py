@@ -133,7 +133,7 @@ def build_card(gate: dict[str, Any]) -> dict[str, Any]:
             "Arrive90 implements reproducible offline evaluation mechanics but has insufficient "
             "empirical evidence for a reliability recommendation claim."
         ),
-        "version": "milestone-6-local-mechanics-v1",
+        "version": "milestone-6-local-mechanics-v2",
     }
 
 
@@ -151,7 +151,10 @@ def main() -> int:
     output = ROOT / "artifacts/reports/gates/milestone-6.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    _write_card(ROOT / "artifacts/cards/milestone-6-local-mechanics-v1.json", build_card(report))
+    card = build_card(report)
+    _write_card(ROOT / "artifacts/cards/milestone-6-local-mechanics-v2.json", card)
+    web_card = ROOT / "packages/service/src/arrive90_service/web/milestone-6-card.json"
+    web_card.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(output.relative_to(ROOT))
     return 0
 

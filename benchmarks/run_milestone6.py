@@ -167,7 +167,7 @@ def build_report() -> dict[str, Any]:
         "environment": {
             "benchmark_image_id": os.environ.get("ARRIVE90_BENCHMARK_IMAGE_ID"),
             "base_image": (
-                "python@sha256:6c4dd321d176d61ea848dc8c73a4f7dbae8f70e0ee48bb411ea2f045b599fa8e"
+                "python@sha256:78098ea6a3a9c6a7727a5d4674e4a44e57e01fac878ee9cb4d24a86bd93916ff"
             ),
             "cgroup_cpu_allocation": _cgroup_cpu_allocation(),
             "cgroup_memory_limit_bytes": _cgroup_memory_limit_bytes(),

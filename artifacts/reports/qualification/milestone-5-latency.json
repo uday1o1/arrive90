@@ -7,79 +7,81 @@
   },
   "decision_by_candidate_count_and_feed_state": {
     "1-abstained": {
-      "mean_ms": 0.011312243999999999,
-      "p50_ms": 0.010917,
-      "p95_ms": 0.014126,
-      "p99_ms": 0.017126,
-      "throughput_per_second": 88399.79052785637
+      "mean_ms": 0.022875156,
+      "p50_ms": 0.0145,
+      "p95_ms": 0.033792,
+      "p99_ms": 0.067875,
+      "throughput_per_second": 43715.5488688252
     },
     "1-ready": {
-      "mean_ms": 0.037062032,
-      "p50_ms": 0.0255,
-      "p95_ms": 0.06646,
-      "p99_ms": 0.14117,
-      "throughput_per_second": 26981.79096062515
+      "mean_ms": 0.065612166,
+      "p50_ms": 0.071626,
+      "p95_ms": 0.110583,
+      "p99_ms": 0.176334,
+      "throughput_per_second": 15241.075869984234
     },
     "1-stale": {
-      "mean_ms": 0.016581052,
-      "p50_ms": 0.011042,
-      "p95_ms": 0.028709,
-      "p99_ms": 0.041793,
-      "throughput_per_second": 60309.80422713831
+      "mean_ms": 0.033833334,
+      "p50_ms": 0.031667,
+      "p95_ms": 0.057292,
+      "p99_ms": 0.101459,
+      "throughput_per_second": 29556.64966390838
     },
     "10-abstained": {
-      "mean_ms": 0.08266491399999999,
-      "p50_ms": 0.067794,
-      "p95_ms": 0.142795,
-      "p99_ms": 0.192755,
-      "throughput_per_second": 12097.030670109934
+      "mean_ms": 0.148168248,
+      "p50_ms": 0.102208,
+      "p95_ms": 0.273292,
+      "p99_ms": 0.567461,
+      "throughput_per_second": 6749.084324733326
     },
     "10-ready": {
-      "mean_ms": 0.270122546,
-      "p50_ms": 0.18163,
-      "p95_ms": 0.408887,
-      "p99_ms": 0.750813,
-      "throughput_per_second": 3702.0234512375723
+      "mean_ms": 0.381990724,
+      "p50_ms": 0.240959,
+      "p95_ms": 0.722044,
+      "p99_ms": 1.180296,
+      "throughput_per_second": 2617.864616000466
     },
     "10-stale": {
-      "mean_ms": 0.084960382,
-      "p50_ms": 0.068794,
-      "p95_ms": 0.154088,
-      "p99_ms": 0.214339,
-      "throughput_per_second": 11770.191899560903
+      "mean_ms": 0.15108190200000002,
+      "p50_ms": 0.098834,
+      "p95_ms": 0.264501,
+      "p99_ms": 0.371459,
+      "throughput_per_second": 6618.926468108668
     },
     "5-abstained": {
-      "mean_ms": 0.050847056,
-      "p50_ms": 0.035667,
-      "p95_ms": 0.102961,
-      "p99_ms": 0.236715,
-      "throughput_per_second": 19666.822008338102
+      "mean_ms": 0.071641694,
+      "p50_ms": 0.045917,
+      "p95_ms": 0.118084,
+      "p99_ms": 0.161334,
+      "throughput_per_second": 13958.352241084638
     },
     "5-ready": {
-      "mean_ms": 0.126487772,
-      "p50_ms": 0.100045,
-      "p95_ms": 0.227923,
-      "p99_ms": 0.3018,
-      "throughput_per_second": 7905.902556335644
+      "mean_ms": 0.21926383000000002,
+      "p50_ms": 0.150792,
+      "p95_ms": 0.375627,
+      "p99_ms": 0.80367,
+      "throughput_per_second": 4560.715736836303
     },
     "5-stale": {
-      "mean_ms": 0.04176553399999999,
-      "p50_ms": 0.035459,
-      "p95_ms": 0.079378,
-      "p99_ms": 0.123129,
-      "throughput_per_second": 23943.18722226801
+      "mean_ms": 0.064127034,
+      "p50_ms": 0.045334,
+      "p95_ms": 0.127251,
+      "p99_ms": 0.188376,
+      "throughput_per_second": 15594.047278094915
     }
   },
   "environment": {
-    "base_image": "python@sha256:6c4dd321d176d61ea848dc8c73a4f7dbae8f70e0ee48bb411ea2f045b599fa8e",
-    "benchmark_image_id": "sha256:cacbdec96f56cf5a7db2e9504350ab633e08ea19675039f3c7e1a18f73a12497",
+    "base_image": "python@sha256:78098ea6a3a9c6a7727a5d4674e4a44e57e01fac878ee9cb4d24a86bd93916ff",
+    "benchmark_image_id": "sha256:85b7d3f8aeb5b88fc1e6d1294014e72805ee1d8cdb6872d15eba33dc8db99648",
+    "cgroup_cpu_allocation": 4.0,
+    "cgroup_memory_limit_bytes": 8307167232,
     "cpu_count": 4,
     "fastapi": "0.141.1",
+    "host_visible_memory_bytes": 12513599488,
     "httpx2": "2.10.0",
     "machine": "aarch64",
-    "memory_bytes": 8307167232,
-    "operating_system": "Linux-6.8.0-117-generic-aarch64-with-glibc2.41",
-    "python": "3.12.13"
+    "operating_system": "Linux-6.8.0-117-generic-aarch64-with",
+    "python": "3.12.14"
   },
   "failing_checks": [],
   "iterations": {
@@ -88,19 +90,19 @@
     "recovery": 500
   },
   "recovery": {
-    "mean_ms": 0.166247522,
-    "p50_ms": 0.134003,
-    "p95_ms": 0.311009,
-    "p99_ms": 0.414762,
-    "throughput_per_second": 6015.127251039567
+    "mean_ms": 0.338179548,
+    "p50_ms": 0.363209,
+    "p95_ms": 0.710128,
+    "p99_ms": 0.955337,
+    "throughput_per_second": 2957.009097427737
   },
   "status": "PASSED",
   "warm_cached_api_search": {
-    "mean_ms": 1.082936855,
-    "p50_ms": 0.667644,
-    "p95_ms": 2.790954,
-    "p99_ms": 4.023322,
-    "throughput_per_second": 923.4148744526752
+    "mean_ms": 3.4972092299999997,
+    "p50_ms": 2.737719,
+    "p95_ms": 7.095403,
+    "p99_ms": 12.332966,
+    "throughput_per_second": 285.94228547200765
   },
   "workload_manifest_hash": "d44a39c388041033d0d1c1094dc5de61d09f253b3970f7da3c5e03f2e047b10b"
 }

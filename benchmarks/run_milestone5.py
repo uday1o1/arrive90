@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import itertools
 import json
 import os
 import platform
@@ -129,12 +130,28 @@ def _summary(samples: list[float]) -> dict[str, float]:
     }
 
 
-def _memory_bytes() -> int | None:
+def _host_visible_memory_bytes() -> int | None:
     path = Path("/proc/meminfo")
     if not path.is_file():
         return None
     first = path.read_text(encoding="utf-8").splitlines()[0]
     return int(first.split()[1]) * 1024
+
+
+def _cgroup_cpu_allocation() -> float | None:
+    path = Path("/sys/fs/cgroup/cpu.max")
+    if not path.is_file():
+        return None
+    quota, period = path.read_text(encoding="utf-8").split()
+    return None if quota == "max" else int(quota) / int(period)
+
+
+def _cgroup_memory_limit_bytes() -> int | None:
+    path = Path("/sys/fs/cgroup/memory.max")
+    if not path.is_file():
+        return None
+    value = path.read_text(encoding="utf-8").strip()
+    return None if value == "max" else int(value)
 
 
 def build_report() -> dict[str, Any]:
@@ -193,15 +210,16 @@ def build_report() -> dict[str, Any]:
         active_decision_key_version="benchmark",
         trip_keys=(("benchmark", b"t" * 32),),
         active_trip_key_version="benchmark",
-        search_limit_per_minute=100_000,
+        search_limit_per_minute=30,
     )
+    epoch_ticks = itertools.count(100.0, 3.0)
     store = CapabilityTripStore(":memory:", config)
     app = create_app(
         backend=LocalBlockedBackend(),
         store=store,
         config=config,
         clock=lambda: NOW,
-        epoch_clock=lambda: 100.0,
+        epoch_clock=lambda: next(epoch_ticks),
     )
     client = TestClient(app)
     payload = {
@@ -229,7 +247,8 @@ def build_report() -> dict[str, Any]:
         platform.system() == "Linux"
         and platform.machine() == "aarch64"
         and os.cpu_count() == 4
-        and _memory_bytes() == 8_307_167_232
+        and _cgroup_cpu_allocation() == 4
+        and _cgroup_memory_limit_bytes() == 8_307_167_232
     )
     checks = {
         "cached_schedule_search_p95_below_1000_ms": api_result["p95_ms"] < 1_000,
@@ -243,13 +262,15 @@ def build_report() -> dict[str, Any]:
         "environment": {
             "benchmark_image_id": os.environ.get("ARRIVE90_BENCHMARK_IMAGE_ID"),
             "base_image": (
-                "python@sha256:6c4dd321d176d61ea848dc8c73a4f7dbae8f70e0ee48bb411ea2f045b599fa8e"
+                "python@sha256:78098ea6a3a9c6a7727a5d4674e4a44e57e01fac878ee9cb4d24a86bd93916ff"
             ),
+            "cgroup_cpu_allocation": _cgroup_cpu_allocation(),
+            "cgroup_memory_limit_bytes": _cgroup_memory_limit_bytes(),
             "cpu_count": os.cpu_count(),
             "fastapi": fastapi.__version__,
             "httpx2": httpx2.__version__,
             "machine": platform.machine(),
-            "memory_bytes": _memory_bytes(),
+            "host_visible_memory_bytes": _host_visible_memory_bytes(),
             "operating_system": platform.platform(),
             "python": platform.python_version(),
         },
