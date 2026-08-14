@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "all_documented_commands_passed": true,
+    "exact_commit_checked_out": true,
+    "expected_terminal_manifest_reproduced": true,
+    "fresh_clone_remained_clean": true
+  },
+  "commit": "07f74583aa37b12f4d88c7d6177d8c5018e90477",
+  "environment": {
+    "docker": "29.5.2/arm64",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "python": "Python 3.12.13",
+    "uv": "uv 0.11.23 (Homebrew 2026-06-19 aarch64-apple-darwin)"
+  },
+  "failing_command": null,
+  "observations": {
+    "terminal_manifest_reproduced": true
+  },
+  "repository": "https://github.com/uday1o1/arrive90.git",
+  "results": [
+    {
+      "command": "git clone --no-checkout <repository>",
+      "name": "clone",
+      "status": 0
+    },
+    {
+      "command": "git checkout --detach <commit>",
+      "name": "checkout",
+      "status": 0
+    },
+    {
+      "command": "uv sync --frozen",
+      "name": "sync_python",
+      "status": 0
+    },
+    {
+      "command": "make demo",
+      "name": "network_free_demo",
+      "status": 0
+    }
+  ],
+  "status": "PASSED",
+  "workflow": "demo"
+}

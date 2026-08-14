@@ -1,0 +1,41 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "api_matches_frozen_offline_scorer": true,
+    "browser_completes_selection_prediction_and_reveal": true,
+    "browser_exposes_fixed_horizons_quantiles_diagnostics_and_lineage": true,
+    "clean_checkout_offline_demo_reproduces_terminal_manifest": true,
+    "errors_are_specific_and_understandable": true,
+    "keyboard_and_non_color_workflow_passes": true,
+    "milestone_4_is_accepted": true,
+    "outcome_is_absent_from_prediction_and_feature_payload": true,
+    "truthful_screenshot_and_walkthrough_are_present": true,
+    "working_checkout_demo_browser_and_check_pass": true
+  },
+  "command": "make qualify-milestone5 && make milestone5-evidence && make gate MILESTONE=5",
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "build_plan": "87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1",
+    "clean_checkout_qualification": "e680dcfe1aae4908b9e53b4ba0b93802dcb1fe14942fe330e64751a9c532349d",
+    "expected_terminal_manifest": "3386735d19279f6576a4da9cdcaa6353ab3f40b89ac3cb4b53c4630acfd157ec",
+    "milestone_4_report": "7034a9c4cfc277be2c637cdfb6f9cfed5eab0802d6c54e13df9bdaa37331afc2",
+    "replay_fixture": "0d869ab66d1a5026676f62b535795d4187ebcc0c1b445298908708ea9760d1b0",
+    "screenshot": "804a52cfc901c893180b75e6a3b48ea4e757e782499a9d7018e1f1d6cc35de05",
+    "service_implementation": "9bd553cff250c17cd085d0d970ff87e938e83f6f95839ecf5738d69e604d9f03",
+    "tests": "1f63324017561ecbe9728f70b4463962ddeb94b354622e18a84cd33141e5d50f",
+    "walkthrough": "d1d3399952a142305c46ec02792ef6a5bcc4a0fba60ba6b5fd5ddb7a50e09f74",
+    "working_checkout_qualification": "9efe582a60b2b4c6e162c9c40df1e7dea1e8e64a6870a91bb24420cfd3d45521"
+  },
+  "milestone": 5,
+  "observed": {
+    "browser_tests_passed": 4,
+    "clean_commit": "07f74583aa37b12f4d88c7d6177d8c5018e90477",
+    "model_bundle_id": "FULL-normal-scale-0p5",
+    "python_coverage_percent": 90.03,
+    "python_tests_passed": 496,
+    "replay_count": 200,
+    "screenshot_bytes": 685427,
+    "walkthrough_bytes": 111691
+  },
+  "state": "ACCEPTED"
+}

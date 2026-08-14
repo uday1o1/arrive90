@@ -1,0 +1,40 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_working_checkout_commands_passed": true,
+    "browser_workflows_passed": true,
+    "terminal_manifest_reproduced": true
+  },
+  "observations": {
+    "browser_expected": 4,
+    "browser_titles": [
+      "full replay selection, prediction, and outcome reveal is honest",
+      "fixed horizons, calibration diagnostics, and evidence remain visible",
+      "empty filtering and unsupported requests explain the problem",
+      "primary workflow is keyboard reachable and never depends on color"
+    ],
+    "browser_unexpected": 0,
+    "python_coverage_percent": 90.03,
+    "python_tests_passed": 496,
+    "terminal_manifest_reproduced": true
+  },
+  "results": [
+    {
+      "command": "make demo",
+      "name": "network_free_demo",
+      "return_code": 0
+    },
+    {
+      "command": "make browser-test",
+      "name": "browser_workflow",
+      "return_code": 0
+    },
+    {
+      "command": "make check",
+      "name": "complete_quality_suite",
+      "return_code": 0
+    }
+  ],
+  "status": "PASSED",
+  "version": "milestone-5-working-qualification-v1"
+}
