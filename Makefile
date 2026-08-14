@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source audit-milestone0 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -56,6 +56,27 @@ source-discovery:
 
 source-discovery-live:
 	$(UV_RUN) arrive90-discover-rapid-transit-source --download
+
+audit-milestone0:
+	@test -n "$(EVENT_METADATA)" || (echo "EVENT_METADATA is required" >&2; exit 2)
+	@test -n "$(EVENT_ARCHIVE)" || (echo "EVENT_ARCHIVE is required" >&2; exit 2)
+	@test -n "$(EVENT_ACQUIRED_AT)" || (echo "EVENT_ACQUIRED_AT is required" >&2; exit 2)
+	@test -n "$(SCHEDULE_ARCHIVE)" || (echo "SCHEDULE_ARCHIVE is required" >&2; exit 2)
+	@test -n "$(SCHEDULE_DATABASE)" || (echo "SCHEDULE_DATABASE is required" >&2; exit 2)
+	@test -n "$(SCHEDULE_ACQUIRED_AT)" || (echo "SCHEDULE_ACQUIRED_AT is required" >&2; exit 2)
+	@test -n "$(LAMP_ROOT)" || (echo "LAMP_ROOT is required" >&2; exit 2)
+	@test -n "$(PRODUCER_ROOT)" || (echo "PRODUCER_ROOT is required" >&2; exit 2)
+	@test -n "$(LICENSE_PDF)" || (echo "LICENSE_PDF is required" >&2; exit 2)
+	$(UV_RUN) arrive90-audit-milestone0 \
+		--event-metadata "$(EVENT_METADATA)" \
+		--event-archive "$(EVENT_ARCHIVE)" \
+		--event-acquired-at-utc "$(EVENT_ACQUIRED_AT)" \
+		--schedule-archive "$(SCHEDULE_ARCHIVE)" \
+		--schedule-database "$(SCHEDULE_DATABASE)" \
+		--schedule-acquired-at-utc "$(SCHEDULE_ACQUIRED_AT)" \
+		--lamp-root "$(LAMP_ROOT)" \
+		--producer-root "$(PRODUCER_ROOT)" \
+		--license "$(LICENSE_PDF)"
 
 audit-source:
 	@test -n "$(INDEX)" || (echo "INDEX is required" >&2; exit 2)

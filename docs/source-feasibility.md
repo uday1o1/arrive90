@@ -4,13 +4,20 @@ Audit updated: 2026-08-13.
 
 ## Current finding
 
-An official public source now resolves the original source-discovery blocker.
+An official public source resolves the original source-identity blocker.
 The MBTA Rapid Transit Events 2022 ArcGIS item preserves actual `ARR` and `DEP` events separately from prediction fallbacks `PRA` and `PRD`.
 The official event-recorder implementation emits `ARR` only from a Vehicle Position `STOPPED_AT` status and uses the Vehicle Position timestamp.
 
-This discovery reopens Milestone 0, but it does not make Milestone 0 pass.
-The complete interval-width, stop-presence, reconciliation, censoring, schedule-knowledge, scope, and query-reproduction audit remains pending.
-The gate report therefore remains `FAILED` until every required measurement passes.
+The complete Milestone 0 audit now fails the frozen source gate.
+It scanned all 24,565,356 official event rows, reconstructed all 102 applicable schedule versions, and evaluated 975 deterministic frozen queries.
+Only 25 queries were fully resolved, for a 2.5641 percent resolution rate and a 97.4359 percent censoring rate.
+No proposed line passed the aggregate retention rule, so truthful scope reduction leaves no recommendation scope.
+The narrowest line result was Blue at 23 percent resolution, including 18 percent peak and 28 percent off-peak resolution.
+The required thresholds are 90 percent overall, 80 percent in every peak or off-peak slice, and no more than 10 percent censoring.
+
+The resolved intervals were not the problem.
+All 25 resolved arrivals were within the 300-second conservative interval-width limit, with a 61-second median and 143-second p95.
+The blocker is incomplete per-train reconciliation for candidate policies, not timestamp precision.
 
 ## Official source identity
 
@@ -63,6 +70,42 @@ The archive is therefore label-only for historical V1.
 Its event timestamp is never copied into `product_available_at_utc`.
 Historical operational features remain schedule-only, and archive availability is conservatively no earlier than the verified item modification and Arrive90 acquisition completion evidence.
 
+## Public archive search
+
+The Cornell Tech Bus Observatory is the strongest anonymous historical Vehicle Position archive found.
+Its [public MBTA S3 listing](https://busobservatory-lake.s3.amazonaws.com/?list-type=2&prefix=feeds%2Fmbta_all%2FCOMPACTED_&max-keys=1000) contains 897 daily compacted Parquet objects from 2023-04-28 through 2025-10-22, with complete calendar-year 2024 coverage.
+Its [public documentation](https://api.busobservatory.org/) describes minute-by-minute GTFS-Realtime collection and the CC BY-NC 4.0 attribution requirement.
+The collector implementation is pinned at commit [`de653c0ab29243c9b1d64d3b425acbffc81d2822`](https://github.com/Cornell-Tech-Urban-Tech-Hub/BusObservatory-Grabber/tree/de653c0ab29243c9b1d64d3b425acbffc81d2822).
+
+The compacted archive preserves trip, route, direction, vehicle, stop, stop sequence, Vehicle Position status, source vehicle timestamp, and coordinates.
+It does not preserve Trip Updates, explicit cancellations, the collector fetch timestamp, the original fetch batch, or the GTFS-Realtime feed-header timestamp.
+Its source timestamps are timezone-naive Boston local values.
+S3 `Last-Modified` values cannot repair this gap because older objects were migrated or reuploaded in November 2025.
+
+A bounded 2024-05-15 diagnostic joined the official 2024 event export, official 2024 schedule archive, and the public Bus Observatory object.
+The union matched 73.45 percent to 91.67 percent of scheduled active trips by line.
+The Bus Observatory object added at most one matched scheduled trip per line over the official event export on that day.
+It therefore adds useful trajectory evidence but does not identify cancellations or close the per-train completeness gate.
+The exact object identities, hashes, schema limitation, and line results are recorded in `artifacts/reports/qualification/milestone-0-public-source-assessment-v1.json`.
+
+The official MBTA [`prediction_loc`](https://github.com/mbta/prediction_loc) repository includes a `scripts/getArchive.py` client for archived subway Trip Updates.
+Its README requires an AWS access key and secret from an MBTA AWS administrator and a bucket name from MBTA 1Password.
+That private archive is the closest identified source that could contain explicit cancellation states, but it is not an anonymous public resource.
+
+## Exact blocker and resume choices
+
+The official event item explicitly says the data is not guaranteed complete for any stop or date.
+An absent `ARR` or `DEP` row therefore cannot prove that a scheduled train was canceled, skipped, short-turned, non-revenue, or merely missing from telemetry.
+The BUILD_PLAN forbids converting that uncertainty into success or non-arrival and requires the candidate to remain censored.
+
+Milestone 0 can resume only through one of these paths:
+
+1. Obtain an authorized complete 2022 MBTA archived subway GTFS-Realtime export with Vehicle Positions, Trip Updates, feed headers, fetch-object timestamps, and explicit cancellation or skip relationships, then rerun `make audit-milestone0` with immutable pinned inputs.
+2. Collect equivalent prospective fetch-attempt and entity evidence for the plan's 28-service-day shakeout and 56-service-day shadow periods, then create a new untouched acceptance interval before making a live recommendation claim.
+3. Apply the BUILD_PLAN kill gate and select another ML product, such as a historical MBTA reliability explorer or a conditional travel-time model whose target does not require proving the first eligible train among unseen schedules.
+
+The current recommendation model cannot proceed to Milestone 1 with a failed Milestone 0 gate.
+
 ## Previous LAMP finding
 
 The current public LAMP historical rail export remains unsuitable for primary boarding evidence.
@@ -73,7 +116,7 @@ Newer coalesced exports are not substituted for the provenance-preserving 2022 e
 ## Discovery and acceptance states
 
 `make source-discovery-live` downloads the pinned source into ignored storage, streams every archive row, and writes a compact non-gate report.
-A passing discovery report changes the blocker state to `PUBLIC_OFFICIAL_SOURCE_DISCOVERED_M0_AUDIT_PENDING`.
+A passing discovery report changes only the source-identity state.
 It never overwrites `artifacts/reports/gates/milestone-0.json` and never authorizes model or product claims.
 
-Milestone 0 can become `ACCEPTED` only after the complete BUILD_PLAN gate is implemented and passes on the frozen 2022 policy.
+Milestone 0 remains `FAILED` because the complete frozen 2022 audit recommends no supported line or transfer station.

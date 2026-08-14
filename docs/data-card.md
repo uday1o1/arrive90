@@ -13,7 +13,8 @@ Small committed fixtures are synthetic.
 | Source | Intended role | Current status |
 | --- | --- | --- |
 | MBTA GTFS schedule | Stops, routes, trips, stop times, calendars, and canonical schedule simulation. | Contract and archive path implemented. |
-| MBTA Rapid Transit Events 2022 | Primary historical label candidate with separate actual and prediction event types. | Official CC0 source discovered; complete Milestone 0 audit pending. |
+| MBTA Rapid Transit Events 2022 | Primary historical label candidate with separate actual and prediction event types. | Full frozen audit failed per-train completeness and censoring gates. |
+| Cornell Tech Bus Observatory | Independent historical Vehicle Position trajectory diagnostic. | Public 2024 archive inspected; compaction omits Trip Updates, cancellation states, fetch timestamps, and feed headers. |
 | MBTA GTFS Realtime Vehicle Positions | Prospective boarding, transfer, destination, movement, and presence evidence. | Immutable collector implemented; future collection gates remain. |
 | MBTA GTFS Realtime Trip Updates | Rider-visible prediction baseline and sensitivity analysis only. | Forbidden as a substitute for primary Vehicle Position evidence. |
 | MBTA Service Alerts | Causal disruption features and route closure state. | Revision-aware archive path implemented. |
@@ -81,5 +82,8 @@ The locked software dependency inventory is in [../artifacts/reports/qualificati
 
 ## Current gate
 
-Milestone 0 remains `FAILED` because source discovery does not prove the required coverage, interval widths, continuity, reconciliation, censoring, schedule knowledge, and deterministic query reproduction.
-The official 2022 archive resolves the original provenance-discovery blocker, while its missing file time forces historical features to remain schedule-only.
+Milestone 0 remains `FAILED` after the full frozen audit.
+The audit scanned 24,565,356 rows and resolved 25 of 975 candidate policies, for 2.5641 percent resolution and 97.4359 percent censoring.
+No proposed line passed the retention gate.
+All 25 resolved intervals passed the 300-second interval-width rule, so source completeness rather than interval precision is the limiting evidence.
+The official 2022 archive resolves the label-provenance question, while its missing file time forces historical features to remain schedule-only and its missing cancellation evidence prevents complete first-eligible-train reconciliation.

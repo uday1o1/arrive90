@@ -1,0 +1,36 @@
+source_profile_version: mbta-lamp-gtfs-archive-2022-v1
+source_id: mbta-lamp-gtfs-archive-2022
+url: https://performancedata.mbta.com/lamp/gtfs_archive/2022/GTFS_ARCHIVE.db.gz
+allowed_host: performancedata.mbta.com
+last_modified_at_utc: "2024-07-09T02:58:46+00:00"
+compressed_size_bytes: 152231542
+compressed_sha256: d01ad03f35e4a67835a52cd0c1f73b90d2065f4b391b22ff575c709d64f5362c
+expanded_size_bytes: 996286464
+expanded_sha256: f20472cbc887b9e9b1a293fd364bae121b0391bb14d7aace86854288c454173f
+archive_year: 2022
+expected_schedule_version_count: 102
+expected_first_active_date: 2022-01-01
+expected_last_active_date: 2022-12-31
+required_tables:
+  - calendar
+  - calendar_dates
+  - feed_info
+  - pathways
+  - route_patterns
+  - routes
+  - stop_times
+  - stops
+  - transfers
+  - trips
+rail_routes: [Blue, Green-B, Green-C, Green-D, Green-E, Mattapan, Orange, Red]
+knowledge_time_policy:
+  source_field: feed_info.feed_version
+  parser: MBTA_TITLE_COMMA_ISO8601_COMMA_VERSION
+  applicability_rule: publication_date_plus_one_service_day
+  query_cutoff_rule: publication_timestamp_must_not_follow_query_cutoff
+license:
+  identifier: MassDOT-Developer-License
+  license_sha256: 6962a9dd3abac0ce700af47da0136739615af621fee21a4ef8a8cf693b540a95
+  attribution: Massachusetts Bay Transportation Authority
+  raw_archive_redistribution: regenerate_outside_git
+  project_artifact_policy: commit_only_hashes_aggregate_reports_and_synthetic_fixtures

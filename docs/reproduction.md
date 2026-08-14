@@ -179,14 +179,35 @@ make source-discovery \
 The command never substitutes its invocation time because doing so would make the evidence manifest nondeterministic.
 
 Discovery passing only confirms that the official source matches its pinned identity and provenance contract.
-After the complete Milestone 0 audit evidence is generated, verify the actual gate with:
+Run the complete Milestone 0 audit with the immutable official event archive, LAMP schedule archive, pinned producer checkouts, and reviewed MassDOT license:
+
+```sh
+make audit-milestone0 \
+  EVENT_METADATA=/absolute/path/to/item-metadata.json \
+  EVENT_ARCHIVE=/absolute/path/to/Events_2022.zip \
+  EVENT_ACQUIRED_AT=2026-08-13T21:09:00+00:00 \
+  SCHEDULE_ARCHIVE=/absolute/path/to/GTFS_ARCHIVE.db.gz \
+  SCHEDULE_DATABASE=/absolute/path/to/GTFS_ARCHIVE.db \
+  SCHEDULE_ACQUIRED_AT=2026-08-13T21:59:07+00:00 \
+  LAMP_ROOT=/absolute/path/to/mbta-lamp \
+  PRODUCER_ROOT=/absolute/path/to/transit-performance \
+  LICENSE_PDF=/absolute/path/to/massdot-developer-license.pdf
+```
+
+The current pinned inputs produce a truthful `FAILED` result.
+The full audit resolves 25 of 975 candidate policies and recommends no supported line.
+The detailed query reproductions are written under ignored `artifacts/runtime`, while the compact aggregate gate remains tracked.
+
+Verify the actual gate with:
 
 ```sh
 make gate MILESTONE=0
 ```
 
 Proceed to later empirical commands only if that gate is `PASSED`.
-Until then, `FAILED` is the expected truthful result.
+The exact missing evidence is complete archived MBTA GTFS-Realtime data that terminally reconciles potentially eligible trains, including cancellations, skips, fetch timestamps, and feed headers.
+The public Cornell Tech Bus Observatory archive does not contain those fields.
+Until authorized archive evidence, a sufficiently long prospective collection, or a BUILD_PLAN-authorized product pivot exists, `FAILED` is the expected truthful result.
 
 ## Generated output policy
 

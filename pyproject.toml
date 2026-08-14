@@ -25,6 +25,7 @@ arrive90-source-audit = "arrive90_data_contracts.source_audit:main"
 arrive90-discover-rapid-transit-source = "arrive90_ingestion.rapid_transit_archive:main"
 arrive90-ingest-schedule = "arrive90_ingestion.schedule:main"
 arrive90-generate-query-population = "arrive90_routing.population:main"
+arrive90-audit-milestone0 = "arrive90_evaluation.milestone0:main"
 
 [dependency-groups]
 dev = [

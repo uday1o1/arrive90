@@ -844,7 +844,7 @@ def run_discovery(
         "metadata_public_access_verified": metadata["access"] == profile.expected_access,
         "metadata_cc0_verified": metadata["licenseInfo"] == profile.expected_license,
         "archive_contract_passed": archive["status"] == "PASSED",
-        "producer_semantics_pinned": len(profile.producer_file_hashes) == 3,
+        "producer_semantics_pinned": len(profile.producer_file_hashes) >= 3,
         "event_time_not_used_as_product_availability": conservative_available
         > datetime(profile.archive_year, 12, 31, tzinfo=UTC),
         "raw_archive_repository_policy_defined": bool(profile.project_artifact_policy),

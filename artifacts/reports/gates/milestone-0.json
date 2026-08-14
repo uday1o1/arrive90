@@ -1,74 +1,676 @@
 {
   "acceptance_version": "v1",
-  "acceptance_version_hash": "11c30f2cb2c14189c8746fcb79c5ce9ca77dc01cb751d62e5f9b0322ef85777d",
-  "blocking_prerequisite": "Historical rail Vehicle Position STOPPED_AT primitives must be separately identifiable from Trip Update predictions with defensible availability lineage.",
+  "acceptance_version_hash": "02b5a29839ec6057dc2ccf57ef2338c6143c71997ff0c0834b6badce7c82177d",
+  "blocking_prerequisite": "Obtain complete archived MBTA GTFS-Realtime evidence that terminally reconciles every potentially eligible 2022 train, collect an equivalent prospective panel, or select another ML product under the Milestone 0 kill gate.",
   "checks": {
-    "boarding_evidence_discriminator_available": false,
-    "daily_stop_timestamp_coalescence_documented": true,
-    "direct_vehicle_position_stop_provenance_available": false,
-    "primary_boarding_evidence_identifiable": false,
-    "primary_outcome_semantic_frozen": false,
-    "public_parquet_schema_inspected": true,
-    "source_index_contract_valid": true,
-    "supported_scope_frozen": false,
-    "transformation_coalescence_verified": true,
-    "vehicle_position_move_evidence_available": true
+    "aggregate_scope_matches_frozen_charter": false,
+    "arrival_interval_width_overall_passed": false,
+    "arrival_interval_width_slices_passed": false,
+    "audit_candidate_resolution_rate_overall_passed": false,
+    "audit_candidate_resolution_rate_slices_passed": false,
+    "audit_censoring_rate_passed": false,
+    "downstream_move_never_used_as_boarding_evidence": true,
+    "event_time_never_used_as_product_availability": true,
+    "every_schedule_known_by_query_cutoff": true,
+    "field_level_provenance_ledger_complete": true,
+    "historical_operational_features_frozen_empty": true,
+    "lamp_coalesced_export_rejection_verified": true,
+    "license_and_redistribution_policy_documented": true,
+    "manual_direct_query_inventory_satisfied": true,
+    "manual_transfer_query_inventory_satisfied": true,
+    "observed_stop_presence_after_ready_passed": false,
+    "official_event_producer_semantics_verified": true,
+    "official_event_source_identity_and_license_pinned": true,
+    "one_primary_outcome_semantic_used": true,
+    "primary_and_sensitivity_evidence_distinguishable": true,
+    "proven_no_arrival_and_censoring_distinguishable": true,
+    "representative_service_date_rules_satisfied": true,
+    "schedule_archive_contract_passed": true
   },
-  "command": "make audit-source with external immutable inputs",
+  "configured_scope": {
+    "scope_frozen": false,
+    "supported_lines": [],
+    "supported_stations": [],
+    "supported_transfer_stations": []
+  },
+  "event_scan": {
+    "ambiguous_schedule_trip_identities": 150,
+    "observed_schedule_trip_identities": 94945,
+    "prediction_rows_excluded": 400695,
+    "relevant_actual_rows": 2819256,
+    "relevant_semantic_duplicates_removed": 3,
+    "required_schedule_trip_identities": 133861,
+    "rows_scanned": 24565356
+  },
   "failing_checks": [
-    "direct_vehicle_position_stop_provenance_available",
-    "primary_boarding_evidence_identifiable",
-    "supported_scope_frozen",
-    "primary_outcome_semantic_frozen"
+    "audit_candidate_resolution_rate_overall_passed",
+    "audit_candidate_resolution_rate_slices_passed",
+    "audit_censoring_rate_passed",
+    "arrival_interval_width_overall_passed",
+    "arrival_interval_width_slices_passed",
+    "observed_stop_presence_after_ready_passed",
+    "aggregate_scope_matches_frozen_charter"
   ],
-  "index_summary": {
-    "duplicate_service_dates": 0,
-    "first_service_date": "2019-09-15",
-    "last_service_date": "2026-08-13",
-    "missing_fields": [],
-    "row_count": 2525
-  },
-  "input_manifest_hashes": {
-    "acceptance_charter": "11c30f2cb2c14189c8746fcb79c5ce9ca77dc01cb751d62e5f9b0322ef85777d",
-    "lamp_data_dictionary": "dda3909c3acddf21a8ce11b5652cc521c3e9b87349ef3b7a9d1c4740f5d028cb",
-    "lamp_index": "c1458cd555911275f875e964ae008e0ff13f3d27b483231a2a7b9a102b6ee11a",
-    "lamp_transformation_source": "89af2d68417ced3f0db71ab119fe318b9f7be1bfdebfd086b8f79cdfe512a9ca",
-    "massdot_license": "6962a9dd3abac0ce700af47da0136739615af621fee21a4ef8a8cf693b540a95",
-    "representative_parquet": "86f5c9bd9c40e16a393d0242b302162505bea2a7cd4aaa11557e330d0436a412"
+  "input_manifest_hash": "dce14956449c0a9f94b2c759cfcf35f50985487e7188a04f0cf3cf4411d99f38",
+  "metrics": {
+    "lines": {
+      "Blue": {
+        "overall": {
+          "arrival_interval_width_coverage": 1.0,
+          "arrival_interval_width_denominator": 23,
+          "arrival_interval_width_passing": 23,
+          "arrival_interval_width_seconds_p50": 58,
+          "arrival_interval_width_seconds_p95": 143,
+          "arrived_count": 23,
+          "audit_candidate_resolution_rate": 0.23,
+          "candidate_count": 100,
+          "censored_count": 77,
+          "censoring_rate": 0.77,
+          "observed_stop_presence_rate": 0.23,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 23
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": 1.0,
+            "arrival_interval_width_denominator": 14,
+            "arrival_interval_width_passing": 14,
+            "arrival_interval_width_seconds_p50": 54,
+            "arrival_interval_width_seconds_p95": 143,
+            "arrived_count": 14,
+            "audit_candidate_resolution_rate": 0.28,
+            "candidate_count": 50,
+            "censored_count": 36,
+            "censoring_rate": 0.72,
+            "observed_stop_presence_rate": 0.28,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 14
+          },
+          "peak": {
+            "arrival_interval_width_coverage": 1.0,
+            "arrival_interval_width_denominator": 9,
+            "arrival_interval_width_passing": 9,
+            "arrival_interval_width_seconds_p50": 71,
+            "arrival_interval_width_seconds_p95": 143,
+            "arrived_count": 9,
+            "audit_candidate_resolution_rate": 0.18,
+            "candidate_count": 50,
+            "censored_count": 41,
+            "censoring_rate": 0.82,
+            "observed_stop_presence_rate": 0.18,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 9
+          }
+        }
+      },
+      "Green-B": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 100,
+          "censored_count": 100,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Green-C": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 100,
+          "censored_count": 100,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Green-D": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 100,
+          "censored_count": 100,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Green-E": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 100,
+          "censored_count": 100,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Mattapan": {
+        "overall": {
+          "arrival_interval_width_coverage": 1.0,
+          "arrival_interval_width_denominator": 1,
+          "arrival_interval_width_passing": 1,
+          "arrival_interval_width_seconds_p50": 61,
+          "arrival_interval_width_seconds_p95": 61,
+          "arrived_count": 1,
+          "audit_candidate_resolution_rate": 0.01,
+          "candidate_count": 100,
+          "censored_count": 99,
+          "censoring_rate": 0.99,
+          "observed_stop_presence_rate": 0.01,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 1
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": 1.0,
+            "arrival_interval_width_denominator": 1,
+            "arrival_interval_width_passing": 1,
+            "arrival_interval_width_seconds_p50": 61,
+            "arrival_interval_width_seconds_p95": 61,
+            "arrived_count": 1,
+            "audit_candidate_resolution_rate": 0.02,
+            "candidate_count": 50,
+            "censored_count": 49,
+            "censoring_rate": 0.98,
+            "observed_stop_presence_rate": 0.02,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 1
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Orange": {
+        "overall": {
+          "arrival_interval_width_coverage": 1.0,
+          "arrival_interval_width_denominator": 1,
+          "arrival_interval_width_passing": 1,
+          "arrival_interval_width_seconds_p50": 97,
+          "arrival_interval_width_seconds_p95": 97,
+          "arrived_count": 1,
+          "audit_candidate_resolution_rate": 0.01,
+          "candidate_count": 100,
+          "censored_count": 99,
+          "censoring_rate": 0.99,
+          "observed_stop_presence_rate": 0.01,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 1
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": 1.0,
+            "arrival_interval_width_denominator": 1,
+            "arrival_interval_width_passing": 1,
+            "arrival_interval_width_seconds_p50": 97,
+            "arrival_interval_width_seconds_p95": 97,
+            "arrived_count": 1,
+            "audit_candidate_resolution_rate": 0.02,
+            "candidate_count": 50,
+            "censored_count": 49,
+            "censoring_rate": 0.98,
+            "observed_stop_presence_rate": 0.02,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 1
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      },
+      "Red": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 100,
+          "censored_count": 100,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false,
+        "slices": {
+          "off_peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          },
+          "peak": {
+            "arrival_interval_width_coverage": null,
+            "arrival_interval_width_denominator": 0,
+            "arrival_interval_width_passing": 0,
+            "arrival_interval_width_seconds_p50": null,
+            "arrival_interval_width_seconds_p95": null,
+            "arrived_count": 0,
+            "audit_candidate_resolution_rate": 0.0,
+            "candidate_count": 50,
+            "censored_count": 50,
+            "censoring_rate": 1.0,
+            "observed_stop_presence_rate": 0.0,
+            "proven_no_arrival_count": 0,
+            "resolved_count": 0
+          }
+        }
+      }
+    },
+    "overall_all_proposed_scope": {
+      "arrival_interval_width_coverage": 1.0,
+      "arrival_interval_width_denominator": 25,
+      "arrival_interval_width_passing": 25,
+      "arrival_interval_width_seconds_p50": 61,
+      "arrival_interval_width_seconds_p95": 143,
+      "arrived_count": 25,
+      "audit_candidate_resolution_rate": 0.025641,
+      "candidate_count": 975,
+      "censored_count": 950,
+      "censoring_rate": 0.974359,
+      "observed_stop_presence_rate": 0.025641,
+      "proven_no_arrival_count": 0,
+      "resolved_count": 25
+    },
+    "overall_recommended_scope": {
+      "arrival_interval_width_coverage": null,
+      "arrival_interval_width_denominator": 0,
+      "arrival_interval_width_passing": 0,
+      "arrival_interval_width_seconds_p50": null,
+      "arrival_interval_width_seconds_p95": null,
+      "arrived_count": 0,
+      "audit_candidate_resolution_rate": null,
+      "candidate_count": 0,
+      "censored_count": 0,
+      "censoring_rate": null,
+      "observed_stop_presence_rate": null,
+      "proven_no_arrival_count": 0,
+      "resolved_count": 0
+    },
+    "recommended_scope": {
+      "excluded_lines": [
+        "Blue",
+        "Green-B",
+        "Green-C",
+        "Green-D",
+        "Green-E",
+        "Mattapan",
+        "Orange",
+        "Red"
+      ],
+      "excluded_transfer_stations": [
+        "place-asmnl",
+        "place-dwnxg",
+        "place-gover",
+        "place-haecl",
+        "place-north",
+        "place-pktrm",
+        "place-state"
+      ],
+      "supported_lines": [],
+      "supported_stations": [],
+      "supported_transfer_stations": []
+    },
+    "transfer_stations": {
+      "place-asmnl": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-dwnxg": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-gover": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-haecl": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-north": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-pktrm": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      },
+      "place-state": {
+        "overall": {
+          "arrival_interval_width_coverage": null,
+          "arrival_interval_width_denominator": 0,
+          "arrival_interval_width_passing": 0,
+          "arrival_interval_width_seconds_p50": null,
+          "arrival_interval_width_seconds_p95": null,
+          "arrived_count": 0,
+          "audit_candidate_resolution_rate": 0.0,
+          "candidate_count": 25,
+          "censored_count": 25,
+          "censoring_rate": 1.0,
+          "observed_stop_presence_rate": 0.0,
+          "proven_no_arrival_count": 0,
+          "resolved_count": 0
+        },
+        "retained": false
+      }
+    }
   },
   "milestone": 0,
-  "representative_parquet": {
-    "schema_fields": [
-      "stop_sequence",
-      "stop_id",
-      "parent_station",
-      "move_timestamp",
-      "stop_timestamp",
-      "travel_time_seconds",
-      "dwell_time_seconds",
-      "headway_trunk_seconds",
-      "headway_branch_seconds",
-      "service_date",
-      "route_id",
-      "direction_id",
-      "start_time",
-      "vehicle_id",
-      "branch_route_id",
-      "trunk_route_id",
-      "stop_count",
-      "trip_id",
-      "vehicle_label",
-      "vehicle_consist",
-      "direction",
-      "direction_destination",
-      "scheduled_arrival_time",
-      "scheduled_departure_time",
-      "scheduled_travel_time",
-      "scheduled_headway_branch",
-      "scheduled_headway_trunk"
+  "qualification": "milestone-0-audit-v1",
+  "query_count": 975,
+  "recommended_scope": {
+    "excluded_lines": [
+      "Blue",
+      "Green-B",
+      "Green-C",
+      "Green-D",
+      "Green-E",
+      "Mattapan",
+      "Orange",
+      "Red"
     ],
-    "schema_fingerprint": "baf7f021f10ea64fb0673192656626bfd12da94792b2cad99af80c6f88a93222"
+    "excluded_transfer_stations": [
+      "place-asmnl",
+      "place-dwnxg",
+      "place-gover",
+      "place-haecl",
+      "place-north",
+      "place-pktrm",
+      "place-state"
+    ],
+    "supported_lines": [],
+    "supported_stations": [],
+    "supported_transfer_stations": []
   },
-  "source_commit": "6b30a81b3e9dfedbf2b6bbb4abcd2d8bdd5289c5",
+  "runtime_report_sha256": "17e8315b682c6fc921b7d03912cbdaebadf85b1adaaa433662df4aa751a038ce",
+  "sample_service_date_count": 298,
+  "source_profiles": {
+    "events": "mbta-rapid-transit-events-2022-v1",
+    "lamp": "mbta-lamp-implementation-v1",
+    "schedule": "mbta-lamp-gtfs-archive-2022-v1"
+  },
   "status": "FAILED"
 }

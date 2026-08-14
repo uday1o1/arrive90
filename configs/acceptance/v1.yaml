@@ -28,6 +28,19 @@ historical_interval:
       - 2022-11-07
     schedule_boundary_radius_service_days: 1
     major_discontinuity_radius_service_days: 3
+    major_documented_discontinuities:
+      - date: 2022-03-21
+        event: GREEN_LINE_EXTENSION_UNION_SQUARE_OPENING
+        source: https://www.mbta.com/projects/green-line-extension-glx/update/green-line-extension-glx-union-square-branch-opens-march
+      - date: 2022-08-19
+        event: ORANGE_LINE_30_DAY_CLOSURE_START
+        source: https://www.mbta.com/news/2022-08-03/building-better-t-major-orange-line-revitalization-work-be-accelerated-during-30
+      - date: 2022-09-19
+        event: ORANGE_AND_GREEN_LINE_SERVICE_RESUMPTION
+        source: https://www.mbta.com/news/2022-09-18/orange-line-and-green-line-extension-service-will-resume-schedule-monday-september
+      - date: 2022-12-12
+        event: GREEN_LINE_EXTENSION_MEDFORD_BRANCH_OPENING
+        source: https://www.mbta.com/news/2022-12-12/mbta-celebrates-opening-the-green-line-extension-medford-branch
 query_generation:
   public_seed: arrive90-v1-public-query-seed
   readiness_horizons_minutes: [0, 5, 10, 15]
@@ -55,6 +68,17 @@ scope:
   exclusion_rule_frozen: true
   exclusion_granularity: WHOLE_LINE_OR_STATION_ONLY
   individual_service_date_or_query_exclusion_forbidden: true
+  line_retention_rule:
+    resolution_rate_min: 0.90
+    censoring_rate_max: 0.10
+    interval_width_coverage_min: 0.90
+    observed_stop_presence_rate_min: 0.90
+    peak_and_off_peak_resolution_rate_min: 0.80
+    peak_and_off_peak_interval_width_coverage_min: 0.80
+  transfer_station_retention_rule:
+    query_count_min: 25
+    resolution_rate_min: 0.80
+    interval_width_coverage_min: 0.80
 primary_outcome:
   selected_semantic: CONSERVATIVE_STATION_DEPARTURE_INTERVAL
   semantic_frozen_before_full_outcome_audit: true
