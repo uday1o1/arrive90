@@ -14,6 +14,7 @@ from arrive90_ingestion.vehicle import (
     LATITUDE,
     LONGITUDE,
     OBSERVATION_TIMESTAMP,
+    OCCUPANCY_PERCENTAGE,
     ROUTE_ID,
     SCHEDULE_RELATIONSHIP,
     SPEED,
@@ -178,6 +179,20 @@ def test_normalizer_rejects_missing_or_incompatible_physical_schema(tmp_path: Pa
     pq.write_table(table, wrong)
     with pytest.raises(VehicleNormalizationError, match="incompatible column types"):
         normalize_vehicle_parquet(wrong, source_object_key=SOURCE_KEY)
+
+    optional = tmp_path / "optional.parquet"
+    _write(optional, [_row(**{OCCUPANCY_PERCENTAGE: 0.5})])
+    assert len(normalize_vehicle_parquet(optional, source_object_key=SOURCE_KEY).observations) == 1
+
+    bad_optional = tmp_path / "bad-optional.parquet"
+    _write(bad_optional, [_row(**{OCCUPANCY_PERCENTAGE: "unknown"})])
+    with pytest.raises(VehicleNormalizationError, match="incompatible column types"):
+        normalize_vehicle_parquet(bad_optional, source_object_key=SOURCE_KEY)
+
+    unknown = tmp_path / "unknown.parquet"
+    _write(unknown, [_row(**{"producer.unknown": "value"})])
+    with pytest.raises(VehicleNormalizationError, match="unknown columns"):
+        normalize_vehicle_parquet(unknown, source_object_key=SOURCE_KEY)
 
 
 def test_normalizer_rejects_source_without_retained_rail_rows(tmp_path: Path) -> None:

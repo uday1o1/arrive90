@@ -100,7 +100,7 @@ def _optional_timestamp(value: object, field: str) -> datetime | None:
     return None if value is None else _timestamp(value, field)
 
 
-def _inventory_entries(path: Path, year: int) -> tuple[InventoryLockEntry, ...]:
+def load_inventory_entries(path: Path, year: int) -> tuple[InventoryLockEntry, ...]:
     if year != 2024:
         raise AcquisitionError("the complete-year acquisition is frozen to 2024")
     lock = _load_json(path, "inventory lock")
@@ -204,7 +204,7 @@ def _derived_entry(value: object, field: str) -> DerivedArtifactEntry:
         raise AcquisitionError(f"invalid {field}: {error}") from error
 
 
-def _lock_entries(
+def load_acquisition_lock(
     path: Path,
     field: str,
 ) -> tuple[tuple[AcquisitionContentEntry, ...], tuple[DerivedArtifactEntry, ...]]:
@@ -353,15 +353,15 @@ def acquire_full_year(
 
     if not 1 <= workers <= MAX_WORKERS:
         raise AcquisitionError(f"workers must be between 1 and {MAX_WORKERS}")
-    inventory_entries = _inventory_entries(inventory_lock_path, year)
-    pinned_content, pinned_derived = _lock_entries(
+    inventory_entries = load_inventory_entries(inventory_lock_path, year)
+    pinned_content, pinned_derived = load_acquisition_lock(
         pinned_acquisition_lock_path, "pinned acquisition lock"
     )
     schedule_entry, schedule_derived = _verify_schedule(raw_root, pinned_content, pinned_derived)
     locked_content: tuple[AcquisitionContentEntry, ...] | None = None
     locked_derived: tuple[DerivedArtifactEntry, ...] | None = None
     if acquisition_lock_path.is_file():
-        locked_content, locked_derived = _lock_entries(
+        locked_content, locked_derived = load_acquisition_lock(
             acquisition_lock_path, "full-year acquisition lock"
         )
         if locked_derived != (schedule_derived,):

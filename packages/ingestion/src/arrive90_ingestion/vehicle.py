@@ -41,6 +41,9 @@ STOP_ID = "vehicle.stop_id"
 VEHICLE_ID = "vehicle.vehicle.id"
 VEHICLE_LABEL = "vehicle.vehicle.label"
 SPEED = "vehicle.position.speed"
+MULTI_CARRIAGE_DETAILS = "vehicle.multi_carriage_details"
+OCCUPANCY_PERCENTAGE = "vehicle.occupancy_percentage"
+OCCUPANCY_STATUS = "vehicle.occupancy_status"
 
 REQUIRED_COLUMNS = (
     ENTITY_ID,
@@ -60,6 +63,11 @@ REQUIRED_COLUMNS = (
     VEHICLE_ID,
     VEHICLE_LABEL,
     SPEED,
+)
+KNOWN_OPTIONAL_COLUMNS = (
+    MULTI_CARRIAGE_DETAILS,
+    OCCUPANCY_PERCENTAGE,
+    OCCUPANCY_STATUS,
 )
 
 IDENTITY_AVAILABILITY_COLUMNS = (
@@ -98,6 +106,14 @@ class VehicleNormalizationError(ValueError):
 
 
 @dataclass(frozen=True, slots=True)
+class VehicleSchemaContract:
+    """Name-based compatibility result for one acquired physical schema."""
+
+    columns: tuple[tuple[str, str, bool], ...]
+    present_optional_columns: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class QuarantinedVehicleRow:
     """One exact source row excluded with an explicit deterministic reason."""
 
@@ -122,13 +138,17 @@ class NormalizedVehicleDay:
     exact_duplicate_row_count: int
     conflicting_identity_count: int
     retained_rows_by_route: tuple[tuple[str, int], ...]
+    identity_complete_row_count: int
+    identity_complete_rows_by_route: tuple[tuple[str, int], ...]
     identity_availability_overall: float
     identity_availability_by_route: tuple[tuple[str, float], ...]
     source_min_naive_utc: datetime
     source_max_naive_utc: datetime
 
 
-def _validate_schema(schema: pa.Schema) -> None:
+def validate_vehicle_schema(schema: pa.Schema) -> VehicleSchemaContract:
+    """Validate required names and the closed explicit optional-field vocabulary."""
+
     fields = {field.name: field for field in schema}
     missing = sorted(set(REQUIRED_COLUMNS) - fields.keys())
     if missing:
@@ -146,8 +166,35 @@ def _validate_schema(schema: pa.Schema) -> None:
         )
         if invalid_type:
             wrong.append(f"{name}={data_type}")
+    wrong.extend(
+        f"{name}={fields[name].type}"
+        for name in (OCCUPANCY_PERCENTAGE, OCCUPANCY_STATUS)
+        if name in fields
+        and not (pa.types.is_floating(fields[name].type) or pa.types.is_integer(fields[name].type))
+    )
+    if MULTI_CARRIAGE_DETAILS in fields:
+        carriage_type = fields[MULTI_CARRIAGE_DETAILS].type
+        if not (
+            isinstance(carriage_type, pa.ExtensionType)
+            or pa.types.is_string(carriage_type)
+            or pa.types.is_large_string(carriage_type)
+            or pa.types.is_null(carriage_type)
+        ):
+            wrong.append(f"{MULTI_CARRIAGE_DETAILS}={carriage_type}")
     if wrong:
         raise VehicleNormalizationError(f"source Parquet has incompatible column types: {wrong}")
+    unknown = sorted(set(fields) - set(REQUIRED_COLUMNS) - set(KNOWN_OPTIONAL_COLUMNS))
+    if unknown:
+        raise VehicleNormalizationError(f"source Parquet has unknown columns: {unknown}")
+    return VehicleSchemaContract(
+        columns=tuple(
+            sorted(
+                ((field.name, str(field.type), field.nullable) for field in schema),
+                key=lambda item: item[0].encode(),
+            )
+        ),
+        present_optional_columns=tuple(name for name in KNOWN_OPTIONAL_COLUMNS if name in fields),
+    )
 
 
 def _required_string(value: object, field: str) -> str:
@@ -270,7 +317,12 @@ def _observation_sort_key(observation: VehicleObservation) -> tuple[object, ...]
 
 def _availability(
     table: pa.Table, indices: pa.Array
-) -> tuple[float, tuple[tuple[str, float], ...]]:
+) -> tuple[
+    int,
+    tuple[tuple[str, int], ...],
+    float,
+    tuple[tuple[str, float], ...],
+]:
     retained = table.take(indices)
     if retained.num_rows == 0:
         raise VehicleNormalizationError("source Parquet contains no retained heavy-rail rows")
@@ -279,20 +331,27 @@ def _availability(
         complete = pc.and_kleene(complete, pc.invert(pc.is_null(retained[name])))
     overall = pc.sum(pc.cast(pc.fill_null(complete, False), pa.int64())).as_py()
     by_route: list[tuple[str, float]] = []
+    complete_by_route: list[tuple[str, int]] = []
     for route_id in RAIL_ROUTE_IDS:
         mask = pc.equal(retained[ROUTE_ID], route_id)
         denominator = pc.sum(pc.cast(mask, pa.int64())).as_py()
         route_complete = pc.and_kleene(complete, mask)
         numerator = pc.sum(pc.cast(pc.fill_null(route_complete, False), pa.int64())).as_py()
+        complete_by_route.append((route_id, int(numerator)))
         by_route.append((route_id, float(numerator / denominator) if denominator else 0.0))
-    return float(overall / retained.num_rows), tuple(by_route)
+    return (
+        int(overall),
+        tuple(complete_by_route),
+        float(overall / retained.num_rows),
+        tuple(by_route),
+    )
 
 
 def normalize_vehicle_parquet(path: Path, *, source_object_key: str) -> NormalizedVehicleDay:
     """Normalize one complete source object with deterministic lineage and quarantine."""
 
     parquet = pq.ParquetFile(path)
-    _validate_schema(parquet.schema_arrow)
+    validate_vehicle_schema(parquet.schema_arrow)
     table = parquet.read(columns=list(REQUIRED_COLUMNS))
     rail_mask = pc.is_in(table[ROUTE_ID], value_set=pa.array(RAIL_ROUTE_IDS))
     retained_indices = pc.indices_nonzero(pc.fill_null(rail_mask, False))
@@ -369,7 +428,12 @@ def normalize_vehicle_parquet(path: Path, *, source_object_key: str) -> Normaliz
     retained_counts = Counter(
         str(route_id) for route_id in retained[ROUTE_ID].to_pylist() if route_id is not None
     )
-    availability_overall, availability_by_route = _availability(table, retained_indices)
+    (
+        identity_complete,
+        identity_complete_by_route,
+        availability_overall,
+        availability_by_route,
+    ) = _availability(table, retained_indices)
     profile = parquet_profile(path)
     return NormalizedVehicleDay(
         source_object_key=source_object_key,
@@ -385,6 +449,8 @@ def normalize_vehicle_parquet(path: Path, *, source_object_key: str) -> Normaliz
         retained_rows_by_route=tuple(
             (route_id, retained_counts[route_id]) for route_id in RAIL_ROUTE_IDS
         ),
+        identity_complete_row_count=identity_complete,
+        identity_complete_rows_by_route=identity_complete_by_route,
         identity_availability_overall=availability_overall,
         identity_availability_by_route=availability_by_route,
         source_min_naive_utc=minimum,

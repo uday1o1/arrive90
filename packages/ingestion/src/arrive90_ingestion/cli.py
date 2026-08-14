@@ -31,6 +31,13 @@ from arrive90_ingestion.year_acquisition import (
     DEFAULT_FULL_ACQUISITION_LOCK,
     acquire_full_year,
 )
+from arrive90_ingestion.year_normalization import (
+    DEFAULT_NORMALIZED_ROOT,
+    normalize_year,
+)
+from arrive90_ingestion.year_normalization import (
+    DEFAULT_RUNTIME_ROOT as DEFAULT_NORMALIZATION_RUNTIME_ROOT,
+)
 
 
 def _source_lock(args: argparse.Namespace) -> int:
@@ -133,6 +140,33 @@ def _data_qualify_day(args: argparse.Namespace) -> int:
     return 0 if result.checks_passed else 1
 
 
+def _data_normalize(args: argparse.Namespace) -> int:
+    result = normalize_year(
+        args.year,
+        inventory_lock_path=args.inventory_lock,
+        acquisition_lock_path=args.acquisition_lock,
+        raw_root=args.raw_root,
+        normalized_root=args.normalized_root,
+        runtime_root=args.runtime_root,
+    )
+    print(
+        json.dumps(
+            {
+                "dataset_manifest_path": str(result.dataset_manifest_path),
+                "dataset_manifest_sha256": result.dataset_manifest_sha256,
+                "observation_count": result.observation_count,
+                "partition_count": result.partition_count,
+                "quarantine_count": result.quarantine_count,
+                "runtime_report_path": str(result.runtime_report_path),
+                "schedule_index_path": str(result.schedule_index_path),
+                "schedule_index_sha256": result.schedule_index_sha256,
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the frozen Milestone 0 CLI surface."""
 
@@ -176,6 +210,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     data = commands.add_parser("data")
     data_commands = data.add_subparsers(dest="data_command", required=True)
+    normalize = data_commands.add_parser("normalize")
+    normalize.add_argument("--year", type=int, required=True)
+    normalize.add_argument("--inventory-lock", type=Path, default=DEFAULT_INVENTORY_LOCK)
+    normalize.add_argument("--acquisition-lock", type=Path, default=DEFAULT_FULL_ACQUISITION_LOCK)
+    normalize.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
+    normalize.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
+    normalize.add_argument("--runtime-root", type=Path, default=DEFAULT_NORMALIZATION_RUNTIME_ROOT)
+    normalize.set_defaults(handler=_data_normalize)
     qualify_day = data_commands.add_parser("qualify-day")
     qualify_day.add_argument("--date", type=date.fromisoformat, required=True)
     qualify_day.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
