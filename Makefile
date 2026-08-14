@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test demo demo-serve check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 qualify-milestone5 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test demo demo-serve check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 qualify-milestone2 qualify-milestone3 qualify-milestone4 qualify-milestone5 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone6-robustness qualify-milestone6-reproduction qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -133,8 +133,25 @@ milestone4-evidence:
 milestone5-evidence:
 	$(UV_RUN) python scripts/report_milestone_5.py
 
-qualify-milestone6:
-	$(UV_RUN) python scripts/qualify_milestone_6.py --output artifacts/reports/qualification/milestone-6-synthetic.json
+qualify-milestone6: benchmark-milestone6 qualify-milestone6-robustness
+	$(UV_RUN) python scripts/reproduce_full_year.py
+
+qualify-milestone6-robustness:
+	$(UV_RUN) python scripts/qualify_milestone_6_robustness.py
+
+qualify-milestone6-reproduction:
+	@test -n "$(REPOSITORY)" || (echo "REPOSITORY is required" >&2; exit 2)
+	@test -n "$(COMMIT)" || (echo "COMMIT is required" >&2; exit 2)
+	@test -n "$(DATA_ROOT)" || (echo "DATA_ROOT is required" >&2; exit 2)
+	@test -n "$(FROZEN_RUNTIME)" || (echo "FROZEN_RUNTIME is required" >&2; exit 2)
+	@test -n "$(REBUILD_ROOT)" || (echo "REBUILD_ROOT is required" >&2; exit 2)
+	$(UV_RUN) python scripts/qualify_milestone_6_reproduction.py \
+		--repository "$(REPOSITORY)" \
+		--commit "$(COMMIT)" \
+		--data-root "$(DATA_ROOT)" \
+		--frozen-evaluation-runtime "$(FROZEN_RUNTIME)" \
+		--rebuild-root "$(REBUILD_ROOT)" \
+		--output artifacts/reports/qualification/milestone-6-reproduction-v1.2.json
 
 milestone6-evidence:
 	$(UV_RUN) python scripts/report_milestone_6.py
@@ -230,8 +247,7 @@ benchmark-milestone5:
 	@echo "Run the image with ARRIVE90_BENCHMARK_IMAGE_ID set to its inspected image ID."
 
 benchmark-milestone6:
-	docker build --file benchmarks/milestone6.Dockerfile --tag arrive90/milestone6-benchmark:v1 .
-	@echo "Run benchmarks/run_milestone6.py in this image with 4 CPUs, 8307167232 bytes of memory, the inspected image ID, and the Milestone 5 latency report mounted read-only."
+	$(UV_RUN) python benchmarks/run_milestone6.py
 
 build-otp-graph:
 	@test -n "$(GTFS)" || (echo "GTFS is required" >&2; exit 2)

@@ -1,0 +1,89 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_nine_seeded_defects_fail_for_asserted_reason_and_controls_pass": true,
+    "qualification_preserves_correctness_artifacts": true
+  },
+  "correctness_hashes": {
+    "final_evaluation": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "replay_fixture": "0d869ab66d1a5026676f62b535795d4187ebcc0c1b445298908708ea9760d1b0",
+    "terminal_manifest": "3386735d19279f6576a4da9cdcaa6353ab3f40b89ac3cb4b53c4630acfd157ec"
+  },
+  "failing_checks": [],
+  "scenarios": {
+    "changed_etag": {
+      "control_node": "packages/ingestion/tests/test_acquisition.py::test_resumable_download_appends_only_a_valid_range_response",
+      "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_validates_expected_hash_and_response_metadata",
+      "intended_reason": "changed ETag fails while the locked ETag and digest pass",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.23s\n",
+      "return_code": 0
+    },
+    "corrupted_model": {
+      "control_node": "packages/service/tests/test_explorer.py::test_repository_verifies_exact_frozen_assets",
+      "defect_node": "packages/service/tests/test_explorer.py::test_corrupted_model_bytes_fail_before_scoring",
+      "intended_reason": "corrupted model bytes fail bundle validation before scoring",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 2.47s\n",
+      "return_code": 0
+    },
+    "duplicate_conflict": {
+      "control_node": "packages/ingestion/tests/test_vehicle.py::test_normalizer_filters_rail_attaches_utc_and_collapses_exact_duplicates",
+      "defect_node": "packages/ingestion/tests/test_vehicle.py::test_normalizer_quarantines_conflicts_invalid_enums_and_missing_identity",
+      "intended_reason": "conflicting identities quarantine while exact duplicates collapse with lineage",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.28s\n",
+      "return_code": 0
+    },
+    "interrupted_download_resume": {
+      "control_node": "packages/ingestion/tests/test_acquisition.py::test_resumable_download_appends_only_a_valid_range_response",
+      "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_rejects_invalid_resume_status_range_and_final_size",
+      "intended_reason": "invalid Content-Range is rejected while an exact byte range resumes",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.39s\n",
+      "return_code": 0
+    },
+    "low_disk": {
+      "control_node": "packages/ingestion/tests/test_acquisition.py::test_existing_verified_download_is_reused_without_network",
+      "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_fails_before_network_when_disk_cannot_hold_remaining_bytes",
+      "intended_reason": "insufficient disk fails before network while verified immutable bytes are reused",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.24s\n",
+      "return_code": 0
+    },
+    "malformed_parquet": {
+      "control_node": "packages/ingestion/tests/test_acquisition.py::test_parquet_profile_hashes_name_type_and_nullability",
+      "defect_node": "packages/ingestion/tests/test_acquisition.py::test_parquet_profile_rejects_malformed_or_partial_bytes",
+      "intended_reason": "malformed footer bytes fail while complete Parquet is profiled deterministically",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.20s\n",
+      "return_code": 0
+    },
+    "missing_artifact": {
+      "control_node": "packages/service/tests/test_app.py::test_read_only_explorer_api_exercises_prediction_and_reveal",
+      "defect_node": "packages/service/tests/test_app.py::test_api_errors_are_specific_and_nonrevealing",
+      "intended_reason": "missing explorer artifacts return a specific unavailable state while real assets serve",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 2.15s\n",
+      "return_code": 0
+    },
+    "partial_object": {
+      "control_node": "packages/ingestion/tests/test_acquisition.py::test_existing_verified_download_is_reused_without_network",
+      "defect_node": "packages/ingestion/tests/test_acquisition.py::test_existing_download_rejects_wrong_size_and_digest",
+      "intended_reason": "partial or changed final bytes fail size and digest verification",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.30s\n",
+      "return_code": 0
+    },
+    "schema_drift": {
+      "control_node": "packages/ingestion/tests/test_vehicle.py::test_schema_validator_accepts_arrow_json_carriage_details",
+      "defect_node": "packages/ingestion/tests/test_vehicle.py::test_normalizer_rejects_missing_or_incompatible_physical_schema",
+      "intended_reason": "missing, incompatible, and unknown columns fail while a supported optional type passes",
+      "passed": true,
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.25s\n",
+      "return_code": 0
+    }
+  },
+  "status": "PASSED",
+  "version": "milestone-6-robustness-v1"
+}

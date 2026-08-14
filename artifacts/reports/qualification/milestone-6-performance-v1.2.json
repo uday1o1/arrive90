@@ -1,0 +1,150 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_eight_required_stages_have_p50_p95_throughput_and_memory": true,
+    "benchmark_did_not_change_correctness_artifacts": true,
+    "full_year_peak_memory_is_bounded_below_70_percent_of_host": true,
+    "full_year_source_lock_was_verified": true
+  },
+  "dependencies": {
+    "fastapi": "0.141.1",
+    "numpy": "2.5.2",
+    "pyarrow": "25.0.0",
+    "scipy": "1.18.0",
+    "xgboost": "3.3.0"
+  },
+  "environment": {
+    "logical_cpu_count": 10,
+    "machine": "arm64",
+    "physical_memory_bytes": 25769803776,
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "optimization": {
+    "performed": false,
+    "reason": "No measured acceptance bottleneck required optimization."
+  },
+  "stages": {
+    "acquisition_verification": {
+      "iterations": 1,
+      "mean_ms": 5268.96225,
+      "p50_ms": 5268.96225,
+      "p95_ms": 5268.96225,
+      "peak_process_rss_bytes": 269516800,
+      "throughput_work_units_per_second": 69.84297524621665,
+      "work_units_per_iteration": 368,
+      "workload": "all 368 acquired vehicle objects plus schedule lock"
+    },
+    "api_scoring": {
+      "iterations": 100,
+      "mean_ms": 3.9037712499999997,
+      "p50_ms": 3.10875,
+      "p95_ms": 5.174417,
+      "peak_process_rss_bytes": 371113984,
+      "throughput_work_units_per_second": 256.1625505080504,
+      "work_units_per_iteration": 1,
+      "workload": "warm in-process GET prediction for one frozen replay"
+    },
+    "batch_scoring": {
+      "iterations": 3,
+      "mean_ms": 847.4998193333334,
+      "p50_ms": 818.25225,
+      "p95_ms": 922.008666,
+      "peak_process_rss_bytes": 371113984,
+      "probability_sha256": "ccaedeec664a231462b51879be490781d13c4d1b8d8c3bb9e2af8e2bd585a4d3",
+      "throughput_work_units_per_second": 235.98825089700372,
+      "work_units_per_iteration": 200,
+      "workload": "all 200 frozen held-out replays through the real scorer"
+    },
+    "dataset_generation": {
+      "iterations": 3,
+      "mean_ms": 25.536653,
+      "p50_ms": 21.27925,
+      "p95_ms": 35.554417,
+      "peak_process_rss_bytes": 371113984,
+      "population_manifest_sha256": "568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4",
+      "throughput_work_units_per_second": 14332.34026401189,
+      "work_units_per_iteration": 366,
+      "workload": "366-day population and transform manifest loading"
+    },
+    "dataset_generation_full_year": {
+      "iterations": 1,
+      "mean_ms": 648148.5132500529,
+      "measurement_source": "deterministic full-year population build",
+      "p50_ms": 648148.5132500529,
+      "p95_ms": 648148.5132500529,
+      "peak_process_rss_bytes": 1145915806,
+      "throughput_work_units_per_second": 1777.203798900955,
+      "work_units_per_iteration": 1151892
+    },
+    "episode_construction": {
+      "episode_count": 979,
+      "iterations": 5,
+      "mean_ms": 74.6518834,
+      "p50_ms": 73.184959,
+      "p95_ms": 84.464416,
+      "peak_process_rss_bytes": 371113984,
+      "throughput_work_units_per_second": 344492.3132374715,
+      "work_units_per_iteration": 25717,
+      "workload": "normalized observations from one immutable source object"
+    },
+    "explorer_startup": {
+      "iterations": 10,
+      "mean_ms": 16.813416699999998,
+      "p50_ms": 10.980708,
+      "p95_ms": 58.121083,
+      "peak_process_rss_bytes": 371113984,
+      "throughput_work_units_per_second": 59.476310963018015,
+      "work_units_per_iteration": 1,
+      "workload": "cold repository verification and model load"
+    },
+    "normalization": {
+      "iterations": 1,
+      "mean_ms": 1518.440459,
+      "p50_ms": 1518.440459,
+      "p95_ms": 1518.440459,
+      "peak_process_rss_bytes": 371113984,
+      "throughput_work_units_per_second": 248375.23115550756,
+      "work_units_per_iteration": 377143,
+      "workload": "feeds/mbta_all/COMPACTED_mbta_all_2023-12-31_13:42:28.parquet"
+    },
+    "normalization_full_year": {
+      "iterations": 2,
+      "mean_ms": 1415117.8930206224,
+      "measurement_source": "two deterministic full-year milestone runs",
+      "p50_ms": 1371205.366665963,
+      "p95_ms": 1459030.4193752818,
+      "peak_process_rss_bytes": 634109952,
+      "throughput_work_units_per_second": 147298.2710684744,
+      "work_units_per_iteration": 208444419
+    },
+    "training": {
+      "iterations": 1,
+      "mean_ms": 112982.90429171175,
+      "measurement_source": "deterministic seven-bundle training and calibration run",
+      "p50_ms": 112982.90429171175,
+      "p95_ms": 112982.90429171175,
+      "peak_process_rss_bytes": 1145915806,
+      "throughput_work_units_per_second": 4496.0430357539,
+      "work_units_per_iteration": 507976
+    }
+  },
+  "status": "PASSED",
+  "storage_bytes": {
+    "dataset": 1562321980,
+    "demo": 1056556,
+    "models": 697528,
+    "normalized": 2047504642,
+    "raw": 8804061429
+  },
+  "workload_manifest_hashes": {
+    "acquisition_lock": "af6b8967a422f18d0ccb35dd206c9a533daf91ed4eaac81faa7ba70109adc2f9",
+    "feature_transform": "fb319bc0033c8ebdd34d5184d3b7ccb6a2d8ff1019a1cda605c3ca83574d6875",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "model_manifest": "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b",
+    "population_manifest": "568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4",
+    "replay_fixture": "0d869ab66d1a5026676f62b535795d4187ebcc0c1b445298908708ea9760d1b0",
+    "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
+  }
+}

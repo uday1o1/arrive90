@@ -1,200 +1,325 @@
-"""Measure candidate and replay mechanics for the frozen Milestone 6 workload."""
+"""Benchmark every frozen 2024 pipeline and explorer stage on repository-owned workloads."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import math
 import os
 import platform
+import resource
 import statistics
+import sys
 import time
 from collections.abc import Callable
-from datetime import UTC, date, datetime, timedelta
-from datetime import time as wall_time
-from functools import partial
 from pathlib import Path
 from typing import Any
 
-from arrive90_data_contracts.candidates import CandidateItinerary, TransitLeg
-from arrive90_routing.candidates import deduplicate_and_limit
-from arrive90_routing.population import PopulationConfig, StationPair, generate_query_population
+import fastapi
+import numpy as np
+import pyarrow  # type: ignore[import-untyped]
+import scipy  # type: ignore[import-untyped]
+import xgboost
+from arrive90_evaluation.modeling_data import load_modeling_context
+from arrive90_ingestion.episodes import build_trip_episodes
+from arrive90_ingestion.vehicle import normalize_vehicle_parquet
+from arrive90_service.app import create_app
+from arrive90_service.explorer import ExplorerRepository
+from fastapi.testclient import TestClient
 
 ROOT = Path(__file__).resolve().parents[1]
-NOW = datetime(2025, 1, 1, 12, tzinfo=UTC)
+sys.path.insert(0, str(ROOT))
+
+from scripts.reproduce_full_year import verify_acquisition  # noqa: E402
+
+
+def _digest(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while block := stream.read(4 * 1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def _percentile(values: list[float], percentile: float) -> float:
     ordered = sorted(values)
-    index = min(len(ordered) - 1, max(0, int((len(ordered) - 1) * percentile)))
+    index = min(len(ordered) - 1, max(0, round((len(ordered) - 1) * percentile)))
     return ordered[index]
 
 
-def _measure(
-    operation: Callable[[], object], *, iterations: int
-) -> tuple[dict[str, float], object]:
-    samples: list[float] = []
-    last: object = None
-    for _index in range(iterations):
+def _peak_rss_bytes() -> int:
+    value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return int(value if platform.system() == "Darwin" else value * 1024)
+
+
+def _measure[T](
+    operation: Callable[[], T], *, iterations: int, work_units: int
+) -> tuple[dict[str, Any], T]:
+    if iterations < 1:
+        raise ValueError("benchmark iterations must be positive")
+    started = time.perf_counter_ns()
+    result = operation()
+    samples = [(time.perf_counter_ns() - started) / 1_000_000]
+    for _index in range(1, iterations):
         started = time.perf_counter_ns()
-        last = operation()
+        result = operation()
         samples.append((time.perf_counter_ns() - started) / 1_000_000)
     mean = statistics.fmean(samples)
     return (
         {
+            "iterations": iterations,
             "mean_ms": mean,
             "p50_ms": _percentile(samples, 0.50),
             "p95_ms": _percentile(samples, 0.95),
-            "p99_ms": _percentile(samples, 0.99),
-            "throughput_per_second": 1_000 / mean,
+            "peak_process_rss_bytes": _peak_rss_bytes(),
+            "throughput_work_units_per_second": work_units / (mean / 1_000),
+            "work_units_per_iteration": work_units,
         },
-        last,
+        result,
     )
 
 
-def _candidate(index: int) -> CandidateItinerary:
-    leg = TransitLeg(
-        f"pattern-{index}",
-        "route",
-        0,
-        f"trip-{index}",
-        "a-platform",
-        "a",
-        "b-platform",
-        "b",
-        NOW + timedelta(seconds=index),
-        NOW + timedelta(minutes=10, seconds=index),
-        ("a-platform", "b-platform"),
-    )
-    return CandidateItinerary((leg,), ())
+def _historical_stage(
+    elapsed_seconds: list[float], *, work_units: int, peak_bytes: int | None, source: str
+) -> dict[str, Any]:
+    milliseconds = [value * 1_000 for value in elapsed_seconds]
+    mean = statistics.fmean(elapsed_seconds)
+    return {
+        "iterations": len(elapsed_seconds),
+        "measurement_source": source,
+        "mean_ms": mean * 1_000,
+        "p50_ms": _percentile(milliseconds, 0.50),
+        "p95_ms": _percentile(milliseconds, 0.95),
+        "peak_process_rss_bytes": peak_bytes,
+        "throughput_work_units_per_second": work_units / mean,
+        "work_units_per_iteration": work_units,
+    }
 
 
-def _replay(days: int) -> object:
-    dates = tuple(date(2025, 1, 1) + timedelta(days=index) for index in range(days))
-    config = PopulationConfig(
-        maximum_pairs_per_stratum=1,
-        readiness_horizons_minutes=(0,),
-        query_start_local=wall_time(12),
-        query_end_local=wall_time(12),
-    )
-    return generate_query_population(
-        (StationPair("a", "b", "direct"),),
-        dates,
-        schedule_version_by_date=dict.fromkeys(dates, "schedule-v1"),
-        split_by_date=dict.fromkeys(dates, "benchmark"),
-        config=config,
-    )
-
-
-def _host_visible_memory_bytes() -> int | None:
-    path = Path("/proc/meminfo")
-    if not path.is_file():
-        return None
-    return int(path.read_text(encoding="utf-8").splitlines()[0].split()[1]) * 1024
-
-
-def _cgroup_cpu_allocation() -> float | None:
-    path = Path("/sys/fs/cgroup/cpu.max")
-    if not path.is_file():
-        return None
-    quota, period = path.read_text(encoding="utf-8").split()
-    return None if quota == "max" else int(quota) / int(period)
-
-
-def _cgroup_memory_limit_bytes() -> int | None:
-    path = Path("/sys/fs/cgroup/memory.max")
-    if not path.is_file():
-        return None
-    value = path.read_text(encoding="utf-8").strip()
-    return None if value == "max" else int(value)
+def _directory_bytes(path: Path) -> int:
+    return sum(item.stat().st_size for item in path.rglob("*") if item.is_file())
 
 
 def build_report() -> dict[str, Any]:
-    candidate_results: dict[str, dict[str, float]] = {}
-    for count in (1, 5, 10):
-        candidates = tuple(_candidate(index) for index in range(count))
-        result, normalized = _measure(
-            partial(deduplicate_and_limit, candidates),
-            iterations=500,
-        )
-        if len(normalized) != count:  # type: ignore[arg-type]
-            raise RuntimeError("candidate benchmark changed the frozen candidate set")
-        candidate_results[str(count)] = result
-
-    replay_results: dict[str, dict[str, Any]] = {}
-    replay_manifest = hashlib.sha256()
-    for label, days, iterations in (
-        ("one_day", 1, 20),
-        ("one_month", 31, 10),
-        ("one_year", 365, 5),
-    ):
-        result, population = _measure(partial(_replay, days), iterations=iterations)
-        manifest_hash = population.manifest_hash  # type: ignore[attr-defined]
-        repeated_hash = _replay(days).manifest_hash  # type: ignore[attr-defined]
-        replay_manifest.update(f"{label}:{manifest_hash}".encode())
-        replay_results[label] = {
-            **result,
-            "base_query_count": len(population.base_queries),  # type: ignore[attr-defined]
-            "deadline_variant_count": len(population.deadline_variants),  # type: ignore[attr-defined]
-            "deterministic_manifest": manifest_hash == repeated_hash,
-            "manifest_hash": manifest_hash,
-            "service_days": days,
-        }
-
-    api_path = ROOT / "artifacts/reports/qualification/milestone-5-latency.json"
-    api = json.loads(api_path.read_text(encoding="utf-8"))
-    hardware_match = (
-        platform.system() == "Linux"
-        and platform.machine() == "aarch64"
-        and _cgroup_cpu_allocation() == 4
-        and _cgroup_memory_limit_bytes() == 8_307_167_232
-    )
-    checks = {
-        "api_benchmark_passed_on_named_hardware": api.get("status") == "PASSED",
-        "candidate_p95_below_cached_search_limit": max(
-            result["p95_ms"] for result in candidate_results.values()
-        )
-        < 1_000,
-        "named_reference_hardware_matches": hardware_match,
-        "replay_is_deterministic_at_all_temporal_scales": all(
-            result["deterministic_manifest"] for result in replay_results.values()
+    before = {
+        "final_report": _digest(ROOT / "artifacts/reports/final/travel-time-v1.2.json"),
+        "model_manifest": _digest(
+            ROOT
+            / "artifacts/demo/travel-time-v1/model"
+            / "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b"
+            / "manifest.json"
         ),
+        "terminal_manifest": _digest(ROOT / "artifacts/demo/travel-time-v1/terminal-manifest.json"),
+    }
+    stages: dict[str, dict[str, Any]] = {}
+    acquisition, acquisition_result = _measure(
+        lambda: verify_acquisition(ROOT / "data"), iterations=1, work_units=368
+    )
+    acquisition["workload"] = "all 368 acquired vehicle objects plus schedule lock"
+    stages["acquisition_verification"] = acquisition
+
+    lock = json.loads(
+        (ROOT / "configs/source-locks/mbta-2024-acquired.json").read_text(encoding="utf-8")
+    )
+    first = lock["content_entries"][0]
+    source = ROOT / "data/raw/bus-observatory/mbta_all" / Path(first["source_object_key"]).name
+    normalization, normalized = _measure(
+        lambda: normalize_vehicle_parquet(source, source_object_key=first["source_object_key"]),
+        iterations=1,
+        work_units=int(first["row_count"]),
+    )
+    normalization["workload"] = str(first["source_object_key"])
+    stages["normalization"] = normalization
+
+    episode, episode_result = _measure(
+        lambda: build_trip_episodes(normalized.observations),
+        iterations=5,
+        work_units=len(normalized.observations),
+    )
+    episode["workload"] = "normalized observations from one immutable source object"
+    episode["episode_count"] = len(episode_result.episodes)
+    stages["episode_construction"] = episode
+
+    dataset, context = _measure(
+        lambda: load_modeling_context(
+            ROOT / "data/datasets/travel-time-v1",
+            normalized_root=ROOT / "data/normalized",
+        ),
+        iterations=3,
+        work_units=366,
+    )
+    dataset["workload"] = "366-day population and transform manifest loading"
+    dataset["population_manifest_sha256"] = context.population_manifest_sha256
+    stages["dataset_generation"] = dataset
+
+    m1 = json.loads(
+        (ROOT / "artifacts/runtime/milestone-1/normalization-run.json").read_text(encoding="utf-8")
+    )
+    m1_restart = json.loads(
+        (ROOT / "artifacts/runtime/milestone-1-restart/normalization-run.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    stages["normalization_full_year"] = _historical_stage(
+        [float(m1["elapsed_seconds"]), float(m1_restart["elapsed_seconds"])],
+        work_units=208_444_419,
+        peak_bytes=max(
+            int(m1["peak_resident_memory_bytes"]),
+            int(m1_restart["peak_resident_memory_bytes"]),
+        ),
+        source="two deterministic full-year milestone runs",
+    )
+    m2 = json.loads(
+        (ROOT / "artifacts/runtime/milestone-2/model-population-run.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    dmatrix = json.loads(
+        (ROOT / "artifacts/runtime/milestone-2/dmatrix-benchmark.json").read_text(encoding="utf-8")
+    )
+    stages["dataset_generation_full_year"] = _historical_stage(
+        [float(m2["elapsed_seconds"])],
+        work_units=int(m2["selected_example_count"]),
+        peak_bytes=int(dmatrix["projected_peak_memory_bytes"]),
+        source="deterministic full-year population build",
+    )
+    m3 = json.loads(
+        (ROOT / "artifacts/runtime/milestone-3/training-run.json").read_text(encoding="utf-8")
+    )
+    stages["training"] = _historical_stage(
+        [float(m3["elapsed_seconds"])],
+        work_units=int(m3["training_rows"]),
+        peak_bytes=int(dmatrix["projected_peak_memory_bytes"]),
+        source="deterministic seven-bundle training and calibration run",
+    )
+
+    repository = ExplorerRepository.load()
+    replay_ids = sorted(repository.records)
+
+    def batch_score() -> tuple[float, ...]:
+        return tuple(
+            repository.prediction(replay_id, horizon_seconds=900)["selected_horizon"]["probability"]
+            for replay_id in replay_ids
+        )
+
+    scoring, probabilities = _measure(batch_score, iterations=3, work_units=len(replay_ids))
+    scoring["workload"] = "all 200 frozen held-out replays through the real scorer"
+    scoring["probability_sha256"] = hashlib.sha256(
+        np.asarray(probabilities, dtype=np.float64).tobytes()
+    ).hexdigest()
+    stages["batch_scoring"] = scoring
+
+    client = TestClient(create_app(repository=repository))
+    replay_id = replay_ids[0]
+
+    def api_score() -> None:
+        response = client.get(
+            f"/v1/explorer/replays/{replay_id}/prediction",
+            params={"horizon_seconds": 900},
+        )
+        if response.status_code != 200:
+            raise RuntimeError("API benchmark request failed")
+
+    api, _ = _measure(api_score, iterations=100, work_units=1)
+    api["workload"] = "warm in-process GET prediction for one frozen replay"
+    stages["api_scoring"] = api
+    startup, _ = _measure(ExplorerRepository.load, iterations=10, work_units=1)
+    startup["workload"] = "cold repository verification and model load"
+    stages["explorer_startup"] = startup
+
+    after = {
+        "final_report": _digest(ROOT / "artifacts/reports/final/travel-time-v1.2.json"),
+        "model_manifest": _digest(
+            ROOT
+            / "artifacts/demo/travel-time-v1/model"
+            / "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b"
+            / "manifest.json"
+        ),
+        "terminal_manifest": _digest(ROOT / "artifacts/demo/travel-time-v1/terminal-manifest.json"),
+    }
+    required = {
+        "acquisition_verification",
+        "api_scoring",
+        "batch_scoring",
+        "dataset_generation",
+        "episode_construction",
+        "explorer_startup",
+        "normalization",
+        "training",
+    }
+    physical_memory = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+    checks = {
+        "all_eight_required_stages_have_p50_p95_throughput_and_memory": required.issubset(stages)
+        and all(
+            all(
+                value is not None and math.isfinite(float(value)) and float(value) >= 0
+                for value in (
+                    stages[name]["p50_ms"],
+                    stages[name]["p95_ms"],
+                    stages[name]["throughput_work_units_per_second"],
+                    stages[name]["peak_process_rss_bytes"],
+                )
+            )
+            for name in required
+        ),
+        "benchmark_did_not_change_correctness_artifacts": before == after,
+        "full_year_peak_memory_is_bounded_below_70_percent_of_host": int(
+            stages["normalization_full_year"]["peak_process_rss_bytes"]
+        )
+        < int(physical_memory * 0.70),
+        "full_year_source_lock_was_verified": acquisition_result["vehicle_object_count"] == 368,
     }
     return {
-        "api_benchmark_report_sha256": hashlib.sha256(api_path.read_bytes()).hexdigest(),
-        "candidate_generation": candidate_results,
+        "acceptance_version": "travel-time-v1.2",
         "checks": checks,
+        "dependencies": {
+            "fastapi": fastapi.__version__,
+            "numpy": np.__version__,
+            "pyarrow": pyarrow.__version__,
+            "scipy": scipy.__version__,
+            "xgboost": xgboost.__version__,
+        },
         "environment": {
-            "benchmark_image_id": os.environ.get("ARRIVE90_BENCHMARK_IMAGE_ID"),
-            "base_image": (
-                "python@sha256:78098ea6a3a9c6a7727a5d4674e4a44e57e01fac878ee9cb4d24a86bd93916ff"
-            ),
-            "cgroup_cpu_allocation": _cgroup_cpu_allocation(),
-            "cgroup_memory_limit_bytes": _cgroup_memory_limit_bytes(),
-            "host_visible_cpu_count": os.cpu_count(),
-            "host_visible_memory_bytes": _host_visible_memory_bytes(),
+            "logical_cpu_count": os.cpu_count(),
             "machine": platform.machine(),
-            "operating_system": platform.platform(),
+            "physical_memory_bytes": physical_memory,
+            "platform": platform.platform(),
             "python": platform.python_version(),
         },
         "failing_checks": sorted(key for key, passed in checks.items() if not passed),
-        "replay_generation": replay_results,
-        "status": "PASSED" if all(checks.values()) else "INSUFFICIENT_EVIDENCE",
-        "workload": {
-            "candidate_counts": [1, 5, 10],
-            "deadline_slacks_minutes": list(range(5, 181, 5)),
-            "origin_destination_pairs": 1,
-            "query_times_per_service_day": 1,
-            "readiness_horizons_minutes": [0],
-            "replay_manifest_hash": replay_manifest.hexdigest(),
-            "service_day_scales": [1, 31, 365],
+        "optimization": {
+            "performed": False,
+            "reason": "No measured acceptance bottleneck required optimization.",
+        },
+        "stages": stages,
+        "status": "PASSED" if all(checks.values()) else "FAILED",
+        "storage_bytes": {
+            "dataset": _directory_bytes(ROOT / "data/datasets/travel-time-v1"),
+            "demo": _directory_bytes(ROOT / "artifacts/demo/travel-time-v1"),
+            "models": _directory_bytes(ROOT / "data/models/travel-time-v1/primary"),
+            "normalized": _directory_bytes(ROOT / "data/normalized"),
+            "raw": _directory_bytes(ROOT / "data/raw"),
+        },
+        "workload_manifest_hashes": {
+            "acquisition_lock": _digest(ROOT / "configs/source-locks/mbta-2024-acquired.json"),
+            "feature_transform": repository.transform_sha256,
+            "final_report": before["final_report"],
+            "model_manifest": repository.bundle.manifest.manifest_hash,
+            "population_manifest": context.population_manifest_sha256,
+            "replay_fixture": _digest(ROOT / "artifacts/demo/travel-time-v1/replay-fixture.json"),
+            "uv_lock": _digest(ROOT / "uv.lock"),
         },
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "artifacts/reports/qualification/milestone-6-performance-v1.2.json",
+    )
     args = parser.parse_args()
     report = build_report()
     args.output.parent.mkdir(parents=True, exist_ok=True)

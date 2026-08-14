@@ -128,6 +128,16 @@ def test_corrupted_allow_listed_asset_fails_closed(tmp_path: Path) -> None:
         ExplorerRepository.load(copied)
 
 
+def test_corrupted_model_bytes_fail_before_scoring(tmp_path: Path) -> None:
+    copied = tmp_path / "demo"
+    shutil.copytree("artifacts/demo/travel-time-v1", copied)
+    model = next((copied / "model").glob("*/model.ubj"))
+    model.write_bytes(model.read_bytes() + b"seeded-corruption")
+
+    with pytest.raises(ExplorerArtifactError, match="model bundle failed validation"):
+        ExplorerRepository.load(copied)
+
+
 def test_missing_coordinate_changed_score_and_missing_reveal_fail_closed(
     repository: ExplorerRepository,
 ) -> None:

@@ -7,6 +7,7 @@ import hashlib
 import os
 import platform
 import re
+import shutil
 import sqlite3
 import tempfile
 import urllib.request
@@ -237,6 +238,13 @@ def download_resumable(
     offset = partial.stat().st_size if partial.exists() else 0
     if offset > maximum_bytes or (expected_size_bytes is not None and offset > expected_size_bytes):
         raise AcquisitionError("partial download exceeds the bounded size limit")
+    remaining_bytes = (
+        expected_size_bytes - offset
+        if expected_size_bytes is not None
+        else min(maximum_bytes - offset, READ_BLOCK_BYTES)
+    )
+    if remaining_bytes > 0 and shutil.disk_usage(destination.parent).free < remaining_bytes:
+        raise AcquisitionError("insufficient free disk space for the verified download")
     headers = {"User-Agent": DOWNLOAD_USER_AGENT}
     if offset:
         headers["Range"] = f"bytes={offset}-"
@@ -297,7 +305,10 @@ def download_resumable(
 def parquet_profile(path: Path) -> ParquetProfile:
     """Fingerprint the physical Parquet schema without reading its row payload."""
 
-    parquet = pq.ParquetFile(path)
+    try:
+        parquet = pq.ParquetFile(path)
+    except (OSError, ValueError) as error:
+        raise AcquisitionError("source object is not a readable complete Parquet file") from error
     columns = tuple((field.name, str(field.type), field.nullable) for field in parquet.schema_arrow)
     fingerprint = hashlib.sha256(canonical_json_bytes(columns)).hexdigest()
     return ParquetProfile(

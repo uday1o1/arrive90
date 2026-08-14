@@ -5,6 +5,7 @@ import hashlib
 import io
 import json
 import sqlite3
+from collections import namedtuple
 from datetime import UTC, date, datetime
 from email.message import Message
 from pathlib import Path
@@ -210,6 +211,30 @@ def test_existing_verified_download_is_reused_without_network(
     assert result.downloaded_at_utc.tzinfo is UTC
 
 
+def test_download_fails_before_network_when_disk_cannot_hold_remaining_bytes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    destination = tmp_path / "low-disk.parquet"
+    usage = namedtuple("usage", "total used free")
+    monkeypatch.setattr(
+        "arrive90_ingestion.acquisition.shutil.disk_usage",
+        lambda _path: usage(100, 100, 0),
+    )
+    monkeypatch.setattr(
+        "arrive90_ingestion.acquisition.urllib.request.build_opener",
+        lambda *_handlers: pytest.fail("low-disk preflight must fail before network access"),
+    )
+
+    with pytest.raises(AcquisitionError, match="insufficient free disk space"):
+        download_resumable(
+            SOURCE_URL,
+            destination,
+            allowed_hosts=ALLOWED_HOSTS,
+            maximum_bytes=100,
+            expected_size_bytes=10,
+        )
+
+
 def test_existing_download_rejects_wrong_size_and_digest(tmp_path: Path) -> None:
     destination = tmp_path / "existing.parquet"
     destination.write_bytes(b"bytes")
@@ -309,6 +334,14 @@ def test_parquet_profile_hashes_name_type_and_nullability(tmp_path: Path) -> Non
     assert first.row_count == 2
     assert first.columns == (("value", "int64", True),)
     assert len(first.schema_fingerprint) == 64
+
+
+def test_parquet_profile_rejects_malformed_or_partial_bytes(tmp_path: Path) -> None:
+    malformed = tmp_path / "malformed.parquet"
+    malformed.write_bytes(b"PAR1-partial")
+
+    with pytest.raises(AcquisitionError, match="readable complete Parquet"):
+        parquet_profile(malformed)
 
 
 def _schedule_database(path: Path, *, feed_version: str | None = None) -> None:

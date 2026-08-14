@@ -1,0 +1,39 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_366_service_days_reproduced": true,
+    "all_368_vehicle_objects_and_schedule_verified": true,
+    "final_report_and_claims_are_hash_bound": true,
+    "milestone_5_terminal_manifest_remains_valid": true,
+    "model_registry_has_seven_verified_bundles": true,
+    "normalized_dataset_and_population_manifests_verified": true
+  },
+  "content": {
+    "acquisition": {
+      "acquisition_lock_sha256": "af6b8967a422f18d0ccb35dd206c9a533daf91ed4eaac81faa7ba70109adc2f9",
+      "total_verified_bytes": 8804061429,
+      "vehicle_object_count": 368,
+      "vehicle_row_count": 208444419
+    },
+    "final_report_sha256": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "model_registry_index_sha256": "fcf50e10aeec81223b190eaeea2d0b8f5cc31a4b665486c47379d38576a45089",
+    "model_registry_verified_bytes": 432201,
+    "normalized": {
+      "manifest_sha256": "add71239ed0a81d146e18390958db66708304821800acb4b332a1b1b16a429b3",
+      "referenced_file_count": 1100,
+      "verified_bytes": 677929812
+    },
+    "population": {
+      "manifest_sha256": "568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4",
+      "referenced_file_count": 734,
+      "verified_bytes": 167116126
+    },
+    "unsampled": {
+      "manifest_sha256": "e02e40b899bfa02f441aa5e2f7352e7871961eb079b5867755c4872bef8b91d7",
+      "referenced_file_count": 732,
+      "verified_bytes": 1387579308
+    }
+  },
+  "state": "PASSED",
+  "version": "full-year-reproduction-terminal-v1"
+}
