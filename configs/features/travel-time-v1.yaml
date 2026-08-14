@@ -1,0 +1,17 @@
+feature_schema_version: travel-time-v1
+cutoff: ANCHOR_OBSERVATION_UTC
+categorical_transform: TRAINING_ONLY_ONE_HOT
+categorical_missing_token: __MISSING__
+categorical_unknown_token: __UNKNOWN__
+matrix_format: SCIPY_CSR_FLOAT32
+forbidden_inputs:
+  - LATER_EPISODE_OBSERVATION
+  - FINAL_EPISODE_LENGTH
+  - FINAL_OBSERVED_STOP
+  - OUTCOME_BOUND
+  - CENSORING_REASON
+  - POST_ANCHOR_AGGREGATE
+  - FUTURE_SCHEDULE_VERSION
+  - CROSS_TRAIN_LIVE_STATE
+  - VEHICLE_IDENTITY
+  - RAW_SOURCE_OBJECT_DATE

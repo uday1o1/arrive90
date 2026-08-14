@@ -40,8 +40,10 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "gtfs-realtime-bindings" },
+    { name = "numpy" },
     { name = "pyarrow" },
     { name = "pyyaml" },
+    { name = "scipy" },
     { name = "uvicorn" },
     { name = "xgboost" },
 ]
@@ -60,8 +62,10 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = "==0.141.1" },
     { name = "gtfs-realtime-bindings", specifier = "==2.1.0" },
+    { name = "numpy", specifier = "==2.5.2" },
     { name = "pyarrow", specifier = "==25.0.0" },
     { name = "pyyaml", specifier = ">=6.0.2,<7" },
+    { name = "scipy", specifier = "==1.18.0" },
     { name = "uvicorn", specifier = "==0.51.0" },
     { name = "xgboost", specifier = "==3.3.0" },
 ]

@@ -245,7 +245,9 @@ def build_travel_time_feature_row(
         "median_last_three_segment_seconds": (
             statistics.median(completed_durations[-3:]) if completed_durations else None
         ),
+        "median_last_three_segment_seconds_missing": not completed_durations,
         "most_recent_observation_gap_seconds": previous_gap,
+        "most_recent_observation_gap_seconds_missing": previous_gap is None,
         "observed_origin_lateness_seconds": (
             anchor.observation_utc - origin_stop.arrival_utc
         ).total_seconds(),
@@ -257,6 +259,7 @@ def build_travel_time_feature_row(
             if stopped_before
             else None
         ),
+        "previous_stopped_segment_seconds_missing": not stopped_before,
         "remaining_scheduled_stop_count": destination_offset,
         "route_id": match.episode.route_id,
         "route_pattern_id": trip.route_pattern_id,
