@@ -42,6 +42,7 @@ def test_acceptance_envelope_is_consistent_across_source_locks() -> None:
         ROOT / "configs/sources/bus-observatory-mbta-2024.yaml",
         ROOT / "configs/sources/mbta-gtfs-archive-2024.yaml",
         ROOT / "configs/source-locks/mbta-2024.json",
+        ROOT / "configs/source-locks/mbta-2024-acquired.json",
         ROOT / "configs/source-locks/milestone0-acquired.json",
     )
     for path in paths:
