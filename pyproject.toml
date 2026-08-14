@@ -13,7 +13,7 @@ authors = [{ name = "Uday Arora" }]
 dependencies = [
   "fastapi==0.141.1",
   "gtfs-realtime-bindings==2.1.0",
-  "pyarrow>=21.0.0,<22",
+  "pyarrow==25.0.0",
   "pyyaml>=6.0.2,<7",
   "uvicorn==0.51.0",
   "xgboost==3.3.0",

@@ -1,8 +1,11 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
 UV_RUN := $(UV) run --no-sync
+TRIVY_IMAGE := aquasec/trivy@sha256:7cced7cae583819fc7806d4cbc0dbbc7cad18b99f7d3e235192e6da8c091045c
+SECURITY_RUNTIME := $(CURDIR)/artifacts/runtime/security
+RELEASE_IMAGE := arrive90/release-candidate:v1
 
 sync:
 	$(UV) sync --frozen
@@ -90,6 +93,54 @@ qualify-milestone8:
 
 milestone8-evidence:
 	$(UV_RUN) python scripts/report_milestone_8.py
+
+security-scan-repository:
+	mkdir -p "$(SECURITY_RUNTIME)"
+	docker run --rm \
+		-v "$(CURDIR):/workspace:ro" \
+		-v "$(SECURITY_RUNTIME):/out" \
+		-v arrive90-trivy-cache:/root/.cache/trivy \
+		$(TRIVY_IMAGE) fs \
+		--scanners vuln,secret,misconfig,license \
+		--include-dev-deps \
+		--severity CRITICAL,HIGH \
+		--exit-code 0 \
+		--format json \
+		--output /out/repository.json \
+		--skip-dirs .git --skip-dirs .venv --skip-dirs .cache \
+		--skip-dirs node_modules --skip-dirs artifacts/runtime \
+		/workspace
+	docker run --rm \
+		-v arrive90-trivy-cache:/root/.cache/trivy \
+		$(TRIVY_IMAGE) version --format json > "$(SECURITY_RUNTIME)/trivy-version.json"
+
+security-build-image:
+	mkdir -p "$(SECURITY_RUNTIME)"
+	docker build --file deployment/Dockerfile --tag $(RELEASE_IMAGE) .
+	docker run --rm --network none --read-only --entrypoint python $(RELEASE_IMAGE) -c \
+		"import os; assert os.getuid() == 65532; import arrive90_service.app; print('release candidate import passed')"
+	docker save --output "$(SECURITY_RUNTIME)/release-candidate.tar" $(RELEASE_IMAGE)
+
+security-scan-image: security-build-image
+	docker run --rm \
+		-v "$(SECURITY_RUNTIME):/out" \
+		-v arrive90-trivy-cache:/root/.cache/trivy \
+		$(TRIVY_IMAGE) image \
+		--input /out/release-candidate.tar \
+		--scanners vuln,secret,misconfig,license \
+		--severity CRITICAL,HIGH \
+		--exit-code 0 \
+		--format json \
+		--output /out/image.json
+
+security-scan: security-scan-repository security-scan-image
+
+security-evidence:
+	$(UV_RUN) python scripts/qualify_milestone_9_security.py \
+		--repository-report artifacts/runtime/security/repository.json \
+		--image-report artifacts/runtime/security/image.json \
+		--version-report artifacts/runtime/security/trivy-version.json \
+		--output artifacts/reports/qualification/milestone-9-security.json
 
 benchmark-milestone5:
 	docker build --file benchmarks/milestone5.Dockerfile --tag arrive90/milestone5-benchmark:v1 .
