@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Arrive90 local MBTA deadline-planning research interface">
+    <title>Arrive90 - deadline-aware subway planning</title>
+    <link rel="stylesheet" href="/app.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#planner">Skip to journey planner</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Arrive90 home">Arrive<span>90</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#planner">Plan</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#limitations">Limitations</a>
+      </nav>
+      <p id="system-pill" class="status-pill" aria-live="polite">Checking local service</p>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">Deadline-aware subway research</p>
+          <h1 id="hero-title">Choose for the arrival that matters.</h1>
+          <p class="hero-copy">Compare the scheduled fastest route with a bounded alternative, while keeping uncertainty, stale data, and insufficient evidence visible.</p>
+        </div>
+        <aside class="evidence-callout" aria-labelledby="evidence-title">
+          <p id="evidence-title" class="eyebrow">Evidence status</p>
+          <strong>Empirical recommendation gate blocked</strong>
+          <p>Public historical data does not identify the required primitive Vehicle Position boarding evidence.</p>
+          <a href="#limitations">Why this matters</a>
+        </aside>
+      </section>
+
+      <section id="planner" class="planner-panel" aria-labelledby="planner-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Local workflow</p>
+            <h2 id="planner-title">Plan a station-to-station trip</h2>
+          </div>
+          <p>Ready time means ready to board at the platform.</p>
+        </div>
+
+        <form id="search-form">
+          <label>Origin station
+            <select id="origin" name="origin_station_id" required></select>
+          </label>
+          <label>Destination station
+            <select id="destination" name="destination_station_id" required></select>
+          </label>
+          <label>Ready at
+            <input id="ready-at" name="ready_at" type="datetime-local" required>
+          </label>
+          <label>Arrive by
+            <input id="deadline" name="deadline" type="datetime-local" required>
+          </label>
+          <label>Reliability target
+            <select id="target" name="reliability_target">
+              <option value="0.80">80 percent</option>
+              <option value="0.90" selected>90 percent</option>
+              <option value="0.95">95 percent</option>
+            </select>
+          </label>
+          <label>Maximum extra time
+            <span class="range-output"><output id="cap-output" for="cap">20</output> minutes</span>
+            <input id="cap" name="maximum_extra_minutes" type="range" min="0" max="20" step="1" value="20">
+          </label>
+          <button id="search-button" class="primary-button" type="submit">Compare routes</button>
+        </form>
+        <p id="form-error" class="error-message" role="alert" hidden></p>
+      </section>
+
+      <section id="results" aria-labelledby="results-title" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Decision snapshot</p>
+            <h2 id="results-title">Your route comparison</h2>
+          </div>
+          <div id="decision-status" class="decision-status" aria-live="polite"></div>
+        </div>
+
+        <div id="normalization" class="normalization" aria-live="polite" hidden>
+          <strong>Times were conservatively normalized.</strong>
+          <dl>
+            <div><dt>Requested ready</dt><dd id="requested-ready"></dd></div>
+            <div><dt>Effective ready</dt><dd id="effective-ready"></dd></div>
+            <div><dt>Requested deadline</dt><dd id="requested-deadline"></dd></div>
+            <div><dt>Effective deadline</dt><dd id="effective-deadline"></dd></div>
+          </dl>
+        </div>
+
+        <div class="comparison-grid">
+          <article class="route-card fastest-card" aria-labelledby="fastest-title">
+            <div class="card-label">Schedule comparator</div>
+            <h3 id="fastest-title">Fastest route</h3>
+            <p id="fastest-summary" class="route-summary"></p>
+            <dl class="route-facts">
+              <div><dt>Planned time</dt><dd id="fastest-time"></dd></div>
+              <div><dt>Transfers</dt><dd id="fastest-transfers"></dd></div>
+            </dl>
+            <p id="fastest-model-status" class="unavailable-label"></p>
+          </article>
+
+          <article class="route-card safer-card" aria-labelledby="safer-title">
+            <div class="card-label">Bounded decision</div>
+            <h3 id="safer-title">Selected route</h3>
+            <p id="safer-summary" class="route-summary"></p>
+            <dl class="route-facts">
+              <div><dt>Planned time</dt><dd id="safer-time"></dd></div>
+              <div><dt>Extra planned time</dt><dd id="safer-extra"></dd></div>
+              <div><dt>Transfers</dt><dd id="safer-transfers"></dd></div>
+            </dl>
+            <div id="probability-panel" class="probability-panel" hidden>
+              <p>Estimated deadline probability</p>
+              <strong id="deadline-probability"></strong>
+              <meter id="probability-meter" min="0" max="1" low="0.8" high="0.9" optimum="1"></meter>
+              <p class="method-link"><a href="#methodology">How this estimate is evaluated</a></p>
+            </div>
+            <p id="selected-model-status" class="unavailable-label"></p>
+          </article>
+        </div>
+
+        <div class="detail-grid">
+          <section class="detail-card" aria-labelledby="distribution-title">
+            <h3 id="distribution-title">Arrival uncertainty</h3>
+            <p>Quantiles are model estimates, not promised arrival times.</p>
+            <table>
+              <caption>Supported selected-route arrival quantiles</caption>
+              <thead><tr><th scope="col">Level</th><th scope="col">Arrival</th></tr></thead>
+              <tbody id="quantile-rows"></tbody>
+            </table>
+            <p id="quantile-empty" class="unavailable-label">Arrival quantiles are unavailable for this result.</p>
+          </section>
+
+          <section class="detail-card" aria-labelledby="timeline-title">
+            <h3 id="timeline-title">Transfer and backup timeline</h3>
+            <ol id="timeline" class="timeline"></ol>
+            <p id="backup-summary"></p>
+          </section>
+
+          <section class="detail-card" aria-labelledby="explanations-title">
+            <h3 id="explanations-title">Why this result</h3>
+            <ul id="explanations"></ul>
+          </section>
+        </div>
+
+        <section class="trip-panel" aria-labelledby="trip-title">
+          <div>
+            <p class="eyebrow">Optional local trip session</p>
+            <h3 id="trip-title">Confirm what actually happened</h3>
+            <p id="trip-guidance">Trip state changes only after your explicit confirmation.</p>
+          </div>
+          <div class="trip-actions">
+            <button id="start-trip" type="button">Start this trip</button>
+            <button id="confirm-boarded" type="button" hidden>Confirm boarded</button>
+            <button id="confirm-transfer" type="button" hidden>Confirm at transfer</button>
+            <button id="stop-trip" type="button" hidden>Stop trip</button>
+          </div>
+          <p id="trip-state" class="live-state" aria-live="polite">No active trip.</p>
+          <ol id="event-log" class="event-log" aria-label="Live trip events"></ol>
+        </section>
+
+        <section id="recovery-card" class="recovery-card" aria-labelledby="recovery-title" hidden>
+          <p class="eyebrow">Conditional schedule action</p>
+          <h3 id="recovery-title">Recovery option after confirmed transfer state</h3>
+          <p id="recovery-reason"></p>
+          <p id="recovery-route"></p>
+          <dl>
+            <div><dt>New deadline probability</dt><dd>Not computed</dd></div>
+            <div><dt>New arrival quantiles</dt><dd>Not computed</dd></div>
+            <div><dt>Reliability target status</dt><dd>Not applicable</dd></div>
+          </dl>
+          <button id="activate-recovery" type="button">Use this schedule option</button>
+        </section>
+
+        <section class="network-card" aria-labelledby="network-title" data-optional-map>
+          <div>
+            <p class="eyebrow">Optional orientation</p>
+            <h3 id="network-title">Network schematic</h3>
+            <p>The route cards and text timeline contain the complete decision; the diagram is not required.</p>
+          </div>
+          <svg viewBox="0 0 560 160" role="img" aria-labelledby="map-title map-description">
+            <title id="map-title">Simplified subway connection diagram</title>
+            <desc id="map-description">A red line from origin to transfer and an orange line from transfer to destination.</desc>
+            <path class="map-line red-line" d="M60 80 H280"></path>
+            <path class="map-line orange-line" d="M280 80 H500"></path>
+            <circle cx="60" cy="80" r="10"></circle>
+            <circle cx="280" cy="80" r="10"></circle>
+            <circle cx="500" cy="80" r="10"></circle>
+            <text x="60" y="120" text-anchor="middle">Origin</text>
+            <text x="280" y="120" text-anchor="middle">Transfer</text>
+            <text x="500" y="120" text-anchor="middle">Destination</text>
+          </svg>
+        </section>
+      </section>
+
+      <section id="methodology" class="content-section" aria-labelledby="methodology-title">
+        <p class="eyebrow">Methodology</p>
+        <h2 id="methodology-title">One frozen comparison, complete uncertainty</h2>
+        <p>Arrive90 compares a 0.90-target, 20-minute-cap policy with the static fastest candidate on identical queries.</p>
+        <p>Unresolved outcomes remain in calibration and policy bounds, and uncertainty uses at least 2,000 complete-service-day bootstrap replicates.</p>
+        <p>Only the selected card may display a validated probability or quantile; comparator, alternative, backup, and recovery outputs remain visibly unavailable.</p>
+        <p><a href="/milestone-6-card.json">Machine-readable Milestone 6 evidence card</a></p>
+      </section>
+
+      <section id="limitations" class="content-section limitations-section" aria-labelledby="limitations-title">
+        <p class="eyebrow">Limitations</p>
+        <h2 id="limitations-title">What this interface does not claim</h2>
+        <ul>
+          <li>The displayed probability is an estimate, never a guarantee.</li>
+          <li>The current public source cannot identify the required Vehicle Position boarding evidence, so no MBTA reliability recommendation is accepted.</li>
+          <li>Prospective live calibration is pending.</li>
+          <li>Recovery is a schedule action and receives no new deadline probability or reliability-target status.</li>
+          <li>The scope is station to station, with no rider identity, coordinates, or location history retained.</li>
+        </ul>
+      </section>
+
+      <section class="content-section" aria-labelledby="comparison-title">
+        <p class="eyebrow">Positioning</p>
+        <h2 id="comparison-title">Competitor matrix</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Capability</th><th scope="col">Static planner</th><th scope="col">Arrive90 V1 design</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Fastest schedule</th><td>Yes</td><td>Yes, as comparator</td></tr>
+              <tr><th scope="row">Deadline uncertainty</th><td>Usually absent</td><td>Only with passing frozen evidence</td></tr>
+              <tr><th scope="row">Unresolved outcomes</th><td>Not reported</td><td>Retained in explicit bounds</td></tr>
+              <tr><th scope="row">Recovery</th><td>Replan</td><td>Conditional, deterministic schedule action</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Local research software. Not affiliated with or endorsed by MassDOT or the MBTA.</p>
+      <p>MassDOT is the transit data provider. No MBTA logos or trademarks are used.</p>
+    </footer>
+  </body>
+</html>

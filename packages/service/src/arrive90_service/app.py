@@ -10,12 +10,13 @@ import uuid
 from collections.abc import Callable, Iterator
 from datetime import UTC, datetime
 from decimal import Decimal
+from pathlib import Path
 from typing import Annotated, Any, Literal
 
 from arrive90_decision.contracts import InitialDecisionRequest, SelectedItinerary, TripState
 from arrive90_decision.initial import select_initial_decision
 from arrive90_decision.recovery import select_recovery_decision
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import APIRouter, FastAPI, Header, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
@@ -40,6 +41,7 @@ from arrive90_service.store import (
 _SAFE_IDENTIFIER = re.compile(r"^[A-Za-z0-9_.:-]{1,128}$")
 _NO_STORE = {"Cache-Control": "no-store"}
 _AUTH_FAILURE = {"detail": "authorization failed"}
+_WEB_ROOT = Path(__file__).with_name("web")
 
 
 class SearchRequest(BaseModel):
@@ -628,4 +630,7 @@ def create_app(
             headers={**_NO_STORE, "X-Accel-Buffering": "no"},
         )
 
+    frontend = APIRouter()
+    frontend.frontend("/", directory=_WEB_ROOT)
+    app.include_router(frontend)
     return app

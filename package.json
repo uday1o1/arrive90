@@ -1,0 +1,11 @@
+{
+  "name": "arrive90-browser-tests",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.0"
+  }
+}

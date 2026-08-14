@@ -1,0 +1,7 @@
+{
+  "acceptance_status": "INSUFFICIENT_EVIDENCE",
+  "accepted_reliability_claim": null,
+  "evidence_kind": "SYNTHETIC_MECHANICS_ONLY",
+  "source_artifact": "artifacts/cards/milestone-6-local-mechanics-v1.json",
+  "prospective_live_calibration": "PENDING"
+}

@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence qualify-milestone6 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence qualify-milestone6 qualify-milestone7 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -25,7 +25,21 @@ typecheck:
 test:
 	$(UV) run pytest
 
+browser-install:
+	npm ci
+	npx playwright install chromium
+
+frontend-check:
+	node --check packages/service/src/arrive90_service/web/app.js
+	node --check playwright.config.js
+	node --check tests/browser/rider-workflows.spec.js
+
+browser-test: frontend-check
+	npm run test:e2e
+
 check: lock-check format-check lint typecheck test
+
+check-all: check browser-test
 
 audit-source:
 	@test -n "$(INDEX)" || (echo "INDEX is required" >&2; exit 2)
@@ -63,6 +77,12 @@ qualify-milestone6:
 
 milestone6-evidence:
 	$(UV) run python scripts/report_milestone_6.py
+
+qualify-milestone7:
+	$(UV) run python scripts/qualify_milestone_7.py --input artifacts/runtime/playwright-results.json --output artifacts/reports/qualification/milestone-7-browser.json
+
+milestone7-evidence:
+	$(UV) run python scripts/report_milestone_7.py
 
 benchmark-milestone5:
 	docker build --file benchmarks/milestone5.Dockerfile --tag arrive90/milestone5-benchmark:v1 .
