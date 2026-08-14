@@ -1,0 +1,244 @@
+{
+  "acceptance_charter_sha256": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "blue_passes_full_year_retention_gate": true,
+    "chronological_splits_and_episodes_are_exclusive": true,
+    "data_card_is_generated_from_qualification_evidence": true,
+    "dataset_manifests_are_byte_identical_across_fresh_processes": true,
+    "feature_and_outcome_packages_remain_separated": true,
+    "final_test_duration_bounds_are_sealed_before_milestone_4": true,
+    "interval_and_quarantine_states_remain_distinguishable": true,
+    "make_check_passed": true,
+    "missing_and_unknown_categories_preserve_schema": true,
+    "no_rejected_line_contributes_to_model_population": true,
+    "projected_memory_is_within_budget": true,
+    "projected_temporary_storage_is_within_budget": true,
+    "public_builder_seeded_defects_fail_and_control_passes": true,
+    "selected_weights_satisfy_anchor_identities": true,
+    "transform_is_training_only_sparse_float32": true,
+    "v12_input_manifests_are_consistent": true
+  },
+  "command": "make qualify-milestone2 && make gate MILESTONE=2",
+  "environment": {
+    "implementation_commit": "5a463ebc0cda5afea9a8c44730d89633a80fe8b1",
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "acceptance_charter": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
+    "build_plan": "00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1",
+    "data_card": "6891f12e1011831b540eea62a2395a17f294fabc8bd9015fea860bd66f35ed1b",
+    "normalized_manifest": "add71239ed0a81d146e18390958db66708304821800acb4b332a1b1b16a429b3",
+    "population_manifest": "568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4",
+    "transform": "fb319bc0033c8ebdd34d5184d3b7ccb6a2d8ff1019a1cda605c3ca83574d6875",
+    "unsampled_manifest": "e02e40b899bfa02f441aa5e2f7352e7871961eb079b5867755c4872bef8b91d7",
+    "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
+  },
+  "milestone": 2,
+  "observed": {
+    "benchmark": {
+      "acceptance_version": "travel-time-v1.2",
+      "elapsed_seconds": 0.3227915409952402,
+      "extrapolation_method": "linear selected-row scaling of measured incremental process peak and elapsed time; fixed interpreter baseline retained once",
+      "hardware": {
+        "logical_cpu_count": 10,
+        "machine": "arm64",
+        "physical_memory_bytes": 25769803776,
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "python": "3.12.13",
+        "scipy": "1.18.0",
+        "xgboost": "3.3.0"
+      },
+      "matrix_column_count": 88,
+      "matrix_nnz": 619937,
+      "measured_matrix_bytes": 5059500,
+      "measured_process_baseline_bytes": 396296192,
+      "measured_process_peak_bytes": 412565504,
+      "measured_sample_size": 25000,
+      "measured_temporary_bytes": 0,
+      "projected_peak_memory_bytes": 1145915806,
+      "projected_runtime_seconds": 14.87283974960357,
+      "projected_temporary_bytes": 0,
+      "qualification_free_disk_bytes": 169474244608,
+      "selected_population_size": 1151892,
+      "temporary_storage_method": "in-memory CSR and DMatrix; no temporary training file",
+      "within_memory_budget": true,
+      "within_temporary_storage_budget": true
+    },
+    "features": {
+      "column_count": 88,
+      "example_count": 1151892,
+      "missing_and_unknown_controls_passed": true,
+      "route_vocabulary": [
+        "__MISSING__",
+        "__UNKNOWN__",
+        "Blue"
+      ],
+      "service_day_count": 366
+    },
+    "outcome_states": [
+      "INTERVAL_RESOLVED",
+      "LEFT_CENSORED",
+      "MISSING_STOP_OBSERVATION",
+      "NO_FOLLOW_UP",
+      "OVER_WIDTH_INTERVAL",
+      "RIGHT_CENSORED",
+      "SCHEDULE_UNMATCHED",
+      "SESSION_DISCONTINUITY"
+    ],
+    "probes": {
+      "CONTROL": {
+        "expected_exit_code": 0,
+        "observed_exit_code": 0,
+        "passed": true,
+        "stderr": "",
+        "stdout": "{\"probe\": \"CONTROL\", \"state\": \"PASSED\"}"
+      },
+      "FINAL_EPISODE_LENGTH": {
+        "expected_exit_code": 1,
+        "observed_exit_code": 1,
+        "passed": true,
+        "stderr": "arrive90: feature population schema mismatch: missing=[], unknown=['final_episode_length']",
+        "stdout": ""
+      },
+      "FUTURE_OBSERVATION": {
+        "expected_exit_code": 1,
+        "observed_exit_code": 1,
+        "passed": true,
+        "stderr": "arrive90: future observation exceeds the feature cutoff",
+        "stdout": ""
+      },
+      "FUTURE_SCHEDULE": {
+        "expected_exit_code": 1,
+        "observed_exit_code": 1,
+        "passed": true,
+        "stderr": "arrive90: future schedule publication exceeds the feature cutoff",
+        "stdout": ""
+      },
+      "POST_OUTCOME_AGGREGATE": {
+        "expected_exit_code": 1,
+        "observed_exit_code": 1,
+        "passed": true,
+        "stderr": "arrive90: feature population schema mismatch: missing=[], unknown=['post_outcome_average_seconds']",
+        "stdout": ""
+      },
+      "SPLIT_LEAKAGE": {
+        "expected_exit_code": 1,
+        "observed_exit_code": 1,
+        "passed": true,
+        "stderr": "arrive90: split leakage conflicts with the frozen service-date boundary",
+        "stdout": ""
+      }
+    },
+    "retention": {
+      "acceptance_version": "travel-time-v1.2",
+      "audited_routes": [
+        "Blue",
+        "Orange",
+        "Red"
+      ],
+      "blue_cell_counts": {
+        "0|OFF_PEAK": {
+          "finite_interval_count": 1265937,
+          "finite_width_pass_count": 1259728,
+          "likelihood_distinct_anchor_count": 289227,
+          "likelihood_example_count": 1262540,
+          "right_censored_count": 2812,
+          "total_example_count": 1563807
+        },
+        "0|PEAK": {
+          "finite_interval_count": 640851,
+          "finite_width_pass_count": 636805,
+          "likelihood_distinct_anchor_count": 144266,
+          "likelihood_example_count": 637420,
+          "right_censored_count": 615,
+          "total_example_count": 757431
+        },
+        "1|OFF_PEAK": {
+          "finite_interval_count": 1288054,
+          "finite_width_pass_count": 1269325,
+          "likelihood_distinct_anchor_count": 299359,
+          "likelihood_example_count": 1272582,
+          "right_censored_count": 3257,
+          "total_example_count": 1749014
+        },
+        "1|PEAK": {
+          "finite_interval_count": 593839,
+          "finite_width_pass_count": 577996,
+          "likelihood_distinct_anchor_count": 138936,
+          "likelihood_example_count": 578812,
+          "right_censored_count": 816,
+          "total_example_count": 802126
+        }
+      },
+      "blue_episode_count": 125238,
+      "blue_exact_schedule_match_overall": 0.9997294448020749,
+      "blue_exact_schedule_match_per_direction": {
+        "0": 0.9994593687664287,
+        "1": 1.0
+      },
+      "blue_interval_width_coverage_overall": 0.9881681777906348,
+      "blue_interval_width_coverage_per_direction_peak": {
+        "0|OFF_PEAK": 0.9950953325481442,
+        "0|PEAK": 0.9936865199554967,
+        "1|OFF_PEAK": 0.985459460550567,
+        "1|PEAK": 0.9733210516655187
+      },
+      "blue_likelihood_support_overall": 0.7699226127365324,
+      "blue_likelihood_support_per_direction_peak": {
+        "0|OFF_PEAK": 0.8073502676481177,
+        "0|PEAK": 0.8415552043684508,
+        "1|OFF_PEAK": 0.7275996647253824,
+        "1|PEAK": 0.7215973550290105
+      },
+      "checks": {
+        "audited_routes_complete": true,
+        "blue_cell_distinct_anchors": true,
+        "blue_cell_likelihood_examples": true,
+        "blue_episode_count": true,
+        "blue_exact_schedule_match_overall": true,
+        "blue_exact_schedule_match_per_direction": true,
+        "blue_interval_width_coverage_overall": true,
+        "blue_interval_width_coverage_per_direction_peak": true,
+        "blue_likelihood_support_overall": true,
+        "blue_likelihood_support_per_direction_peak": true,
+        "nontraining_split_right_censored_examples": true,
+        "nontraining_split_service_dates": true
+      },
+      "modeled_routes": [
+        "Blue"
+      ],
+      "nontraining_right_censored_counts": {
+        "CALIBRATION": 590,
+        "FINAL_TEST": 2415,
+        "MODEL_VALIDATION": 1156,
+        "TRAINING": 3339
+      },
+      "nontraining_service_date_counts": {
+        "CALIBRATION": 31,
+        "FINAL_TEST": 61,
+        "MODEL_VALIDATION": 61,
+        "TRAINING": 213
+      },
+      "projection_contract": "aggregate support only; no outcome duration values",
+      "rejected_routes": [
+        "Orange",
+        "Red"
+      ]
+    },
+    "selection": {
+      "anchor_count": 211200,
+      "episode_count": 91652,
+      "example_count": 1151892,
+      "route_values": [
+        "Blue"
+      ],
+      "service_day_count": 366
+    }
+  },
+  "qualification_report_sha256": "bf70e8e3112934c4b25357e19b16fffbaae1e8abef541895e9d077984909e56d",
+  "state": "ACCEPTED"
+}

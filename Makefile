@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all source-discovery source-discovery-live audit-source audit-milestone0 qualify-milestone0 qualify-milestone1 qualify-milestone2 milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence milestone9-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit public-claims-evidence clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -100,11 +100,14 @@ qualify-milestone0:
 qualify-milestone1:
 	$(UV_RUN) python scripts/qualify_milestone_1.py
 
+qualify-milestone2:
+	$(UV_RUN) python scripts/qualify_milestone_2.py
+
 milestone1-evidence:
 	$(UV_RUN) python scripts/report_milestone_1.py
 
 milestone2-evidence:
-	$(UV_RUN) python scripts/report_milestone_2.py
+	$(UV_RUN) python scripts/qualify_milestone_2.py
 
 milestone3-evidence:
 	$(UV_RUN) python scripts/report_milestone_3.py

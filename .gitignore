@@ -17,6 +17,7 @@ playwright-report/
 test-results/
 data/raw/
 data/normalized/
+data/datasets/
 data/models/
 artifacts/models/
 artifacts/profiler/

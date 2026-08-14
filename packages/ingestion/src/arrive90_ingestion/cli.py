@@ -167,8 +167,85 @@ def _data_normalize(args: argparse.Namespace) -> int:
     return 0
 
 
+def _data_build_dataset(args: argparse.Namespace) -> int:
+    from arrive90_evaluation.model_population import (
+        build_model_population,
+        run_dataset_contract_probe,
+    )
+    from arrive90_evaluation.year_dataset import build_unsampled_audit
+
+    if args.qualification_probe is not None:
+        probe = run_dataset_contract_probe(args.qualification_probe)
+        if args.qualification_probe_only:
+            print(json.dumps(probe, sort_keys=True))
+            return 0
+    elif args.qualification_probe_only:
+        raise ValueError("--qualification-probe-only requires --qualification-probe")
+
+    unsampled = None
+    if not args.population_only:
+        unsampled = build_unsampled_audit(
+            normalized_root=args.normalized_root,
+            dataset_root=args.dataset_root,
+            schedule_database=args.schedule_database,
+            runtime_root=args.runtime_root,
+        )
+    if args.unsampled_only:
+        if unsampled is None:
+            raise ValueError("--unsampled-only requires an unsampled build")
+        print(
+            json.dumps(
+                {
+                    "candidate_example_count": unsampled.candidate_example_count,
+                    "episode_count": unsampled.episode_count,
+                    "manifest_path": str(unsampled.manifest_path),
+                    "manifest_sha256": unsampled.manifest_sha256,
+                    "outcome_example_count": unsampled.outcome_example_count,
+                    "runtime_report_path": str(unsampled.runtime_report_path),
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    population = build_model_population(
+        normalized_root=args.normalized_root,
+        dataset_root=args.dataset_root,
+        schedule_database=args.schedule_database,
+        runtime_root=args.runtime_root,
+    )
+    print(
+        json.dumps(
+            {
+                "benchmark_report_path": str(population.benchmark_report_path),
+                "model_population_manifest_path": str(population.manifest_path),
+                "model_population_manifest_sha256": population.manifest_sha256,
+                "population_runtime_report_path": str(population.runtime_report_path),
+                "selected_anchor_count": population.selected_anchor_count,
+                "selected_example_count": population.selected_example_count,
+                "unsampled_candidate_example_count": (
+                    unsampled.candidate_example_count if unsampled is not None else None
+                ),
+                "unsampled_episode_count": unsampled.episode_count
+                if unsampled is not None
+                else None,
+                "unsampled_manifest_path": (
+                    str(unsampled.manifest_path) if unsampled is not None else None
+                ),
+                "unsampled_manifest_sha256": (
+                    unsampled.manifest_sha256 if unsampled is not None else None
+                ),
+                "unsampled_outcome_example_count": (
+                    unsampled.outcome_example_count if unsampled is not None else None
+                ),
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
-    """Build the frozen Milestone 0 CLI surface."""
+    """Build the public CLI surface."""
 
     parser = argparse.ArgumentParser(prog="arrive90")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -218,6 +295,50 @@ def build_parser() -> argparse.ArgumentParser:
     normalize.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
     normalize.add_argument("--runtime-root", type=Path, default=DEFAULT_NORMALIZATION_RUNTIME_ROOT)
     normalize.set_defaults(handler=_data_normalize)
+    build_dataset = data_commands.add_parser("build-dataset")
+    build_dataset.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
+    build_dataset.add_argument(
+        "--dataset-root", type=Path, default=Path("data/datasets/travel-time-v1")
+    )
+    build_dataset.add_argument(
+        "--schedule-database",
+        type=Path,
+        default=Path("data/raw/mbta-gtfs/2024/GTFS_ARCHIVE.db"),
+    )
+    build_dataset.add_argument(
+        "--runtime-root",
+        type=Path,
+        default=Path("artifacts/runtime/milestone-2"),
+    )
+    build_phase = build_dataset.add_mutually_exclusive_group()
+    build_phase.add_argument(
+        "--population-only",
+        action="store_true",
+        help="resume from the verified active unsampled manifest",
+    )
+    build_phase.add_argument(
+        "--unsampled-only",
+        action="store_true",
+        help="build and verify only the unsampled audit phase",
+    )
+    build_dataset.add_argument(
+        "--qualification-probe",
+        choices=(
+            "CONTROL",
+            "FUTURE_OBSERVATION",
+            "FINAL_EPISODE_LENGTH",
+            "FUTURE_SCHEDULE",
+            "POST_OUTCOME_AGGREGATE",
+            "SPLIT_LEAKAGE",
+        ),
+        help=argparse.SUPPRESS,
+    )
+    build_dataset.add_argument(
+        "--qualification-probe-only",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+    build_dataset.set_defaults(handler=_data_build_dataset)
     qualify_day = data_commands.add_parser("qualify-day")
     qualify_day.add_argument("--date", type=date.fromisoformat, required=True)
     qualify_day.add_argument("--raw-root", type=Path, default=DEFAULT_RAW_ROOT)
