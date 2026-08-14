@@ -1,0 +1,44 @@
+{
+  "acceptance_version": "v1",
+  "acceptance_version_hash": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+  "checks": {
+    "candidate_api_and_replay_benchmarks_passed": true,
+    "complete_population_evaluation_mechanics_qualified": true,
+    "empirical_final_test_comparisons_completed": false,
+    "evaluation_protocol_manifest_present": true,
+    "explorer_pivot_activates_when_no_bundle_passes": true,
+    "final_output_support_cells_passed": false,
+    "final_test_outcomes_opened_under_frozen_protocol": false,
+    "fresh_process_synthetic_reproduction_passed": true,
+    "immutable_machine_readable_report_present": true,
+    "learned_or_model_free_bundle_passed_primary_gate": false,
+    "milestone_5_accepted": false,
+    "primary_source_gate_accepted": false,
+    "production_eligibility_and_discovery_hashes_frozen": false
+  },
+  "command": "make check && make qualify-milestone6 && make milestone6-evidence && make gate MILESTONE=6",
+  "failing_checks": [
+    "empirical_final_test_comparisons_completed",
+    "final_output_support_cells_passed",
+    "final_test_outcomes_opened_under_frozen_protocol",
+    "learned_or_model_free_bundle_passed_primary_gate",
+    "milestone_5_accepted",
+    "primary_source_gate_accepted",
+    "production_eligibility_and_discovery_hashes_frozen"
+  ],
+  "input_manifest_hashes": {
+    "acceptance_charter": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+    "decision_policy": "4c9e1034f749720dbbab93578b1e3c20613270d618a77501b52717cdf2692a68",
+    "evaluation_config": "24738ce0db08516c1590156f185b35f7c302039946ed0479cb43c27de91a1580",
+    "implementation": "c1dfc7f3f44601b76fe84c1619c362d200acac811494668c57ba2dce11a7607c",
+    "milestone_5_report": "c214894b3bb96c090f21c2dbafaf98bf2dcd7180e32b83a8dab3616e021f1e99",
+    "performance_qualification": "3d2a7f6d72f988dd66dd0d041bb7ccab46983bddf2aa67d0657d0e48a7612142",
+    "source_report": "39f3380569798bbd37b86199e000c458e23b08ce6e24584465e598bebd22a5c1",
+    "synthetic_qualification": "b2eee6434068bf80ce96508602a340a4b59f921623035b244b3e297e7b8d1767",
+    "tests": "ea4aa69b79de1b4166671f3241a99332cf1c2919cbb0e9b1d2d8431e4ba59416"
+  },
+  "milestone": 6,
+  "missing_prerequisite": "Archived primitive Vehicle Position observations with independent provenance are required before production hashes can freeze and final-test outcomes can open.",
+  "resume_command": "make audit-source INDEX=... PARQUET=... LAMP_ROOT=... LICENSE_PDF=...",
+  "status": "INSUFFICIENT_EVIDENCE"
+}

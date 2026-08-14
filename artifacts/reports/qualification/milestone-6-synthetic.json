@@ -1,0 +1,244 @@
+{
+  "checks": {
+    "bootstrap_uses_at_least_2000_complete_service_day_replicates": true,
+    "complete_population_censoring_bounds_present": true,
+    "fresh_process_discovery_and_evaluation_reproduce": true,
+    "holm_family_and_pareto_curve_present": true,
+    "immutable_protocol_hash_present": true,
+    "negative_evidence_forces_explorer_pivot": true,
+    "synthetic_fixture_cannot_pass_empirical_gate": true
+  },
+  "config_hash": "24738ce0db08516c1590156f185b35f7c302039946ed0479cb43c27de91a1580",
+  "discovery_artifact_hash": "8109ca4b74720925e1db29297bdfaa0f553d7605f2b69bf8ffe3059ac254f520",
+  "eligibility_manifest_hash": "1026dfd97737754875954c8e596ef08b5d2a865f41cb0f63aeb5b551d11704f4",
+  "failing_checks": [],
+  "fresh_process_payload_sha256": "f215674621bf475e8a0e32239e244faf050ada9e4e432839344ebd784bdd71fe",
+  "report": {
+    "acceptance_version": "v1-synthetic-mechanics",
+    "availability": {
+      "primary_pair_resolution_rate": 0.5,
+      "resolution_rate_by_slice": {
+        "OVERALL": 0.5,
+        "disruption": 0.0,
+        "ordinary": 1.0
+      },
+      "scheduled_decision_count": 4
+    },
+    "calibration": {
+      "[0.80,0.90)": {
+        "cluster_adjusted_effective_sample_size": 2.0,
+        "decision_count": 2,
+        "distinct_base_queries": 2,
+        "predicted_mean": 0.81,
+        "resolved_count": 1,
+        "resolved_weighted_mass": 1,
+        "service_day_blocks": 2,
+        "success_lower": 0.0,
+        "success_upper": 0.5,
+        "weighted_mass": 2,
+        "worst_case_absolute_gap": 0.81
+      },
+      "[0.90,0.95)": {
+        "cluster_adjusted_effective_sample_size": 2.0,
+        "decision_count": 2,
+        "distinct_base_queries": 2,
+        "predicted_mean": 0.91,
+        "resolved_count": 2,
+        "resolved_weighted_mass": 2,
+        "service_day_blocks": 2,
+        "success_lower": 1.0,
+        "success_upper": 1.0,
+        "weighted_mass": 2,
+        "worst_case_absolute_gap": 0.08999999999999997
+      }
+    },
+    "censoring_bounds": {
+      "primary_difference_lower": 0.0,
+      "primary_difference_upper": 0.5
+    },
+    "evidence_kind": "SYNTHETIC_MECHANICS_ONLY",
+    "final_test_access": {
+      "opened_at_utc": "2025-02-01T00:00:00Z",
+      "protocol_hash": "6dca4a50fdceedebb4b7ff512ae576b606ab0b702d2659bcca7213dd63fbb4df"
+    },
+    "frozen_cell_results": [
+      {
+        "cell_id": "deadline-band-low",
+        "final_test_passed": null,
+        "pretest_eligible": false
+      },
+      {
+        "cell_id": "quantile-0.90",
+        "final_test_passed": true,
+        "pretest_eligible": true
+      },
+      {
+        "cell_id": "station-slice",
+        "final_test_passed": null,
+        "pretest_eligible": false
+      }
+    ],
+    "gate": {
+      "failing_checks": [
+        "EMPIRICAL_PRIMARY_EVIDENCE_UNAVAILABLE",
+        "PRIMARY_WORST_CASE_BOUND_LOWER_CI_NOT_ABOVE_ZERO",
+        "PRIMARY_PAIR_RESOLUTION_RATE_BELOW_0_90",
+        "SLICE_PAIR_RESOLUTION_RATE_BELOW_0_80:disruption"
+      ],
+      "passed": false
+    },
+    "hypotheses": [
+      {
+        "adjusted_p_value": 0.2,
+        "hypothesis_id": "MODEL_FREE_VS_STATIC_FASTEST",
+        "raw_p_value": 0.2,
+        "rejected": false,
+        "testing_rank": 2
+      },
+      {
+        "adjusted_p_value": 0.08,
+        "hypothesis_id": "RECOVERY_VS_CONTINUATION",
+        "raw_p_value": 0.04,
+        "rejected": false,
+        "testing_rank": 1
+      }
+    ],
+    "negative_results": [
+      "EMPIRICAL_PRIMARY_EVIDENCE_UNAVAILABLE",
+      "PRIMARY_PAIR_RESOLUTION_RATE_BELOW_0_90",
+      "PRIMARY_WORST_CASE_BOUND_LOWER_CI_NOT_ABOVE_ZERO",
+      "SLICE_PAIR_RESOLUTION_RATE_BELOW_0_80:disruption"
+    ],
+    "pareto_frontier": [
+      {
+        "confirmatory": false,
+        "mean_added_time_seconds": 0,
+        "policy_id": "STATIC_FASTEST",
+        "reliability_lower": 0.25,
+        "reliability_upper": 0.5
+      },
+      {
+        "confirmatory": true,
+        "mean_added_time_seconds": 210.0,
+        "policy_id": "ARRIVE90_0_90_CAP_20",
+        "reliability_lower": 0.5,
+        "reliability_upper": 0.75
+      }
+    ],
+    "policy_success_bounds": {
+      "arrive90": {
+        "resolved_rate": 0.75,
+        "success_lower": 0.5,
+        "success_upper": 0.75
+      },
+      "static_fastest": {
+        "resolved_rate": 0.75,
+        "success_lower": 0.25,
+        "success_upper": 0.5
+      }
+    },
+    "predictive_resolved_only": {
+      "bins": 10,
+      "brier_score": 0.22410000000000005,
+      "expected_calibration_error": 0.33,
+      "log_loss": 0.6164508552547112,
+      "maximum_calibration_error": 0.81
+    },
+    "primary_policy": {
+      "difference_lower": 0.0,
+      "difference_upper": 0.5,
+      "maximum_added_planned_time_seconds": 300,
+      "mean_added_planned_time_seconds": 210.0,
+      "p95_added_planned_time_seconds": 300,
+      "pair_resolution_rate": 0.5,
+      "paired_resolved_estimate": 0.5,
+      "resolved_weight": 2.0,
+      "total_weight": 4
+    },
+    "protocol_hash": "6dca4a50fdceedebb4b7ff512ae576b606ab0b702d2659bcca7213dd63fbb4df",
+    "quantiles": {
+      "0.500000": {
+        "coverage_lower": 0.5,
+        "coverage_upper": 1.0,
+        "excluded_censored_weighted_mass": 0.0,
+        "finite_weighted_mass": 2.0,
+        "pinball_loss_lower": 7.5,
+        "pinball_loss_upper": 22.5,
+        "worst_case_coverage_gap": 0.5
+      },
+      "0.900000": {
+        "coverage_lower": 0.0,
+        "coverage_upper": 1.0,
+        "excluded_censored_weighted_mass": 1.0,
+        "finite_weighted_mass": 1.0,
+        "pinball_loss_lower": 0.0,
+        "pinball_loss_upper": 54.0,
+        "worst_case_coverage_gap": 0.9
+      }
+    },
+    "recovery": {
+      "comparison": {
+        "difference_lower": 0.5,
+        "difference_upper": 0.5,
+        "maximum_added_planned_time_seconds": 60,
+        "mean_added_planned_time_seconds": 60.0,
+        "p95_added_planned_time_seconds": 60,
+        "pair_resolution_rate": 1.0,
+        "paired_resolved_estimate": 0.5,
+        "resolved_weight": 2.0,
+        "total_weight": 2
+      },
+      "population": "FROZEN_FIRST_RECOVERY_TRIGGER_ONLY",
+      "recovery_model_outputs": "ALWAYS_NULL"
+    },
+    "release_mode": "HISTORICAL_EXPLORER",
+    "subgroups": {
+      "disruption": {
+        "difference_lower": -0.5,
+        "difference_upper": 0.5,
+        "maximum_added_planned_time_seconds": 300,
+        "mean_added_planned_time_seconds": 300.0,
+        "p95_added_planned_time_seconds": 300,
+        "pair_resolution_rate": 0.0,
+        "paired_resolved_estimate": null,
+        "resolved_weight": 0.0,
+        "total_weight": 2
+      },
+      "ordinary": {
+        "difference_lower": 0.5,
+        "difference_upper": 0.5,
+        "maximum_added_planned_time_seconds": 120,
+        "mean_added_planned_time_seconds": 120.0,
+        "p95_added_planned_time_seconds": 120,
+        "pair_resolution_rate": 1.0,
+        "paired_resolved_estimate": 0.5,
+        "resolved_weight": 2.0,
+        "total_weight": 2
+      }
+    },
+    "uncertainty": {
+      "bootstrap": {
+        "difference_lower": {
+          "estimate": 0.0,
+          "lower_95": -0.75,
+          "replicates": 2000,
+          "seed": 2904221,
+          "service_day_blocks": 4,
+          "upper_95": 0.75
+        },
+        "difference_upper": {
+          "estimate": 0.5,
+          "lower_95": 0.0,
+          "replicates": 2000,
+          "seed": 2904221,
+          "service_day_blocks": 4,
+          "upper_95": 1.0
+        }
+      },
+      "method": "PAIRED_COMPLETE_SERVICE_DAY_BLOCK_BOOTSTRAP",
+      "replicates": 2000,
+      "seed": 2904221
+    }
+  },
+  "status": "INSUFFICIENT_EVIDENCE"
+}

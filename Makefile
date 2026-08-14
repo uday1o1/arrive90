@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence build-otp-graph benchmark-milestone5 gate
+.PHONY: sync lock-check format format-check lint typecheck test check audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence qualify-milestone6 build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -58,9 +58,19 @@ milestone4-evidence:
 milestone5-evidence:
 	$(UV) run python scripts/report_milestone_5.py
 
+qualify-milestone6:
+	$(UV) run python scripts/qualify_milestone_6.py --output artifacts/reports/qualification/milestone-6-synthetic.json
+
+milestone6-evidence:
+	$(UV) run python scripts/report_milestone_6.py
+
 benchmark-milestone5:
 	docker build --file benchmarks/milestone5.Dockerfile --tag arrive90/milestone5-benchmark:v1 .
 	@echo "Run the image with ARRIVE90_BENCHMARK_IMAGE_ID set to its inspected image ID."
+
+benchmark-milestone6:
+	docker build --file benchmarks/milestone6.Dockerfile --tag arrive90/milestone6-benchmark:v1 .
+	@echo "Run benchmarks/run_milestone6.py in this image with 4 CPUs, 8307167232 bytes of memory, the inspected image ID, and the Milestone 5 latency report mounted read-only."
 
 build-otp-graph:
 	@test -n "$(GTFS)" || (echo "GTFS is required" >&2; exit 2)

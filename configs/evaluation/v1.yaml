@@ -1,0 +1,84 @@
+version: OFFLINE_EVALUATION_V1
+status: LOCAL_MECHANICS_ONLY_SOURCE_GATE_FAILED
+final_test_access: LOCKED
+primary_contrast:
+  policy:
+    reliability_target: 0.90
+    maximum_extra_minutes: 20
+  comparator: STATIC_FASTEST_CANDIDATE
+  weighting: FULL_FROZEN_DEADLINE_VARIANT_WEIGHT
+  outcome: PRIMARY_VEHICLE_POSITION_DEADLINE_SUCCESS
+  estimand: COMPLETE_POPULATION_PARTIALLY_IDENTIFIED_DIFFERENCE
+  improvement_gate: LOWER_95_CI_OF_DELTA_LOWER_ABOVE_ZERO
+  pair_resolution_overall_min: 0.90
+  pair_resolution_slice_min: 0.80
+  mean_added_time_seconds_max: 600
+  selected_added_time_seconds_max: 1200
+secondary_hypotheses:
+  alpha: 0.05
+  correction: HOLM
+  declared_order:
+    - MODEL_FREE_VS_STATIC_FASTEST
+    - TARGET_0_80_CAP_20_VS_STATIC_FASTEST
+    - TARGET_0_90_CAP_10_VS_STATIC_FASTEST
+    - RECOVERY_VS_CONTINUATION
+uncertainty:
+  resampling_unit: COMPLETE_SERVICE_DAY
+  bootstrap_replicates: 2000
+  bootstrap_seed: 2904221
+output_support:
+  deadline_band:
+    decision_count_min: 500
+    base_query_count_min: 250
+    service_day_count_min: 50
+    calibration_upper_95_max: 0.05
+  deadline_slice:
+    decision_count_min: 250
+    base_query_count_min: 125
+    service_day_count_min: 30
+    calibration_upper_95_max: 0.08
+  prospective_0_95:
+    decision_count_min: 800
+    base_query_count_min: 400
+    service_day_count_min: 56
+    calibration_upper_95_max: 0.03
+  transfer_candidate_decile:
+    decision_count_min: 500
+    base_query_count_min: 250
+    service_day_count_min: 40
+    calibration_upper_95_max: 0.08
+  transfer_station:
+    decision_count_min: 800
+    base_query_count_min: 400
+    service_day_count_min: 50
+    calibration_upper_95_max: 0.08
+  selected_trigger_decile:
+    decision_count_min: 300
+    base_query_count_min: 150
+    service_day_count_min: 30
+    calibration_upper_95_max: 0.08
+  quantile_level:
+    exposed_levels: [0.50, 0.90]
+    decision_count_min: 1000
+    base_query_count_min: 500
+    service_day_count_min: 50
+    coverage_gap_upper_95_max: 0.08
+recovery:
+  population: FIRST_FROZEN_TRIGGER_ONLY
+  comparator: RECORDED_ORIGINAL_CONTINUATION
+  probability_trigger_threshold: 0.500000
+  maximum_extra_minutes: 20
+  ranking: STATIC_SCHEDULE_TUPLE
+  model_outputs: ALWAYS_NULL
+reporting:
+  required_sections:
+    - availability
+    - censoring_bounds
+    - negative_results
+    - uncertainty
+  reruns_are_create_only: true
+  empirical_and_synthetic_evidence_are_separate: true
+  fallback_order:
+    - LEARNED_RECOMMENDATION
+    - MODEL_FREE_RECOMMENDATION
+    - HISTORICAL_EXPLORER

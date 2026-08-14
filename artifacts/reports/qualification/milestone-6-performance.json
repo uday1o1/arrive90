@@ -1,0 +1,139 @@
+{
+  "api_benchmark_report_sha256": "458d5c41f4e1c41ec26092ca42cf7f64b6b797f7889588250e9d14ca73ea93a2",
+  "candidate_generation": {
+    "1": {
+      "mean_ms": 0.006631146,
+      "p50_ms": 0.005333,
+      "p95_ms": 0.005625,
+      "p99_ms": 0.008708,
+      "throughput_per_second": 150803.49610761096
+    },
+    "10": {
+      "mean_ms": 0.06111746,
+      "p50_ms": 0.05375,
+      "p95_ms": 0.099668,
+      "p99_ms": 0.117334,
+      "throughput_per_second": 16361.936507178145
+    },
+    "5": {
+      "mean_ms": 0.02798887,
+      "p50_ms": 0.025708,
+      "p95_ms": 0.035583,
+      "p99_ms": 0.062959,
+      "throughput_per_second": 35728.48778818152
+    }
+  },
+  "checks": {
+    "api_benchmark_passed_on_named_hardware": true,
+    "candidate_p95_below_cached_search_limit": true,
+    "named_reference_hardware_matches": true,
+    "replay_is_deterministic_at_all_temporal_scales": true
+  },
+  "environment": {
+    "base_image": "python@sha256:6c4dd321d176d61ea848dc8c73a4f7dbae8f70e0ee48bb411ea2f045b599fa8e",
+    "benchmark_image_id": "sha256:c09e3a19f4124aa4bc86affe3b0cda28ee63563a8733fcfbfd54de3db4255ee5",
+    "cgroup_cpu_allocation": 4.0,
+    "cgroup_memory_limit_bytes": 8307167232,
+    "host_visible_cpu_count": 6,
+    "host_visible_memory_bytes": 12513595392,
+    "machine": "aarch64",
+    "operating_system": "Linux-6.8.0-117-generic-aarch64-with-glibc2.41",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "replay_generation": {
+    "one_day": {
+      "base_query_count": 1,
+      "deadline_variant_count": 36,
+      "deterministic_manifest": true,
+      "manifest_hash": "91f416345df90718c6eeb1d746be8f1576986db022210984ca65bf554c220055",
+      "mean_ms": 0.1810446,
+      "p50_ms": 0.154793,
+      "p95_ms": 0.227959,
+      "p99_ms": 0.227959,
+      "service_days": 1,
+      "throughput_per_second": 5523.500839019777
+    },
+    "one_month": {
+      "base_query_count": 31,
+      "deadline_variant_count": 1116,
+      "deterministic_manifest": true,
+      "manifest_hash": "e8d7189811eb8eddfdaae2a38db96c46f95d55235d2873b0231465ce15340a64",
+      "mean_ms": 4.6391109,
+      "p50_ms": 4.500731,
+      "p95_ms": 4.601565,
+      "p99_ms": 4.601565,
+      "service_days": 31,
+      "throughput_per_second": 215.55854592741034
+    },
+    "one_year": {
+      "base_query_count": 365,
+      "deadline_variant_count": 13140,
+      "deterministic_manifest": true,
+      "manifest_hash": "834bf607d2d9b509a995cf7c3c7a4c11afa76cd0a585f9db7415ac53a1ecf3ab",
+      "mean_ms": 66.9309786,
+      "p50_ms": 67.782133,
+      "p95_ms": 69.806018,
+      "p99_ms": 69.806018,
+      "service_days": 365,
+      "throughput_per_second": 14.940764664092331
+    }
+  },
+  "status": "PASSED",
+  "workload": {
+    "candidate_counts": [
+      1,
+      5,
+      10
+    ],
+    "deadline_slacks_minutes": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65,
+      70,
+      75,
+      80,
+      85,
+      90,
+      95,
+      100,
+      105,
+      110,
+      115,
+      120,
+      125,
+      130,
+      135,
+      140,
+      145,
+      150,
+      155,
+      160,
+      165,
+      170,
+      175,
+      180
+    ],
+    "origin_destination_pairs": 1,
+    "query_times_per_service_day": 1,
+    "readiness_horizons_minutes": [
+      0
+    ],
+    "replay_manifest_hash": "f5431ff7b3367889007cc93202fdf98aeb30437a56a844fe0f35dbf297390e9d",
+    "service_day_scales": [
+      1,
+      31,
+      365
+    ]
+  }
+}
