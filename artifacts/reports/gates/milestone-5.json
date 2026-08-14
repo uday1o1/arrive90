@@ -1,0 +1,38 @@
+{
+  "acceptance_version": "v1",
+  "acceptance_version_hash": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+  "checks": {
+    "api_and_sse_contracts_implemented": true,
+    "decision_capability_and_trip_bearer_store_implemented": true,
+    "deterministic_initial_and_recovery_kernels_implemented": true,
+    "empirical_recorded_scenarios_qualified": false,
+    "frozen_named_hardware_latency_targets_passed": true,
+    "milestone_4_accepted": false,
+    "primary_source_gate_accepted": false,
+    "production_model_and_support_bundle_available": false,
+    "threat_model_has_no_open_local_critical_or_high_finding": true,
+    "versioned_decision_policy_manifest_present": true
+  },
+  "command": "make check && make milestone5-evidence && make gate MILESTONE=5",
+  "failing_checks": [
+    "empirical_recorded_scenarios_qualified",
+    "milestone_4_accepted",
+    "primary_source_gate_accepted",
+    "production_model_and_support_bundle_available"
+  ],
+  "input_manifest_hashes": {
+    "acceptance_charter": "0d07788d7007f5f90d9bae54742bfc3d589ddbde493c88f21572f1249163d49c",
+    "benchmark_dockerfile": "f0fabb09d4854264d9f7aeea63bdba39b395015950be76d41436228e9ab3f6d0",
+    "decision_policy": "4c9e1034f749720dbbab93578b1e3c20613270d618a77501b52717cdf2692a68",
+    "implementation": "cee949c63b41d0421ab83a8f4d6ad366351fcd30086aeffed9334e2150a3a9ae",
+    "latency_qualification": "458d5c41f4e1c41ec26092ca42cf7f64b6b797f7889588250e9d14ca73ea93a2",
+    "lockfile": "c149d7d1e3a9aff69215685868488ccf1972c2d36229107b1e9dbd29d5bc9ab5",
+    "milestone_4_report": "77dd35fc5f23dcbed26b5c1a7b3c321fe9d36a28cb18599c8adb8bf5b0b5e617",
+    "tests": "d6c1a0abe41b0be7b2cbc66bbd9a844d5f927724cdd2c334177787348923f6ca",
+    "threat_model": "3cfeccae30811c20dd14b6aae93c4dd8d89c87849fc83b568d5a8f099ca392a5"
+  },
+  "milestone": 5,
+  "missing_prerequisite": "An accepted Milestone 0 primitive Vehicle Position source and the resulting frozen chronological model, calibration, support, and final-test evidence are required.",
+  "resume_command": "make audit-source INDEX=... PARQUET=... LAMP_ROOT=... LICENSE_PDF=...",
+  "status": "INSUFFICIENT_EVIDENCE"
+}

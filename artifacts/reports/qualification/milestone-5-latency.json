@@ -1,0 +1,106 @@
+{
+  "checks": {
+    "cached_schedule_search_p95_below_1000_ms": true,
+    "decision_p95_below_100_ms": true,
+    "named_reference_hardware_matches": true,
+    "recovery_p95_below_100_ms": true
+  },
+  "decision_by_candidate_count_and_feed_state": {
+    "1-abstained": {
+      "mean_ms": 0.011312243999999999,
+      "p50_ms": 0.010917,
+      "p95_ms": 0.014126,
+      "p99_ms": 0.017126,
+      "throughput_per_second": 88399.79052785637
+    },
+    "1-ready": {
+      "mean_ms": 0.037062032,
+      "p50_ms": 0.0255,
+      "p95_ms": 0.06646,
+      "p99_ms": 0.14117,
+      "throughput_per_second": 26981.79096062515
+    },
+    "1-stale": {
+      "mean_ms": 0.016581052,
+      "p50_ms": 0.011042,
+      "p95_ms": 0.028709,
+      "p99_ms": 0.041793,
+      "throughput_per_second": 60309.80422713831
+    },
+    "10-abstained": {
+      "mean_ms": 0.08266491399999999,
+      "p50_ms": 0.067794,
+      "p95_ms": 0.142795,
+      "p99_ms": 0.192755,
+      "throughput_per_second": 12097.030670109934
+    },
+    "10-ready": {
+      "mean_ms": 0.270122546,
+      "p50_ms": 0.18163,
+      "p95_ms": 0.408887,
+      "p99_ms": 0.750813,
+      "throughput_per_second": 3702.0234512375723
+    },
+    "10-stale": {
+      "mean_ms": 0.084960382,
+      "p50_ms": 0.068794,
+      "p95_ms": 0.154088,
+      "p99_ms": 0.214339,
+      "throughput_per_second": 11770.191899560903
+    },
+    "5-abstained": {
+      "mean_ms": 0.050847056,
+      "p50_ms": 0.035667,
+      "p95_ms": 0.102961,
+      "p99_ms": 0.236715,
+      "throughput_per_second": 19666.822008338102
+    },
+    "5-ready": {
+      "mean_ms": 0.126487772,
+      "p50_ms": 0.100045,
+      "p95_ms": 0.227923,
+      "p99_ms": 0.3018,
+      "throughput_per_second": 7905.902556335644
+    },
+    "5-stale": {
+      "mean_ms": 0.04176553399999999,
+      "p50_ms": 0.035459,
+      "p95_ms": 0.079378,
+      "p99_ms": 0.123129,
+      "throughput_per_second": 23943.18722226801
+    }
+  },
+  "environment": {
+    "base_image": "python@sha256:6c4dd321d176d61ea848dc8c73a4f7dbae8f70e0ee48bb411ea2f045b599fa8e",
+    "benchmark_image_id": "sha256:cacbdec96f56cf5a7db2e9504350ab633e08ea19675039f3c7e1a18f73a12497",
+    "cpu_count": 4,
+    "fastapi": "0.141.1",
+    "httpx2": "2.10.0",
+    "machine": "aarch64",
+    "memory_bytes": 8307167232,
+    "operating_system": "Linux-6.8.0-117-generic-aarch64-with-glibc2.41",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "iterations": {
+    "api": 200,
+    "decision_each": 500,
+    "recovery": 500
+  },
+  "recovery": {
+    "mean_ms": 0.166247522,
+    "p50_ms": 0.134003,
+    "p95_ms": 0.311009,
+    "p99_ms": 0.414762,
+    "throughput_per_second": 6015.127251039567
+  },
+  "status": "PASSED",
+  "warm_cached_api_search": {
+    "mean_ms": 1.082936855,
+    "p50_ms": 0.667644,
+    "p95_ms": 2.790954,
+    "p99_ms": 4.023322,
+    "throughput_per_second": 923.4148744526752
+  },
+  "workload_manifest_hash": "d44a39c388041033d0d1c1094dc5de61d09f253b3970f7da3c5e03f2e047b10b"
+}

@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 
+import arrive90_data_contracts
 import pyarrow as pa  # type: ignore[import-untyped]
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
 import pytest
@@ -151,3 +152,14 @@ def test_cli_writes_sorted_report(
     assert report["command"] == "fixture audit"
     assert report["status"] == "FAILED"
     assert '"status": "FAILED"' in capsys.readouterr().out
+
+
+def test_source_audit_public_exports_are_lazy_and_compatible() -> None:
+    assert arrive90_data_contracts.AuditInputs is AuditInputs
+    assert arrive90_data_contracts.run_source_audit is run_source_audit
+
+    def read_unknown() -> object:
+        return arrive90_data_contracts.unknown
+
+    with pytest.raises(AttributeError):
+        read_unknown()
