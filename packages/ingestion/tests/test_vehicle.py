@@ -13,6 +13,7 @@ from arrive90_ingestion.vehicle import (
     ENTITY_ID,
     LATITUDE,
     LONGITUDE,
+    MULTI_CARRIAGE_DETAILS,
     OBSERVATION_TIMESTAMP,
     OCCUPANCY_PERCENTAGE,
     ROUTE_ID,
@@ -27,6 +28,7 @@ from arrive90_ingestion.vehicle import (
     VEHICLE_LABEL,
     VehicleNormalizationError,
     normalize_vehicle_parquet,
+    validate_vehicle_schema,
 )
 
 SOURCE_KEY = "feeds/mbta_all/day.parquet"
@@ -200,3 +202,11 @@ def test_normalizer_rejects_source_without_retained_rail_rows(tmp_path: Path) ->
     _write(path, [_row(**{ROUTE_ID: "1"})])
     with pytest.raises(VehicleNormalizationError, match="no retained heavy-rail"):
         normalize_vehicle_parquet(path, source_object_key=SOURCE_KEY)
+
+
+def test_schema_validator_accepts_arrow_json_carriage_details() -> None:
+    schema = pa.Table.from_pylist([_row()]).schema.append(
+        pa.field(MULTI_CARRIAGE_DETAILS, pa.json_())
+    )
+    contract = validate_vehicle_schema(schema)
+    assert MULTI_CARRIAGE_DETAILS in contract.present_optional_columns

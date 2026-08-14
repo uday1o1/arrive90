@@ -175,7 +175,8 @@ def validate_vehicle_schema(schema: pa.Schema) -> VehicleSchemaContract:
     if MULTI_CARRIAGE_DETAILS in fields:
         carriage_type = fields[MULTI_CARRIAGE_DETAILS].type
         if not (
-            isinstance(carriage_type, pa.ExtensionType)
+            carriage_type.equals(pa.json_())
+            or isinstance(carriage_type, pa.ExtensionType)
             or pa.types.is_string(carriage_type)
             or pa.types.is_large_string(carriage_type)
             or pa.types.is_null(carriage_type)
