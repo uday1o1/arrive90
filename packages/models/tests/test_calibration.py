@@ -24,16 +24,21 @@ def test_sigmoid_calibration_preserves_endpoints_bounds_and_order() -> None:
 
 def test_calibrator_fit_is_deterministic_and_strictly_increasing() -> None:
     cells = (
+        CalibrationCell(0.0, False, 1),
         CalibrationCell(0.1, False, 1),
         CalibrationCell(0.3, False, 1),
         CalibrationCell(0.7, True, 1),
         CalibrationCell(0.9, True, 1),
+        CalibrationCell(1.0, True, 1),
     )
     first = fit_sigmoid_calibrator(cells)
     second = fit_sigmoid_calibrator(cells)
     assert first == second
+    assert first.optimizer_alpha is not None
+    assert first.manifest["family"] == "positive-slope-logistic-v1"
+    assert SigmoidCalibrator.from_manifest(first.manifest) == first
     assert first.transform(0.2) < first.transform(0.8)
     with pytest.raises(ValueError, match="configuration"):
         fit_sigmoid_calibrator(())
     with pytest.raises(ValueError, match="interior"):
-        fit_sigmoid_calibrator((CalibrationCell(0, False, 1),))
+        fit_sigmoid_calibrator((CalibrationCell(0, False, 1), CalibrationCell(1, True, 1)))

@@ -1,0 +1,442 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_final_compared_bundles_are_calibrated_serialized_and_hashed": true,
+    "candidate_grid_and_required_baselines_are_complete": true,
+    "cdf_probability_quantile_and_horizon_invariants_pass": true,
+    "deterministic_training_reproduces_predictions_and_manifest": true,
+    "final_test_outcomes_remain_sealed": true,
+    "frozen_model_selection_order_promotes_a_common_bundle": true,
+    "interval_exact_left_and_right_likelihood_fixtures_pass": true,
+    "make_check_passed": true,
+    "normal_logistic_and_extreme_value_distributions_are_registered": true,
+    "predeclared_ablations_are_trained_and_frozen": true,
+    "promoted_bundle_is_within_committed_demo_budget": true,
+    "raw_margin_semantics_are_not_default_event_time_semantics": true,
+    "registry_rejects_every_seeded_lineage_and_byte_tamper": true,
+    "selection_and_calibration_never_read_final_test": true,
+    "source_dataset_split_feature_dependency_and_code_hashes_are_bound": true
+  },
+  "environment": {
+    "implementation_commit": "0a97c9de09aac5ee090f62b14c0551a69f86fb8b",
+    "machine": "arm64",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "acceptance_charter": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
+    "build_plan": "00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1",
+    "model_config": "197dc5c1c00f1dfbe7168f5f370a8c36bbace82228191653be4ca2c192060f9c",
+    "model_population_manifest": "568971b631aa91ed12044182c2a3e9bd4a17274392529cb0dc9d4d43c7130cc4",
+    "primary_registry_index": "fcf50e10aeec81223b190eaeea2d0b8f5cc31a4b665486c47379d38576a45089",
+    "restart_registry_index": "fcf50e10aeec81223b190eaeea2d0b8f5cc31a4b665486c47379d38576a45089",
+    "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
+  },
+  "make_check_output_tail": "07, 142\npackages/outcomes/src/arrive90_outcomes/bounds.py                             52      0     12      0   100%\npackages/outcomes/src/arrive90_outcomes/contracts.py                          83      7     28      7    87%   76, 78, 80, 86, 92, 106, 113\npackages/outcomes/src/arrive90_outcomes/oracle.py                            112      8     40      8    89%   44->40, 103->105, 146, 152, 165-166, 181-182, 188, 195\npackages/outcomes/src/arrive90_outcomes/travel_time.py                       145      4     66      7    95%   117, 124->120, 165, 170->160, 231, 348, 405->404\npackages/outcomes/src/arrive90_outcomes/travel_time_baselines.py             114     14     46     14    82%   51, 53, 55, 96, 98, 118, 120, 148, 151, 155, 186, 198, 200, 209\npackages/routing/src/arrive90_routing/__init__.py                              2      0      0      0   100%\npackages/routing/src/arrive90_routing/audit.py                                79      0     28      0   100%\npackages/routing/src/arrive90_routing/candidates.py                           38      1      8      1    96%   79\npackages/routing/src/arrive90_routing/equivalence.py                          17      0      0      0   100%\npackages/routing/src/arrive90_routing/exceptional.py                          27      0      2      0   100%\npackages/routing/src/arrive90_routing/graph_build.py                          61     16     14      5    72%   42, 53, 71, 79, 102, 122-140\npackages/routing/src/arrive90_routing/population.py                          151     27     48      2    83%   58, 60, 72-77, 255-269, 275-304\npackages/routing/src/arrive90_routing/recall.py                               35      0      6      0   100%\npackages/routing/src/arrive90_routing/simulation.py                           73      4     36      4    93%   45, 49, 54, 70\npackages/service/src/arrive90_service/__init__.py                              2      0      0      0   100%\npackages/service/src/arrive90_service/app.py                                 263     24     40      9    88%   101, 136, 143, 177-179, 210, 216-218, 242, 258, 265, 289-290, 453, 515, 528, 547, 559, 566->622, 645-648, 663\npackages/service/src/arrive90_service/backup.py                               98     16     24      3    81%   23, 37, 92-97, 136-137, 145-150\npackages/service/src/arrive90_service/browser_fixture.py                      47      7      6      0    87%   175-179, 203-216\npackages/service/src/arrive90_service/cli.py                                  33      9      4      1    73%   38-60\npackages/service/src/arrive90_service/contracts.py                           132      4     22      4    95%   158, 175, 197, 223\npackages/service/src/arrive90_service/demo.py                                 15      0      0      0   100%\npackages/service/src/arrive90_service/middleware.py                          115      7     40      5    92%   98->108, 122-124, 132-133, 134->127, 138-139, 165->164\npackages/service/src/arrive90_service/normalization.py                        37      0     16      0   100%\npackages/service/src/arrive90_service/observability.py                        16      0      4      0   100%\npackages/service/src/arrive90_service/rate_limit.py                           32      0     10      0   100%\npackages/service/src/arrive90_service/reliability.py                          14      1      0      0    93%   25\npackages/service/src/arrive90_service/store.py                               277     20     54     11    91%   257-259, 269-270, 301, 319, 345-347, 394, 421, 432, 458, 551-553, 575, 597, 599, 602->exit\n----------------------------------------------------------------------------------------------------------------------\nTOTAL                                                                      10999    792   3210    583    90%\nFAIL Required test coverage of 90% not reached. Total coverage: 90.00%\n======================= 492 passed in 134.74s (0:02:14) ========================\nResolved 40 packages in 2ms\n",
+  "observed": {
+    "calibration_row_count": 80387,
+    "likelihood_fixtures": {
+      "extreme": 2.005630119190564,
+      "logistic": 2.1748786870525483,
+      "normal": 1.9484819004149383
+    },
+    "point_baselines": {
+      "artifact_sha256": "5ed5252cc5bbe11312de6d7d6d2736c972f5165d835f0b550f86aa80b869442d",
+      "empirical_midpoint": {
+        "backoff_order": [
+          "FULL_CELL",
+          "LINE_DIRECTION_ORIGIN_DESTINATION",
+          "LINE_DIRECTION_DESTINATION_OFFSET",
+          "GLOBAL_DESTINATION_OFFSET"
+        ],
+        "coverage_finite_row_count": 158883,
+        "coverage_finite_weight": 130684.08795634488,
+        "coverage_loss_weight": 0.0,
+        "manifest_sha256": "eb20121ba49dc95f509c4a4caac61ad77eeff17311cd6097af3692ace19c7d0a",
+        "minimum_distinct_anchors": 25,
+        "minimum_finite_examples": 100,
+        "supported_cell_count": 1522,
+        "weighted_mean_interval_distance_seconds": 36.84260485673918
+      },
+      "fitting_split": "TRAINING",
+      "official_schedule": {
+        "validation_finite_weight": 130684.08795634488,
+        "weighted_mean_interval_distance_seconds": 47.761822799843905
+      },
+      "validation_split": "MODEL_VALIDATION",
+      "version": "travel-time-point-baselines-v1"
+    },
+    "prediction_reproducibility": {
+      "all_probabilities_finite": true,
+      "horizon_monotonic": true,
+      "maximum_absolute_restart_delta": 0.0,
+      "probabilities_bounded": true,
+      "probability_count": 1114575,
+      "quantile_cdf_consistent": true,
+      "quantiles_ordered": true,
+      "raw_event_time_rejected_as_probability": true,
+      "row_count": 159225,
+      "sixty_minute_horizon_behavior": true
+    },
+    "primary_registry": {
+      "bundles": [
+        {
+          "bundle_id": "FULL-extreme-scale-1p0",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "9cb7bfce07058fcf3768632ce8db5bea5ce978a7b45c942fb67cfba6bd5bbf52",
+          "directory_bytes": 61701,
+          "distribution": "extreme",
+          "feature_count": 88,
+          "manifest_sha256": "24952ff3c556e1c679f271b84a85f550f6fede1efeb8951238b6c984f5848898"
+        },
+        {
+          "bundle_id": "FULL-logistic-scale-1p0",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "e13af46e8be0b664a375a462c439090c430b7ff8fd50a10f27869c685367aa19",
+          "directory_bytes": 63678,
+          "distribution": "logistic",
+          "feature_count": 88,
+          "manifest_sha256": "60bd5cab2c17ac1c9a676ef695c06e08d219274f8bb06515f3b31014dbb5577b"
+        },
+        {
+          "bundle_id": "FULL-normal-scale-0p5",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "9fa565b2e134747237b3292cef00fc70b549034d5c86d884d45f94a5cc1e6792",
+          "directory_bytes": 67213,
+          "distribution": "normal",
+          "feature_count": 88,
+          "manifest_sha256": "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b"
+        },
+        {
+          "bundle_id": "INTERCEPT_ONLY-normal",
+          "bundle_kind": "INTERCEPT_ONLY",
+          "calibrator_sha256": "48f7a6b59e4ab7b38457626de125cfcd072280108a6e9b9a50c30f74539c58c1",
+          "directory_bytes": 38026,
+          "distribution": "normal",
+          "feature_count": 1,
+          "manifest_sha256": "59ca3213b0d84ebeff711896f20b112329319b3351024f5971cede74f89c547d"
+        },
+        {
+          "bundle_id": "NO_POSITION_OBSERVATION-normal",
+          "bundle_kind": "NO_POSITION_OBSERVATION",
+          "calibrator_sha256": "adbdf3e7cdf3fcea9d3987863e1cce9339fc6a6416128fba4437946363476f4a",
+          "directory_bytes": 66678,
+          "distribution": "normal",
+          "feature_count": 80,
+          "manifest_sha256": "c3247121b18425a12d1da99c7fcaca39b2ff74132c3eb9b65b2c258a5d2e3445"
+        },
+        {
+          "bundle_id": "NO_PREFIX_HISTORY-normal",
+          "bundle_kind": "NO_PREFIX_HISTORY",
+          "calibrator_sha256": "1919d743e5728fd5baf0c9da87aef4ea9a4b31ebd98556961c61ef063ea73814",
+          "directory_bytes": 66270,
+          "distribution": "normal",
+          "feature_count": 80,
+          "manifest_sha256": "a5aa3dd997d98d7470dfb7cb560e29df51368dedca9f314b748f8974ee914b54"
+        },
+        {
+          "bundle_id": "SCHEDULE_CALENDAR-normal",
+          "bundle_kind": "SCHEDULE_CALENDAR",
+          "calibrator_sha256": "69119d933eeeec733021d5461305e672cac6f4a129a96726cec1abf4d80a3374",
+          "directory_bytes": 65565,
+          "distribution": "normal",
+          "feature_count": 71,
+          "manifest_sha256": "cfe4239e3f5ead3303897e6feedc35a16d9ee9b3bcc75d46b544ed0fb062ab9d"
+        }
+      ],
+      "calibrator_hash_count": 7,
+      "distributions": [
+        "extreme",
+        "logistic",
+        "normal"
+      ],
+      "kinds": [
+        "FULL",
+        "INTERCEPT_ONLY",
+        "NO_POSITION_OBSERVATION",
+        "NO_PREFIX_HISTORY",
+        "SCHEDULE_CALENDAR"
+      ]
+    },
+    "promoted_bundle_bytes": 67213,
+    "registry_restart": {
+      "bundles": [
+        {
+          "bundle_id": "FULL-extreme-scale-1p0",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "9cb7bfce07058fcf3768632ce8db5bea5ce978a7b45c942fb67cfba6bd5bbf52",
+          "directory_bytes": 61701,
+          "distribution": "extreme",
+          "feature_count": 88,
+          "manifest_sha256": "24952ff3c556e1c679f271b84a85f550f6fede1efeb8951238b6c984f5848898"
+        },
+        {
+          "bundle_id": "FULL-logistic-scale-1p0",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "e13af46e8be0b664a375a462c439090c430b7ff8fd50a10f27869c685367aa19",
+          "directory_bytes": 63678,
+          "distribution": "logistic",
+          "feature_count": 88,
+          "manifest_sha256": "60bd5cab2c17ac1c9a676ef695c06e08d219274f8bb06515f3b31014dbb5577b"
+        },
+        {
+          "bundle_id": "FULL-normal-scale-0p5",
+          "bundle_kind": "FULL",
+          "calibrator_sha256": "9fa565b2e134747237b3292cef00fc70b549034d5c86d884d45f94a5cc1e6792",
+          "directory_bytes": 67213,
+          "distribution": "normal",
+          "feature_count": 88,
+          "manifest_sha256": "1c49f5702cfd7bbd6ad4633a59fd71c42333c28cb53c390ccbf8c07a0ab6e06b"
+        },
+        {
+          "bundle_id": "INTERCEPT_ONLY-normal",
+          "bundle_kind": "INTERCEPT_ONLY",
+          "calibrator_sha256": "48f7a6b59e4ab7b38457626de125cfcd072280108a6e9b9a50c30f74539c58c1",
+          "directory_bytes": 38026,
+          "distribution": "normal",
+          "feature_count": 1,
+          "manifest_sha256": "59ca3213b0d84ebeff711896f20b112329319b3351024f5971cede74f89c547d"
+        },
+        {
+          "bundle_id": "NO_POSITION_OBSERVATION-normal",
+          "bundle_kind": "NO_POSITION_OBSERVATION",
+          "calibrator_sha256": "adbdf3e7cdf3fcea9d3987863e1cce9339fc6a6416128fba4437946363476f4a",
+          "directory_bytes": 66678,
+          "distribution": "normal",
+          "feature_count": 80,
+          "manifest_sha256": "c3247121b18425a12d1da99c7fcaca39b2ff74132c3eb9b65b2c258a5d2e3445"
+        },
+        {
+          "bundle_id": "NO_PREFIX_HISTORY-normal",
+          "bundle_kind": "NO_PREFIX_HISTORY",
+          "calibrator_sha256": "1919d743e5728fd5baf0c9da87aef4ea9a4b31ebd98556961c61ef063ea73814",
+          "directory_bytes": 66270,
+          "distribution": "normal",
+          "feature_count": 80,
+          "manifest_sha256": "a5aa3dd997d98d7470dfb7cb560e29df51368dedca9f314b748f8974ee914b54"
+        },
+        {
+          "bundle_id": "SCHEDULE_CALENDAR-normal",
+          "bundle_kind": "SCHEDULE_CALENDAR",
+          "calibrator_sha256": "69119d933eeeec733021d5461305e672cac6f4a129a96726cec1abf4d80a3374",
+          "directory_bytes": 65565,
+          "distribution": "normal",
+          "feature_count": 71,
+          "manifest_sha256": "cfe4239e3f5ead3303897e6feedc35a16d9ee9b3bcc75d46b544ed0fb062ab9d"
+        }
+      ],
+      "calibrator_hash_count": 7,
+      "distributions": [
+        "extreme",
+        "logistic",
+        "normal"
+      ],
+      "kinds": [
+        "FULL",
+        "INTERCEPT_ONLY",
+        "NO_POSITION_OBSERVATION",
+        "NO_PREFIX_HISTORY",
+        "SCHEDULE_CALENDAR"
+      ]
+    },
+    "selection": {
+      "ablation_bundle_ids": [
+        "NO_PREFIX_HISTORY-normal",
+        "NO_POSITION_OBSERVATION-normal"
+      ],
+      "candidate_count": 6,
+      "final_compared_bundle_ids": [
+        "FULL-normal-scale-0p5",
+        "FULL-logistic-scale-1p0",
+        "FULL-extreme-scale-1p0",
+        "INTERCEPT_ONLY-normal",
+        "SCHEDULE_CALENDAR-normal",
+        "NO_PREFIX_HISTORY-normal",
+        "NO_POSITION_OBSERVATION-normal"
+      ],
+      "latency_seconds": {
+        "FULL-extreme-scale-1p0": 0.002117166,
+        "FULL-logistic-scale-1p0": 0.002405667,
+        "FULL-normal-scale-0p5": 0.002029375,
+        "INTERCEPT_ONLY-normal": 0.00089975,
+        "NO_POSITION_OBSERVATION-normal": 0.002927791,
+        "NO_PREFIX_HISTORY-normal": 0.00216975,
+        "SCHEDULE_CALENDAR-normal": 0.002685583
+      },
+      "promoted_bundle_id": "FULL-normal-scale-0p5",
+      "selected_full_candidate": {
+        "aft_config": {
+          "distribution": "normal",
+          "learning_rate": 0.08,
+          "maximum_depth": 3,
+          "nthread": 1,
+          "rounds": 48,
+          "scale": 0.5,
+          "seed": 90,
+          "subsample": 1.0,
+          "tree_method": "hist"
+        },
+        "bundle_kind": "FULL",
+        "feature_count": 88,
+        "identifier": "FULL-normal-scale-0p5",
+        "parameter_count": 678,
+        "validation": {
+          "horizons": [
+            {
+              "brier_score": 0.053036697383314506,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 300,
+              "identified_row_count": 148920,
+              "identified_weight": 122185.83126190476,
+              "maximum_calibration_error": 0.301772657935437
+            },
+            {
+              "brier_score": 0.05758292734537244,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 600,
+              "identified_row_count": 151762,
+              "identified_weight": 126152.25207936508,
+              "maximum_calibration_error": 0.40281390006081563
+            },
+            {
+              "brier_score": 0.034047525921485876,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 900,
+              "identified_row_count": 153784,
+              "identified_weight": 127797.36244444444,
+              "maximum_calibration_error": 0.13515675842026464
+            },
+            {
+              "brier_score": 0.009732506390786143,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 1200,
+              "identified_row_count": 158290,
+              "identified_weight": 130336.08175396825,
+              "maximum_calibration_error": 0.1215166708425377
+            },
+            {
+              "brier_score": 0.0006764058206861673,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 1800,
+              "identified_row_count": 158858,
+              "identified_weight": 130668.11384920635,
+              "maximum_calibration_error": 0.04020577066967401
+            },
+            {
+              "brier_score": 1.338190701351982e-05,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 2700,
+              "identified_row_count": 158883,
+              "identified_weight": 130684.0879563492,
+              "maximum_calibration_error": 0.0058619613420249905
+            },
+            {
+              "brier_score": 1.2233972795355542e-07,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 3600,
+              "identified_row_count": 158883,
+              "identified_weight": 130684.0879563492,
+              "maximum_calibration_error": 0.0010117537115864605
+            }
+          ],
+          "weighted_horizon_brier_score": 0.02165187522088918,
+          "weighted_interval_negative_log_likelihood": 2.1133029754718993,
+          "worst_supported_horizon_calibration_error": 0.40281390006081563
+        }
+      },
+      "strongest_aft_baseline": {
+        "aft_config": {
+          "distribution": "normal",
+          "learning_rate": 0.08,
+          "maximum_depth": 3,
+          "nthread": 1,
+          "rounds": 48,
+          "scale": 0.5,
+          "seed": 90,
+          "subsample": 1.0,
+          "tree_method": "hist"
+        },
+        "bundle_kind": "SCHEDULE_CALENDAR",
+        "feature_count": 71,
+        "identifier": "SCHEDULE_CALENDAR-normal",
+        "parameter_count": 678,
+        "validation": {
+          "horizons": [
+            {
+              "brier_score": 0.05326759694904897,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 300,
+              "identified_row_count": 148920,
+              "identified_weight": 122185.83126190476,
+              "maximum_calibration_error": 0.30127544949513796
+            },
+            {
+              "brier_score": 0.05775940416772722,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 600,
+              "identified_row_count": 151762,
+              "identified_weight": 126152.25207936508,
+              "maximum_calibration_error": 0.4053450114021131
+            },
+            {
+              "brier_score": 0.03399014920862326,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 900,
+              "identified_row_count": 153784,
+              "identified_weight": 127797.36244444444,
+              "maximum_calibration_error": 0.13209657213779957
+            },
+            {
+              "brier_score": 0.009786774807681618,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 1200,
+              "identified_row_count": 158290,
+              "identified_weight": 130336.08175396825,
+              "maximum_calibration_error": 0.12317942061551868
+            },
+            {
+              "brier_score": 0.0006803260346985002,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 1800,
+              "identified_row_count": 158858,
+              "identified_weight": 130668.11384920635,
+              "maximum_calibration_error": 0.04073140729767111
+            },
+            {
+              "brier_score": 1.3496780219820806e-05,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 2700,
+              "identified_row_count": 158883,
+              "identified_weight": 130684.0879563492,
+              "maximum_calibration_error": 0.005948410614926347
+            },
+            {
+              "brier_score": 1.2571095418966068e-07,
+              "calibration_bin_count": 10,
+              "horizon_seconds": 3600,
+              "identified_row_count": 158883,
+              "identified_weight": 130684.0879563492,
+              "maximum_calibration_error": 0.0010290616100778749
+            }
+          ],
+          "weighted_horizon_brier_score": 0.021708350905205214,
+          "weighted_interval_negative_log_likelihood": 2.120920318529278,
+          "worst_supported_horizon_calibration_error": 0.4053450114021131
+        }
+      }
+    },
+    "tamper_probes": {
+      "CHANGED_CALIBRATOR": true,
+      "CHANGED_DEPENDENCY_LOCK": true,
+      "CHANGED_FEATURE_ORDER": true,
+      "CHANGED_MODEL": true,
+      "CHANGED_SOURCE": true,
+      "CHANGED_SPLIT": true
+    },
+    "training_row_count": 507976,
+    "validation_row_count": 159225
+  },
+  "qualification_command": "make qualify-milestone3",
+  "state": "PASSED"
+}

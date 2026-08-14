@@ -244,6 +244,35 @@ def _data_build_dataset(args: argparse.Namespace) -> int:
     return 0
 
 
+def _model_train(args: argparse.Namespace) -> int:
+    from arrive90_evaluation.model_training import train_model_registry
+
+    result = train_model_registry(
+        dataset_root=args.dataset_root,
+        normalized_root=args.normalized_root,
+        config_path=args.config,
+        model_root=args.model_root,
+        runtime_root=args.runtime_root,
+    )
+    print(
+        json.dumps(
+            {
+                "latency_report_path": str(result.latency_report_path),
+                "point_baseline_sha256": result.point_baseline_sha256,
+                "promoted_bundle_id": result.promoted_bundle_id,
+                "promoted_manifest_sha256": result.promoted_manifest_sha256,
+                "registry_index_path": str(result.registry_index_path),
+                "registry_index_sha256": result.registry_index_sha256,
+                "runtime_report_path": str(result.runtime_report_path),
+                "selection_freeze_sha256": result.selection_freeze_sha256,
+                "validation_comparison_sha256": result.validation_comparison_sha256,
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the public CLI surface."""
 
@@ -356,6 +385,18 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("artifacts/runtime/milestone-0"),
     )
     qualify_day.set_defaults(handler=_data_qualify_day)
+
+    model = commands.add_parser("model")
+    model_commands = model.add_subparsers(dest="model_command", required=True)
+    train = model_commands.add_parser("train")
+    train.add_argument("--dataset-root", type=Path, default=Path("data/datasets/travel-time-v1"))
+    train.add_argument("--normalized-root", type=Path, default=DEFAULT_NORMALIZED_ROOT)
+    train.add_argument("--config", type=Path, default=Path("configs/models/travel-time-v1.json"))
+    train.add_argument(
+        "--model-root", type=Path, default=Path("data/models/travel-time-v1/primary")
+    )
+    train.add_argument("--runtime-root", type=Path, default=Path("artifacts/runtime/milestone-3"))
+    train.set_defaults(handler=_model_train)
 
     gate = commands.add_parser("gate")
     gate.add_argument("--milestone", required=True, type=int)

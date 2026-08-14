@@ -1,0 +1,101 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "baseline": {
+    "empirical_backoff_order": [
+      "FULL_CELL",
+      "LINE_DIRECTION_ORIGIN_DESTINATION",
+      "LINE_DIRECTION_DESTINATION_OFFSET",
+      "GLOBAL_DESTINATION_OFFSET"
+    ],
+    "minimum_distinct_anchors": 25,
+    "minimum_finite_examples": 100,
+    "time_bucket_hours": 3
+  },
+  "candidate_grid": {
+    "distributions": ["normal", "logistic", "extreme"],
+    "learning_rate": 0.08,
+    "maximum_depth": 3,
+    "rounds": 48,
+    "scales": [0.5, 1.0]
+  },
+  "calibration": {
+    "family": "positive-slope-logistic-v1",
+    "ftol": 1e-12,
+    "gtol": 1e-8,
+    "horizons_seconds": [300, 600, 900, 1200, 1800, 2700, 3600],
+    "maximum_iterations": 1000,
+    "optimizer": "L-BFGS-B",
+    "slope_epsilon": 1e-6
+  },
+  "feature_bundles": {
+    "NO_POSITION_OBSERVATION": {
+      "exclude_registry_features": [
+        "anchor_latitude",
+        "anchor_latitude_missing",
+        "anchor_longitude",
+        "anchor_longitude_missing",
+        "anchor_bearing",
+        "anchor_bearing_missing",
+        "anchor_speed",
+        "anchor_speed_missing"
+      ]
+    },
+    "NO_PREFIX_HISTORY": {
+      "exclude_registry_features": [
+        "elapsed_episode_seconds",
+        "observed_stops_before_anchor",
+        "previous_stopped_segment_seconds",
+        "previous_stopped_segment_seconds_missing",
+        "median_last_three_segment_seconds",
+        "median_last_three_segment_seconds_missing",
+        "most_recent_observation_gap_seconds",
+        "most_recent_observation_gap_seconds_missing"
+      ]
+    },
+    "SCHEDULE_CALENDAR": {
+      "include_registry_features": [
+        "route_id",
+        "direction_id",
+        "origin_stop_id",
+        "destination_stop_id",
+        "route_pattern_id",
+        "origin_stop_sequence",
+        "destination_stop_sequence",
+        "remaining_scheduled_stop_count",
+        "scheduled_remaining_seconds",
+        "scheduled_progress_fraction",
+        "local_time_sin",
+        "local_time_cos",
+        "day_of_week_sin",
+        "day_of_week_cos",
+        "weekend",
+        "trip_start_hour"
+      ]
+    }
+  },
+  "final_comparison": {
+    "include_best_full_per_distribution": true,
+    "include_feature_limited_aft": true,
+    "include_intercept_only_aft": true,
+    "required_ablations": ["NO_PREFIX_HISTORY", "NO_POSITION_OBSERVATION"]
+  },
+  "model_horizon_seconds": 3600,
+  "numeric_tolerance": 1e-6,
+  "promoted_bundle_size_bytes_max": 10485760,
+  "qualification": {
+    "latency_repetitions": 5,
+    "latency_sample_rows": 8192,
+    "latency_selection_resolution_seconds": 0.001,
+    "latency_warmup_repetitions": 2
+  },
+  "selection_order": [
+    "weighted_interval_negative_log_likelihood",
+    "weighted_horizon_brier_score",
+    "worst_supported_horizon_calibration_error",
+    "parameter_count",
+    "scoring_latency",
+    "model_identifier"
+  ],
+  "training": {"nthread": 1, "seed": 90, "subsample": 1.0, "tree_method": "hist"},
+  "version": "travel-time-modeling-v1"
+}

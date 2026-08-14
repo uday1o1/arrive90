@@ -5,8 +5,8 @@
     {"milestone": 0, "state": "ACCEPTED"},
     {"milestone": 1, "state": "ACCEPTED"},
     {"milestone": 2, "state": "ACCEPTED"},
-    {"milestone": 3, "state": "IN_PROGRESS"},
-    {"milestone": 4, "state": "NOT_STARTED"},
+    {"milestone": 3, "state": "ACCEPTED"},
+    {"milestone": 4, "state": "IN_PROGRESS"},
     {"milestone": 5, "state": "NOT_STARTED"},
     {"milestone": 6, "state": "NOT_STARTED"},
     {"milestone": 7, "state": "NOT_STARTED"}
