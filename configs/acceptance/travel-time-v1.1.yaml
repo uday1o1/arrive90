@@ -1,5 +1,6 @@
-acceptance_version: travel-time-v1
-build_plan_sha256: a326dfc8deeb475aaffbbbcedddc203a194b564d29f8debfabdbbe8da0bcfc7e
+acceptance_version: travel-time-v1.1
+artifact_family: travel-time-v1
+build_plan_sha256: 105813248e652e51edda323546c4b6c6506f5a9c4eb04be32aa9eeba42157936
 build_plan_baseline_commit: 6609bc64a4539d6c705d4ee387742bd9ca53c987
 timezone: America/New_York
 source_timestamp:
@@ -53,10 +54,24 @@ one_day_gate:
   required_routes: [Red, Orange, Blue]
   identity_availability_overall_min: 0.99
   identity_availability_per_line_min: 0.98
-  multi_stop_episode_rate_per_line_min: 0.70
+  trackable_episode_min_distinct_canonical_event_timestamps: 2
+  trackable_multi_stop_episode_rate_per_line_min: 0.70
+  trackable_multi_stop_min_distinct_unambiguous_stopped_sequences: 2
   finite_examples_per_line_min: 500
   finite_interval_width_coverage_per_line_min: 0.90
   finite_interval_width_seconds_max: 180
+  required_episode_reporting:
+    - all_episode_count
+    - trackable_episode_count
+    - excluded_episode_count
+    - one_observation_episode_count
+    - zero_duration_episode_count
+    - all_episode_stopped_sequence_bucket_counts
+    - trackable_episode_stopped_sequence_bucket_counts
+    - unconditioned_multi_stop_episode_rate
+    - trackable_multi_stop_episode_rate
+    - gap_split_count
+    - post_gap_fragment_count
 full_year_gate:
   exact_schedule_match_overall_min: 0.95
   exact_schedule_match_line_direction_min: 0.90

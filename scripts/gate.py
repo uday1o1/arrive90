@@ -1,4 +1,4 @@
-"""Fail closed unless a travel-time-v1 milestone report is ACCEPTED."""
+"""Fail closed unless a travel-time-v1.1 milestone report is ACCEPTED."""
 
 from __future__ import annotations
 

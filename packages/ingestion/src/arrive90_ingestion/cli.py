@@ -10,6 +10,7 @@ from datetime import date
 from pathlib import Path
 
 from arrive90_data_contracts.gate_cli import run_gate
+from arrive90_data_contracts.gates import DEFAULT_ACCEPTANCE_VERSION
 
 from arrive90_ingestion.inventory import (
     INVENTORY_URL,
@@ -107,7 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
     gate = commands.add_parser("gate")
     gate.add_argument("--milestone", required=True, type=int)
     gate.add_argument("--report-root", type=Path, default=Path("artifacts/reports/gates"))
-    gate.add_argument("--acceptance-version", default="travel-time-v1")
+    gate.add_argument("--acceptance-version", default=DEFAULT_ACCEPTANCE_VERSION)
     gate.set_defaults(handler=_gate)
     return parser
 

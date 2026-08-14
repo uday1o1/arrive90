@@ -13,6 +13,7 @@ from typing import Any
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
+from arrive90_data_contracts.gates import DEFAULT_ACCEPTANCE_VERSION
 from arrive90_data_contracts.source import InventoryLockEntry
 
 from arrive90_ingestion.historical import canonical_json_bytes
@@ -140,7 +141,7 @@ def build_inventory_lock(
         raise InventoryError("expected exactly 366 calendar-year objects")
 
     return {
-        "acceptance_version": "travel-time-v1",
+        "acceptance_version": DEFAULT_ACCEPTANCE_VERSION,
         "lock_version": LOCK_VERSION,
         "feed_id": FEED_ID,
         "inventory_snapshot": {

@@ -12,6 +12,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 import yaml
+from arrive90_data_contracts.gates import DEFAULT_ACCEPTANCE_VERSION
 
 from arrive90_ingestion.acquisition import (
     GZIP_EXPANSION_VERSION,
@@ -111,6 +112,11 @@ def _load_json(path: Path, field: str) -> dict[str, Any]:
     return _mapping(loaded, field)
 
 
+def _require_acceptance_version(envelope: dict[str, Any], field: str) -> None:
+    if envelope.get("acceptance_version") != DEFAULT_ACCEPTANCE_VERSION:
+        raise AcquisitionError(f"{field} acceptance version is not {DEFAULT_ACCEPTANCE_VERSION}")
+
+
 def _utc(value: object, field: str) -> datetime:
     parsed = datetime.fromisoformat(_string(value, field).replace("Z", "+00:00"))
     if parsed.tzinfo is None or parsed.utcoffset() != UTC.utcoffset(parsed):
@@ -147,10 +153,10 @@ def acquire_pinned_day(
     """Acquire and content-lock the Milestone 0 real-source inputs."""
 
     inventory_lock = _load_json(inventory_lock_path, "inventory lock")
-    if inventory_lock.get("acceptance_version") != "travel-time-v1":
-        raise AcquisitionError("inventory lock acceptance version is not travel-time-v1")
+    _require_acceptance_version(inventory_lock, "inventory lock")
     entry = _inventory_entry(inventory_lock, inventory_date)
     bus_profile = _load_yaml(bus_profile_path, "Bus Observatory source profile")
+    _require_acceptance_version(bus_profile, "Bus Observatory source profile")
     sample = _mapping(bus_profile.get("sample"), "Bus Observatory sample")
     sample_date = _date(sample.get("inventory_date"), "sample.inventory_date")
     if inventory_date != sample_date:
@@ -207,6 +213,7 @@ def acquire_pinned_day(
     derived_entries = []
     if include_schedule:
         schedule_profile = _load_yaml(schedule_profile_path, "schedule source profile")
+        _require_acceptance_version(schedule_profile, "schedule source profile")
         schedule_url = _string(schedule_profile.get("url"), "schedule.url")
         response_profile = _mapping(
             schedule_profile.get("response_profile"), "schedule.response_profile"

@@ -1,4 +1,4 @@
-"""Fail-closed travel-time-v1 milestone gate report validation."""
+"""Fail-closed travel-time-v1.1 milestone gate report validation."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class GateState(StrEnum):
 
 
 VALID_STATES = frozenset(state.value for state in GateState)
-DEFAULT_ACCEPTANCE_VERSION = "travel-time-v1"
+DEFAULT_ACCEPTANCE_VERSION = "travel-time-v1.1"
 
 
 def load_report(path: Path) -> dict[str, Any]:

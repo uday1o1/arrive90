@@ -19,6 +19,7 @@ from typing import IO
 from urllib.parse import urlsplit
 
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
+from arrive90_data_contracts.gates import DEFAULT_ACCEPTANCE_VERSION
 from arrive90_data_contracts.realtime import require_utc
 from arrive90_data_contracts.source import AcquisitionContentEntry, DerivedArtifactEntry
 
@@ -444,7 +445,7 @@ def write_acquisition_lock(
     """Write one immutable canonical acquisition lock and return its SHA-256."""
 
     payload = {
-        "acceptance_version": "travel-time-v1",
+        "acceptance_version": DEFAULT_ACCEPTANCE_VERSION,
         "content_entries": [asdict(entry) for entry in content_entries],
         "derived_entries": [asdict(entry) for entry in derived_entries],
     }

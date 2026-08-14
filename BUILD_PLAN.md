@@ -4,7 +4,9 @@ Status: implementation-ready plan.
 
 Planning snapshot: 2026-08-14.
 
-Acceptance version: `travel-time-v1`.
+Acceptance version: `travel-time-v1.1`.
+
+The predictive artifact family remains `travel-time-v1`.
 
 Arrive90 is a local-first MBTA rail travel-time reliability lab.
 It estimates a calibrated distribution for how long an already observed train will take to be observed stopped at a selected downstream station.
@@ -684,7 +686,7 @@ arrive90/
   uv.lock
   Makefile
   configs/
-    acceptance/travel-time-v1.yaml
+    acceptance/travel-time-v1.1.yaml
     sources/bus-observatory-mbta-2024.yaml
     sources/mbta-gtfs-archive-2024.yaml
     features/travel-time-v1.yaml
@@ -771,7 +773,7 @@ Every milestone has exactly one state:
 - `FAILED`.
 
 The machine-readable report key is exactly `state` and its value is one of those five uppercase strings.
-Legacy `status`, `PASSED`, and `INSUFFICIENT_EVIDENCE` values are invalid under `travel-time-v1` rather than silently translated.
+Legacy `status`, `PASSED`, and `INSUFFICIENT_EVIDENCE` values are invalid under `travel-time-v1.1` rather than silently translated.
 
 A milestone becomes `ACCEPTED` only when every acceptance item passes.
 A software defect leaves the milestone `IN_PROGRESS` while it is fixed.
@@ -803,7 +805,11 @@ They may be replaced only by a new acceptance version before model training.
 - The compressed official schedule archive matches its acquired-content lock, the expanded SQLite database matches its derived-artifact lock, and the pinned-day version lookup is deterministic.
 - Red, Orange, and Blue are present.
 - Route, trip, direction, vehicle, status, and timestamp are non-null for at least 99 percent of retained heavy-rail rows overall and at least 98 percent per proposed line.
-- At least 70 percent of trip episodes per line contain two or more distinct `STOPPED_AT` sequences.
+- For the one-day support diagnostic, a trackable trip episode contains at least two distinct canonical event timestamps after the frozen gap and stop-sequence-regression split rules.
+- Trackability depends only on canonical observation timestamps and cannot inspect status, schedule match, destination generation, or outcomes.
+- At least 70 percent of trackable trip episodes per line contain eligible `STOPPED_AT` evidence at two or more distinct unambiguous stop sequences.
+- Every episode remains in the population report and in every later full-population data-quality denominator.
+- Per line, the one-day report records all, trackable, and excluded episode counts; one-observation and zero-duration counts; zero, exactly-one, and at-least-two distinct eligible `STOPPED_AT` sequence buckets for all and trackable episodes; unconditioned and trackable rates; gap-split counts; and episodes beginning after a gap split.
 - The exact active-schedule matcher produces at least 500 finite or left-censored downstream examples per proposed line.
 - At least 90 percent of finite arrival intervals per line are no wider than 180 seconds.
 - The same source object produces byte-identical normalized and example manifests in two fresh processes.
@@ -836,7 +842,7 @@ If fewer than two lines pass, planning re-enters `DECIDE` for a line-specific pr
 
 Deliverables:
 
-- Replace the active acceptance charter with `travel-time-v1`.
+- Replace the active acceptance charter with `travel-time-v1.1` while retaining `travel-time-v1` as the predictive artifact family.
 - Add the content-addressed public inventory snapshot, canonical 368-entry extractor, `InventoryLockEntry` lock, and source profile.
 - Add acquired-content locks for the pinned Bus Observatory object and official 2024 schedule archive plus the expanded database's derived-artifact lock.
 - Implement resumable pinned-object and schedule-archive download, exact hash verification, bounded gzip expansion, and read-only SQLite version lookup.

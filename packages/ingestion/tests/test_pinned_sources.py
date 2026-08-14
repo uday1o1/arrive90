@@ -54,7 +54,7 @@ def _config_files(
     inventory.write_text(
         json.dumps(
             {
-                "acceptance_version": "travel-time-v1",
+                "acceptance_version": "travel-time-v1.1",
                 "entries": [
                     {
                         "inventory_date": PINNED_DATE.isoformat(),
@@ -71,13 +71,14 @@ def _config_files(
     bus_profile.write_text(
         yaml.safe_dump(
             {
+                "acceptance_version": "travel-time-v1.1",
                 "sample": {
                     "inventory_date": PINNED_DATE,
                     "url": VEHICLE_URL,
                     "size_bytes": vehicle.stat().st_size,
                     "sha256": sha256_file(vehicle),
                     "row_count": 2,
-                }
+                },
             },
             sort_keys=True,
         ),
@@ -87,6 +88,7 @@ def _config_files(
     schedule_profile.write_text(
         yaml.safe_dump(
             {
+                "acceptance_version": "travel-time-v1.1",
                 "url": SCHEDULE_URL,
                 "response_profile": {
                     "content_length_bytes": schedule.stat().st_size,
@@ -188,12 +190,73 @@ def test_pinned_day_fails_closed_on_wrong_acceptance_version(tmp_path: Path) -> 
     inventory.write_text(
         json.dumps({"acceptance_version": "legacy", "entries": []}), encoding="utf-8"
     )
-    with pytest.raises(AcquisitionError, match="travel-time-v1"):
+    with pytest.raises(AcquisitionError, match=r"travel-time-v1\.1"):
         acquire_pinned_day(
             PINNED_DATE,
             include_schedule=False,
             inventory_lock_path=inventory,
             bus_profile_path=tmp_path / "unused.yaml",
+            raw_root=tmp_path / "raw",
+            acquisition_lock_path=tmp_path / "acquired.json",
+        )
+
+
+def test_pinned_day_rejects_source_profile_acceptance_drift(tmp_path: Path) -> None:
+    vehicle, schedule = _source_files(tmp_path)
+    inventory, bus_profile, schedule_profile = _config_files(
+        tmp_path,
+        vehicle=vehicle,
+        schedule=schedule,
+    )
+    profile = yaml.safe_load(bus_profile.read_text(encoding="utf-8"))
+    profile["acceptance_version"] = "legacy"
+    bus_profile.write_text(yaml.safe_dump(profile), encoding="utf-8")
+    with pytest.raises(AcquisitionError, match="source profile acceptance version"):
+        acquire_pinned_day(
+            PINNED_DATE,
+            include_schedule=False,
+            inventory_lock_path=inventory,
+            bus_profile_path=bus_profile,
+            schedule_profile_path=schedule_profile,
+            raw_root=tmp_path / "raw",
+            acquisition_lock_path=tmp_path / "acquired.json",
+        )
+
+
+def test_pinned_day_rejects_schedule_profile_acceptance_drift(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    vehicle, schedule = _source_files(tmp_path)
+    inventory, bus_profile, schedule_profile = _config_files(
+        tmp_path,
+        vehicle=vehicle,
+        schedule=schedule,
+    )
+    profile = yaml.safe_load(schedule_profile.read_text(encoding="utf-8"))
+    profile["acceptance_version"] = "legacy"
+    schedule_profile.write_text(yaml.safe_dump(profile), encoding="utf-8")
+
+    def fake_download(url: str, destination: Path, **_kwargs: object) -> DownloadResult:
+        assert url == VEHICLE_URL
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(vehicle.read_bytes())
+        return DownloadResult(
+            path=destination,
+            size_bytes=vehicle.stat().st_size,
+            sha256=sha256_file(vehicle),
+            etag=None,
+            last_modified_at_utc=None,
+            downloaded_at_utc=ACQUIRED_AT,
+        )
+
+    monkeypatch.setattr("arrive90_ingestion.pinned_sources.download_resumable", fake_download)
+    with pytest.raises(AcquisitionError, match="schedule source profile acceptance version"):
+        acquire_pinned_day(
+            PINNED_DATE,
+            include_schedule=True,
+            inventory_lock_path=inventory,
+            bus_profile_path=bus_profile,
+            schedule_profile_path=schedule_profile,
             raw_root=tmp_path / "raw",
             acquisition_lock_path=tmp_path / "acquired.json",
         )
