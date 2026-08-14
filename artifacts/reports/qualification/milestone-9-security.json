@@ -15,14 +15,14 @@
     "vulnerabilities": 0
   },
   "image": {
-    "artifact_id": "sha256:312187e8dbbb51ce782915759c597ba5f3c31899da7f1a9dc8e67b1606470051",
+    "artifact_id": "sha256:b248e2774ab92bd4b99feddf1247b9d9affff4a12bc5fbd097c7aa736bc223f9",
     "artifact_name": "/out/release-candidate.tar",
     "findings": {
       "misconfigurations": [],
       "secrets": [],
       "vulnerabilities": []
     },
-    "report_sha256": "6bcb7127f258e7918d2eb630a81bb48e2fd4f05b7ac0a939f056a75ad1c555e9",
+    "report_sha256": "ab3222c5c5f78cd54f96f5486a6bb740b842dc4b606386844e4de3b846498d47",
     "runtime_user": "65532:65532"
   },
   "repository": {
@@ -31,7 +31,7 @@
       "secrets": [],
       "vulnerabilities": []
     },
-    "report_sha256": "50bccbf65324dbaaa3a0d312e0fdf633f8c9c0fc57dd094148cc39ba61959ddf"
+    "report_sha256": "78ce072bf0dec70e17152a68b0ef3070885b818918decd4aa785b1462d251928"
   },
   "scanner": {
     "database": {

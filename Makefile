@@ -1,4 +1,4 @@
-.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
+.PHONY: sync lock-check format format-check lint typecheck test frontend-check browser-install browser-test check check-all audit-source milestone1-evidence milestone2-evidence milestone3-evidence milestone4-evidence milestone5-evidence milestone6-evidence milestone7-evidence milestone8-evidence qualify-milestone6 qualify-milestone7 qualify-milestone8 security-scan-repository security-build-image security-scan-image security-scan security-evidence license-evidence reliability-evidence repository-audit clean-checkout build-otp-graph benchmark-milestone5 benchmark-milestone6 gate
 
 UV_CACHE_DIR ?= .cache/uv
 UV := UV_CACHE_DIR=$(UV_CACHE_DIR) uv
@@ -141,6 +141,25 @@ security-evidence:
 		--image-report artifacts/runtime/security/image.json \
 		--version-report artifacts/runtime/security/trivy-version.json \
 		--output artifacts/reports/qualification/milestone-9-security.json
+
+license-evidence:
+	$(UV_RUN) python scripts/audit_licenses.py \
+		--output artifacts/reports/qualification/licenses-v1.json
+
+reliability-evidence:
+	$(UV_RUN) python scripts/qualify_milestone_9_reliability.py \
+		--output artifacts/reports/qualification/milestone-9-reliability.json
+
+repository-audit:
+	$(UV_RUN) python scripts/audit_repository.py \
+		--output artifacts/reports/qualification/repository-audit-v1.json
+
+clean-checkout:
+	@test -n "$(REPOSITORY)" || (echo "REPOSITORY is required" >&2; exit 2)
+	@test -n "$(COMMIT)" || (echo "COMMIT is required" >&2; exit 2)
+	@test -n "$(OUTPUT)" || (echo "OUTPUT is required" >&2; exit 2)
+	$(UV_RUN) python scripts/qualify_clean_checkout.py \
+		--repository "$(REPOSITORY)" --commit "$(COMMIT)" --output "$(OUTPUT)"
 
 benchmark-milestone5:
 	docker build --file benchmarks/milestone5.Dockerfile --tag arrive90/milestone5-benchmark:v1 .

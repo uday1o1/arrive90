@@ -1,0 +1,28 @@
+{
+  "checks": {
+    "authorization_and_resource_bounds": true,
+    "backup_restore_and_tamper_rejection": true,
+    "clock_failure_and_recovery": true,
+    "database_and_sse_failure_recovery": true,
+    "retention_and_expiration": true,
+    "router_source_and_model_failure_recovery": true,
+    "secret_scan_seeded_defect_and_control": true,
+    "sensitive_observability_redaction": true,
+    "targeted_fault_suite_passed": true
+  },
+  "command": "uv run --no-sync python -m pytest --no-cov packages/service/tests/test_app.py packages/service/tests/test_backup.py packages/service/tests/test_rate_limit.py packages/service/tests/test_reliability.py packages/service/tests/test_security_qualification.py packages/service/tests/test_store.py",
+  "failing_checks": [],
+  "status": "PASSED",
+  "stderr": "",
+  "stdout_tail": [
+    "packages/service/tests/test_app.py .........                             [ 25%]",
+    "packages/service/tests/test_backup.py ....                               [ 36%]",
+    "packages/service/tests/test_rate_limit.py ..                             [ 41%]",
+    "packages/service/tests/test_reliability.py ..............                [ 80%]",
+    "packages/service/tests/test_security_qualification.py ..                 [ 86%]",
+    "packages/service/tests/test_store.py .....                               [100%]",
+    "",
+    "============================== 36 passed in 2.67s =============================="
+  ],
+  "test_source_sha256": "29184463cce28e3f92cbcaa07e867648733f32e8abab58cfa13f7169fc21aa07"
+}

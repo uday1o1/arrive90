@@ -1,0 +1,327 @@
+{
+  "checks": {
+    "data_provider_attribution_present": true,
+    "node_lock_packages_have_license_and_integrity": true,
+    "project_license_present": true,
+    "python_lock_packages_have_license_metadata": true,
+    "transit_data_license_documented": true
+  },
+  "failing_checks": [],
+  "inputs": {
+    "data_license_sha256": "1a508541cee3d2149d08d5a9b4decb7af0d36e32e70f0bef2f584bc32bf72558",
+    "node_lock_sha256": "d3a0eab8092680f3b536fb5e68c5c39b0a0bdb1b0202c9c9b922b2511aa7bba5",
+    "project_license_sha256": "4088f4f497315db2390fed78ba50dcf7edd4cb60727dc6d678e35fa7989805c7",
+    "python_lock_sha256": "40c0dd592f439a69b6a502862a53723d758eddae3abc68924027b2c47f7b448f"
+  },
+  "node_packages": [
+    {
+      "integrity": "sha512-cKA5B6lpFEMyMGjxF54QihfYpB4FkEGH+qZhtArDEG+wezQAJY8Pq6C7T1SjWz+FFzt3TbyoXBQYk/0292TdJA==",
+      "license": "Apache-2.0",
+      "name": "@playwright/test",
+      "version": "1.61.0"
+    },
+    {
+      "integrity": "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==",
+      "license": "MIT",
+      "name": "fsevents",
+      "version": "2.3.2"
+    },
+    {
+      "integrity": "sha512-Z+7BeeqQPRRzklHsVFP4KTGIyMxKUmfeRA4WisM6G3/XW6nwGeX6fX9qYaDa+CiUqpOkb2f6X3nar05R3kSuJQ==",
+      "license": "Apache-2.0",
+      "name": "playwright",
+      "version": "1.61.0"
+    },
+    {
+      "integrity": "sha512-caX7TrY3Ml6egyDX0WUcTHDxodl/b51y5wJOdCEA36QviK/s2g081hvmGs8eaE3DWb6NYZQ6BjO/QkNRPenoPA==",
+      "license": "Apache-2.0",
+      "name": "playwright-core",
+      "version": "1.61.0"
+    }
+  ],
+  "python_packages": [
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "annotated-doc",
+      "version": "0.0.5"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "anyio",
+      "version": "4.14.2"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "arrive90",
+      "version": "0.0.1"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "click",
+      "version": "8.4.2"
+    },
+    {
+      "installed_in_audit_environment": false,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "https://pypi.org/pypi/colorama/0.4.6/json",
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache-2.0",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "coverage",
+      "version": "7.15.4"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "fastapi",
+      "version": "0.141.1"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache Software License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "gtfs-realtime-bindings",
+      "version": "2.1.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "httpcore2",
+      "version": "2.10.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "httpx2",
+      "version": "2.10.0"
+    },
+    {
+      "installed_in_audit_environment": false,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "https://pypi.org/pypi/httpx2-jsfetch/1.0/json",
+      "name": "httpx2-jsfetch",
+      "version": "1.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "idna",
+      "version": "3.18"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "iniconfig",
+      "version": "2.3.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "librt",
+      "version": "0.15.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "mypy",
+      "version": "1.20.2"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "mypy-extensions",
+      "version": "1.1.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "numpy",
+      "version": "2.5.2"
+    },
+    {
+      "installed_in_audit_environment": false,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "https://pypi.org/pypi/nvidia-nccl-cu12/2.31.2/json",
+      "name": "nvidia-nccl-cu12",
+      "version": "2.31.2"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Mozilla Public License 2.0 (MPL 2.0)",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pathspec",
+      "version": "1.1.1"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pluggy",
+      "version": "1.6.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "3-Clause BSD License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "protobuf",
+      "version": "7.35.1"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache-2.0",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pyarrow",
+      "version": "25.0.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pydantic",
+      "version": "2.13.4"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pydantic-core",
+      "version": "2.46.4"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-2-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pygments",
+      "version": "2.20.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pytest",
+      "version": "8.4.2"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pytest-cov",
+      "version": "6.3.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "pyyaml",
+      "version": "6.0.3"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "ruff",
+      "version": "0.16.3"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "scipy",
+      "version": "1.18.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "starlette",
+      "version": "1.6.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "truststore",
+      "version": "0.10.4"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache-2.0",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "types-pyyaml",
+      "version": "6.0.12.20260724"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "PSF-2.0",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "typing-extensions",
+      "version": "4.16.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "MIT",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "BSD-3-Clause",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "uvicorn",
+      "version": "0.51.0"
+    },
+    {
+      "installed_in_audit_environment": true,
+      "license": "Apache Software License",
+      "license_metadata_source": "installed-core-metadata",
+      "name": "xgboost",
+      "version": "3.3.0"
+    }
+  ],
+  "status": "PASSED",
+  "unresolved_node_packages": [],
+  "unresolved_python_packages": []
+}
