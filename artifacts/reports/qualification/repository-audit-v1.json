@@ -1,0 +1,21 @@
+{
+  "broken_local_links": [],
+  "checks": {
+    "all_required_public_documents_tracked": true,
+    "generated_or_sensitive_artifacts_not_tracked": true,
+    "license_and_attribution_audit_passed": true,
+    "local_markdown_links_resolve": true,
+    "publication_still_requires_user_authorization": true,
+    "repository_security_scan_passed": true,
+    "tracked_public_text_has_no_stale_markers": true,
+    "worktree_is_clean": true
+  },
+  "commit": "38dc9b9b6a3a1ab564a4f8521c607f6e7317668c",
+  "failing_checks": [],
+  "forbidden_tracked_paths": [],
+  "missing_documents": [],
+  "stale_markers": [],
+  "status": "PASSED",
+  "tracked_file_count": 234,
+  "worktree_status": []
+}

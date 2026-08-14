@@ -1,0 +1,89 @@
+{
+  "checks": {
+    "all_documented_commands_passed": true,
+    "exact_commit_checked_out": true,
+    "fresh_clone_remained_clean": true
+  },
+  "commit": "38dc9b9b6a3a1ab564a4f8521c607f6e7317668c",
+  "environment": {
+    "docker": "29.5.2/arm64",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "python": "Python 3.12.13",
+    "uv": "uv 0.11.23 (Homebrew 2026-06-19 aarch64-apple-darwin)"
+  },
+  "failing_command": null,
+  "observations": {
+    "browser_tests_passed": 4,
+    "licenses_status": "PASSED",
+    "python_coverage_percent": 91.2,
+    "python_tests_passed": 234,
+    "reliability_status": "PASSED",
+    "repository-audit_status": "PASSED",
+    "security_status": "PASSED"
+  },
+  "repository": "https://github.com/uday1o1/arrive90.git",
+  "results": [
+    {
+      "command": "git clone --no-checkout <repository>",
+      "name": "clone",
+      "status": 0
+    },
+    {
+      "command": "git checkout --detach <commit>",
+      "name": "checkout",
+      "status": 0
+    },
+    {
+      "command": "uv python install",
+      "name": "install_python",
+      "status": 0
+    },
+    {
+      "command": "uv sync --frozen",
+      "name": "sync_python",
+      "status": 0
+    },
+    {
+      "command": "npm ci",
+      "name": "install_node",
+      "status": 0
+    },
+    {
+      "command": "npx playwright install chromium",
+      "name": "install_chromium",
+      "status": 0
+    },
+    {
+      "command": "make check-all",
+      "name": "local_and_browser_checks",
+      "status": 0
+    },
+    {
+      "command": "make security-scan",
+      "name": "security_scan",
+      "status": 0
+    },
+    {
+      "command": "uv run --no-sync python scripts/qualify_milestone_9_security.py --repository-report artifacts/runtime/security/repository.json --image-report artifacts/runtime/security/image.json --version-report artifacts/runtime/security/trivy-version.json --output artifacts/runtime/clean-checkout-security.json",
+      "name": "security_evidence",
+      "status": 0
+    },
+    {
+      "command": "uv run --no-sync python scripts/audit_licenses.py --output artifacts/runtime/clean-checkout-licenses.json",
+      "name": "license_audit",
+      "status": 0
+    },
+    {
+      "command": "uv run --no-sync python scripts/qualify_milestone_9_reliability.py --output artifacts/runtime/clean-checkout-reliability.json",
+      "name": "reliability_qualification",
+      "status": 0
+    },
+    {
+      "command": "uv run --no-sync python scripts/audit_repository.py --output artifacts/runtime/clean-checkout-repository-audit.json",
+      "name": "repository_audit",
+      "status": 0
+    }
+  ],
+  "status": "PASSED"
+}
