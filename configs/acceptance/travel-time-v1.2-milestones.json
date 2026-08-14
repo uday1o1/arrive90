@@ -3,8 +3,8 @@
   "build_plan_sha256": "00d56368f9f31d32f4e18c654d66346bfcac30c01c966b70a8cddbf431608fc1",
   "milestones": [
     {"milestone": 0, "state": "ACCEPTED"},
-    {"milestone": 1, "state": "IN_PROGRESS"},
-    {"milestone": 2, "state": "NOT_STARTED"},
+    {"milestone": 1, "state": "ACCEPTED"},
+    {"milestone": 2, "state": "IN_PROGRESS"},
     {"milestone": 3, "state": "NOT_STARTED"},
     {"milestone": 4, "state": "NOT_STARTED"},
     {"milestone": 5, "state": "NOT_STARTED"},

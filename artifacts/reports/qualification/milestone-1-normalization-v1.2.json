@@ -1,5 +1,4 @@
 {
-  "acceptance_charter_sha256": "cf4e358fcd82e2c352b5eed2e87e1528853258f8b4b5d31dc77bdac8bda29966",
   "acceptance_version": "travel-time-v1.2",
   "checks": {
     "all_368_vehicle_objects_and_schedule_verified": true,
@@ -19,7 +18,6 @@
     "schedule_index_is_complete_and_verified": true,
     "source_utc_attachment_precedes_deduplication": true
   },
-  "command": "make qualify-milestone1 && make gate MILESTONE=1",
   "environment": {
     "implementation_commit": "5ef862ee58a940bd975090fbfadc1c59067c7879",
     "machine": "arm64",
@@ -37,7 +35,6 @@
     "schedule_index": "2d73ac847b20506a4b6f9f3cb51c41a36a1e42d39ecff8e527603656a7691c5d",
     "uv_lock": "d037297781d364897c86f52d751b25d6a7c37ada13876026e373bc52619b10bc"
   },
-  "milestone": 1,
   "observed": {
     "acquisition": {
       "acquisition_lock_path": "configs/source-locks/mbta-2024-acquired.json",
@@ -178,6 +175,7 @@
       "source_row_count": 208444419
     }
   },
-  "qualification_report_sha256": "2889c3d2618ff6ca3d73bcb1755e71a3587611a5d0d96e5fb6a731630f1333e5",
-  "state": "ACCEPTED"
+  "qualification_command": "make qualify-milestone1",
+  "state": "PASSED",
+  "year": 2024
 }

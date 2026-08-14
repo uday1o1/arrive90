@@ -78,9 +78,7 @@ def test_v12_scope_and_requalification_order_are_explicit() -> None:
     assert full_year_gate["likelihood_support_blue_direction_peak_slice_min"] == 0.70
     milestones = tracker["milestones"]
     assert isinstance(milestones, list)
-    states = {
-        item["milestone"]: item["state"] for item in milestones if isinstance(item, dict)
-    }
+    states = {item["milestone"]: item["state"] for item in milestones if isinstance(item, dict)}
     assert list(states) == list(range(8))
     if states[2] in {"IN_PROGRESS", "ACCEPTED"}:
         assert states[0] == states[1] == "ACCEPTED"
