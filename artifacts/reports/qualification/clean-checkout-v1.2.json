@@ -1,0 +1,162 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "accepted_full_year_reproduction_evidence_present": true,
+    "all_documented_commands_passed": true,
+    "browser_workflows_passed": true,
+    "exact_commit_checked_out": true,
+    "fresh_clone_remained_clean": true,
+    "network_free_demo_terminal_reproduced": true,
+    "python_quality_gate_passed": true,
+    "repository_and_license_audits_passed": true,
+    "robustness_pairs_passed": true
+  },
+  "commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+  "environment": {
+    "machine": "arm64",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "Python 3.12.13",
+    "uv": "uv 0.11.23 (Homebrew 2026-06-19 aarch64-apple-darwin)"
+  },
+  "failing_command": null,
+  "observations": {
+    "accepted_reproduction_file_count": 4827,
+    "accepted_reproduction_status": "PASSED",
+    "browser_tests_passed": 4,
+    "demo_state": "PASSED",
+    "licenses_status": "PASSED",
+    "python_coverage_percent": 90.47,
+    "python_tests_passed": 294,
+    "repository_audit_status": "PASSED",
+    "robustness_scenario_count": 9,
+    "robustness_status": "PASSED",
+    "terminal_manifest_reproduced": true
+  },
+  "repository": "https://github.com/uday1o1/arrive90.git",
+  "results": [
+    {
+      "command": "git clone --no-checkout <repository>",
+      "name": "clone",
+      "status": 0,
+      "stderr_sha256": "0d70382bb2427d4c7766c80f7002f5a919bf24f8b72accd04abe66a114ec8f9e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git checkout --detach <commit>",
+      "name": "checkout",
+      "status": 0,
+      "stderr_sha256": "69396009e7aab15326871fc52fb1314712bdaf8647112ab19bb6dd3863d16b5b",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "uv sync --frozen --all-groups",
+      "name": "sync_python",
+      "status": 0,
+      "stderr_sha256": "cdbba60deaa0347f1ded9a55f85bd24cb43d20068e6728312c49fd76c89eb463",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "make demo",
+      "name": "network_free_demo",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "658826123ee4e0bc10ddac10569de41e6b7c1476c6b396221cd9e1e4c9b933a3"
+    },
+    {
+      "command": "npm ci",
+      "name": "install_node",
+      "status": 0,
+      "stderr_sha256": "22fea3d8962862848e6a89abeba43bc0f6ba764d05275bff8c49617d76610b9a",
+      "stdout_sha256": "95d23572d5361985487b816aee109178428fcc443bc57e42d1a9250dd8fffa6f"
+    },
+    {
+      "command": "npx playwright install chromium",
+      "name": "install_chromium",
+      "status": 0,
+      "stderr_sha256": "22fea3d8962862848e6a89abeba43bc0f6ba764d05275bff8c49617d76610b9a",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "make check-all",
+      "name": "local_and_browser_checks",
+      "status": 0,
+      "stderr_sha256": "c56da13215d8f3134603426e9ebbe360b7fdebbf866b49ac704bd4579b2be748",
+      "stdout_sha256": "a97f3c1187fdd7f624342693241ddb08305342b95e97a39f4ea3c2c44bb11866"
+    },
+    {
+      "command": "uv run --no-sync python scripts/qualify_milestone_6_robustness.py --output artifacts/runtime/clean-checkout-robustness.json",
+      "name": "robustness_qualification",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "a019b84117815832ba772ccbad842200938e8afd5d66638143c392b7bd1cc65f"
+    },
+    {
+      "command": "uv run --no-sync python scripts/audit_licenses.py --output artifacts/runtime/clean-checkout-licenses.json",
+      "name": "license_audit",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "b6326148392bfa9a6c84faeefcccc7c12dd1f794c6b7fcf87dd066fbfa8ae17c"
+    },
+    {
+      "command": "uv run --no-sync python scripts/audit_repository.py --output artifacts/runtime/clean-checkout-repository-audit.json",
+      "name": "repository_audit",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "75b8989db670b27c0326bceb0d5d047fdf564f8e75c05c17f880fc31fc5be296"
+    },
+    {
+      "command": "make gate MILESTONE=0",
+      "name": "milestone_0_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "bab432a5642ecd2b2f8c9ca09ec073a5e363ec58316a2c2ee2276a27e3f65b35"
+    },
+    {
+      "command": "make gate MILESTONE=1",
+      "name": "milestone_1_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "d673175c116614241bf2b017fd79549b0bb5da1f3092b6e77551a39ae8dc28de"
+    },
+    {
+      "command": "make gate MILESTONE=2",
+      "name": "milestone_2_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "1a65c0d0b6b6744d747d568fa0ee33a5dd86f1b87d3fa36a2446b99ffab959e6"
+    },
+    {
+      "command": "make gate MILESTONE=3",
+      "name": "milestone_3_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "d19515326fb92ed6a7fd57df03ec4f201fd543d26d3a0840d6f43ce77a37383d"
+    },
+    {
+      "command": "make gate MILESTONE=4",
+      "name": "milestone_4_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "7911dc1ffa2ecbe651b78438099a36736ac31fae8efe8a165a7ff92f17e70b33"
+    },
+    {
+      "command": "make gate MILESTONE=5",
+      "name": "milestone_5_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "53231f194536430b138b547a3e8395cad29a83ba89190da9e0dc1099ddf26245"
+    },
+    {
+      "command": "make gate MILESTONE=6",
+      "name": "milestone_6_gate",
+      "status": 0,
+      "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
+      "stdout_sha256": "7d69e944f4d810a8ca810e25f3977264e585470fbeeb11ecf008e60dcde00b14"
+    }
+  ],
+  "status": "PASSED",
+  "version": "clean-checkout-v1.2",
+  "workflow": "full"
+}

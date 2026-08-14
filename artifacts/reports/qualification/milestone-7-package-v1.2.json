@@ -1,0 +1,43 @@
+{
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "accepted_full_year_reproduction_remains_valid": true,
+    "all_documentation_charts_match_final_report": true,
+    "all_required_documents_exist": true,
+    "browser_suite_passed_in_clean_checkout": true,
+    "clean_reader_demo_and_terminal_passed": true,
+    "license_and_attribution_audit_passed": true,
+    "public_claim_artifact_matches_current_evidence": true,
+    "python_quality_gate_passed_in_clean_checkout": true,
+    "repository_audit_passed_from_clean_worktree": true,
+    "robustness_suite_has_nine_passing_pairs": true,
+    "screenshot_and_walkthrough_are_present": true
+  },
+  "failing_checks": [],
+  "input_hashes": {
+    "clean_checkout": "8dac35c9d04ff2e87e9fc0a81bd1488b3adbc8e5d92b491a46e58ba9e79d38a3",
+    "documentation": "7edfa75470f455c6ca087899db3fc7e56eeb1bce28efafa600bf2139a33577d9",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "licenses": "68a2df5caffd3a418ffaf7c49e98ae0ba78e32a485bfb6964f28ca8276c577ee",
+    "public_claims": "50d780ea13d502ab769a1eb15333fc0db46c5061dcd669c3e0eac13be3c1c64f",
+    "repository_audit": "b5ebdb62429f1288f8116f82aa14870a4a54184929a5c96da54cdbff99a2375a",
+    "reproduction": "af72059fa91f797756ff41c8ccd08665fbcbfe9f45056e9e2f32f2463bf9b8c5",
+    "robustness": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218",
+    "screenshot": "804a52cfc901c893180b75e6a3b48ea4e757e782499a9d7018e1f1d6cc35de05",
+    "walkthrough": "d1d3399952a142305c46ec02792ef6a5bcc4a0fba60ba6b5fd5ddb7a50e09f74"
+  },
+  "observed": {
+    "browser_tests_passed": 4,
+    "clean_checkout_commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+    "final_test_anchor_count": 36600,
+    "final_test_row_count": 199364,
+    "final_test_service_day_count": 61,
+    "promoted_bundle_id": "FULL-normal-scale-0p5",
+    "promoted_interval_nll": 1.6470473269094874,
+    "python_coverage_percent": 90.47,
+    "python_tests_passed": 294,
+    "robustness_pair_count": 9
+  },
+  "status": "PASSED",
+  "version": "milestone-7-portfolio-package-v1.2"
+}

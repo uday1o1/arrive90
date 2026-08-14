@@ -1,0 +1,57 @@
+{
+  "acceptance_charter_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+  "acceptance_version": "travel-time-v1.2",
+  "checks": {
+    "all_milestone_reports_zero_through_six_are_accepted": true,
+    "clean_reader_demo_is_documented_and_passed": true,
+    "complete_quality_browser_robustness_and_reproduction_evidence_passes": true,
+    "every_readme_result_matches_immutable_evidence": true,
+    "final_tracker_postcondition_is_accepted": true,
+    "publication_and_deployment_targets_remain_absent": true,
+    "repository_audit_has_no_stale_or_unexplained_state": true,
+    "source_attribution_and_noncommercial_notice_are_audited": true
+  },
+  "command": "make check-all && make qualify-milestone6-robustness && make qualify-milestone7 && make milestone7-evidence && make gate MILESTONE=7",
+  "environment": {
+    "implementation_commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+    "machine": "arm64",
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "Python 3.12.13",
+    "uv": "uv 0.11.23 (Homebrew 2026-06-19 aarch64-apple-darwin)"
+  },
+  "failing_checks": [],
+  "input_manifest_hashes": {
+    "acceptance_charter": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+    "build_plan": "87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1",
+    "claim_registry": "111c3df46786e78e3e0706a4847c2c1ee4520b103a5678e30ee47f2a37f8e4a4",
+    "clean_checkout": "8dac35c9d04ff2e87e9fc0a81bd1488b3adbc8e5d92b491a46e58ba9e79d38a3",
+    "code_and_tests": "45e4fa583fab15a70c568912e8d2d4dbec1754221e33e9e694115a951f99751a",
+    "dataset_qualification": "bf70e8e3112934c4b25357e19b16fffbaae1e8abef541895e9d077984909e56d",
+    "documentation_and_charts": "0718bc679fe981a9c2c46cac48ec387cd6b17067c1084c0f44222b8f977bf54a",
+    "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
+    "milestone_6_report": "dad92ca4440758cc2388cd02d40334cb2bcf9e320ba911684a72d7bdbd39ea51",
+    "model_qualification": "0be529c68d33d8be16427ee37d5fa75175906bce8891bac3067b73ae2393e1db",
+    "portfolio_qualification": "bd6afd278a36c809e907c206e63c0029113fef4710fd0d797d0872339d544d91",
+    "public_claims": "50d780ea13d502ab769a1eb15333fc0db46c5061dcd669c3e0eac13be3c1c64f",
+    "repository_audit": "b5ebdb62429f1288f8116f82aa14870a4a54184929a5c96da54cdbff99a2375a",
+    "source_lock": "af6b8967a422f18d0ccb35dd206c9a533daf91ed4eaac81faa7ba70109adc2f9",
+    "tracker": "ec89ec0ae3c27e07b407505e665950c365148835ff6409d263e3026a7ef76474"
+  },
+  "milestone": 7,
+  "observed": {
+    "browser_tests_passed": 4,
+    "clean_checkout_commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+    "final_test_anchor_count": 36600,
+    "final_test_row_count": 199364,
+    "final_test_service_day_count": 61,
+    "promoted_bundle_id": "FULL-normal-scale-0p5",
+    "promoted_interval_nll": 1.6470473269094874,
+    "python_coverage_percent": 90.47,
+    "python_tests_passed": 294,
+    "robustness_pair_count": 9
+  },
+  "qualified_commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+  "state": "ACCEPTED"
+}
