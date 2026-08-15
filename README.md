@@ -112,5 +112,5 @@ The underlying transportation data and historical schedule are attributed to Mas
 Arrive90 is independent and is not affiliated with or endorsed by Cornell Tech, MassDOT, or MBTA.
 
 The code is available under the [MIT License](LICENSE).
-The data-backed portfolio materials are noncommercial, and no external deployment, package, release, or publication action is performed by repository automation.
+The data-backed portfolio materials are noncommercial, and the repository includes no external deployment, package, release, or publication workflow.
 See [DATA_LICENSE.md](DATA_LICENSE.md) for the artifact policy and source links.

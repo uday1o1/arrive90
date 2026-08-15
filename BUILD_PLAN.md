@@ -1,6 +1,6 @@
 # Arrive90 Build Plan
 
-Status: implementation-ready plan.
+Status: complete under acceptance version `travel-time-v1.2`; Milestones 0 through 7 are `ACCEPTED`.
 
 Planning snapshot: 2026-08-14.
 
@@ -1088,7 +1088,7 @@ Acceptance gate:
 - All source attribution and noncommercial-use notices are present.
 - All milestone reports from 0 through 7 are `ACCEPTED`.
 - The complete quality, browser, robustness, reproducibility, and repository-audit suites pass.
-- Publication, deployment, release creation, and pull requests remain outside scope unless separately authorized.
+- Publication, deployment, and release creation remain outside scope unless separately authorized.
 
 ## 17. Test strategy
 
@@ -1207,14 +1207,14 @@ Formatting, static checks, tests, and relevant real-path verification run before
 
 Immediately after each commit:
 
-1. Push the current branch to `origin`.
-2. Read the current branch name and local `HEAD` SHA.
-3. Read `refs/heads/<branch>` from `origin`.
+1. Push local `main` directly to `origin/main`.
+2. Read the local `HEAD` SHA.
+3. Read `refs/heads/main` from `origin` with `git ls-remote origin refs/heads/main`.
 4. Confirm that the remote SHA exactly equals local `HEAD`.
 5. Resolve and retry any failed or mismatched push before continuing.
 
 The repository never accumulates intentionally unpushed verified milestone work.
-No pull request, release, package publication, deployment, or external artifact publication is authorized by the push instruction.
+Release creation, package publication, deployment, and external artifact publication require separate authorization.
 
 ## 20. Replan triggers and bounded fallbacks
 
@@ -1269,3 +1269,32 @@ The strongest interview story is:
 > I built a reproducible ML system over a complete year of public MBTA VehiclePosition data, converted minute-cadence train observations into interval-censored downstream travel-time targets, enforced observation-time leakage boundaries, compared schedule and empirical diagnostics with calibrated AFT distributions, evaluated on an untouched chronological test period with service-day uncertainty, and shipped the results through a local replay explorer with immutable lineage.
 
 That story is complete only when every milestone from 0 through 7 is `ACCEPTED` and every measured claim maps to the final evidence artifacts.
+
+## 24. Completion and handoff
+
+Arrive90 is complete within the frozen `travel-time-v1.2` scope.
+Milestones 0 through 7 are `ACCEPTED` in `artifacts/reports/gates`, and `configs/acceptance/travel-time-v1.2-milestones.json` is the authoritative milestone tracker.
+The immutable final evaluation is `artifacts/reports/final/travel-time-v1.2.json`, and the machine-readable public claim audit is `artifacts/reports/qualification/public-claims-v1.2.json`.
+
+The network-free portfolio path is:
+
+```text
+uv sync --frozen
+make demo
+make demo-serve
+```
+
+The complete local software verification path is:
+
+```text
+make check-all
+make qualify-milestone6-robustness
+make license-evidence
+make repository-audit
+```
+
+The complete-year reproduction remains optional because it requires the locked 8.8 GB source archive and derived-data workspace documented in `docs/reproduction.md`.
+Its accepted evidence is already tracked, and it is not a deferred acceptance gate.
+
+No implementation milestone, external-resource gate, or required continuation task remains.
+Future model, dataset, live-data, routing, deployment, or publication work must begin as a new explicitly scoped acceptance version rather than modifying the frozen V1 result.

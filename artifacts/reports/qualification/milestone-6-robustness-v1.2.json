@@ -16,7 +16,7 @@
       "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_validates_expected_hash_and_response_metadata",
       "intended_reason": "changed ETag fails while the locked ETag and digest pass",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.23s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.20s\n",
       "return_code": 0
     },
     "corrupted_model": {
@@ -24,7 +24,7 @@
       "defect_node": "packages/service/tests/test_explorer.py::test_corrupted_model_bytes_fail_before_scoring",
       "intended_reason": "corrupted model bytes fail bundle validation before scoring",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 2.47s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 1.29s\n",
       "return_code": 0
     },
     "duplicate_conflict": {
@@ -32,7 +32,7 @@
       "defect_node": "packages/ingestion/tests/test_vehicle.py::test_normalizer_quarantines_conflicts_invalid_enums_and_missing_identity",
       "intended_reason": "conflicting identities quarantine while exact duplicates collapse with lineage",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.28s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.23s\n",
       "return_code": 0
     },
     "interrupted_download_resume": {
@@ -40,7 +40,7 @@
       "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_rejects_invalid_resume_status_range_and_final_size",
       "intended_reason": "invalid Content-Range is rejected while an exact byte range resumes",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.39s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.18s\n",
       "return_code": 0
     },
     "low_disk": {
@@ -48,7 +48,7 @@
       "defect_node": "packages/ingestion/tests/test_acquisition.py::test_download_fails_before_network_when_disk_cannot_hold_remaining_bytes",
       "intended_reason": "insufficient disk fails before network while verified immutable bytes are reused",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.24s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.16s\n",
       "return_code": 0
     },
     "malformed_parquet": {
@@ -56,7 +56,7 @@
       "defect_node": "packages/ingestion/tests/test_acquisition.py::test_parquet_profile_rejects_malformed_or_partial_bytes",
       "intended_reason": "malformed footer bytes fail while complete Parquet is profiled deterministically",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.20s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.18s\n",
       "return_code": 0
     },
     "missing_artifact": {
@@ -64,7 +64,7 @@
       "defect_node": "packages/service/tests/test_app.py::test_api_errors_are_specific_and_nonrevealing",
       "intended_reason": "missing explorer artifacts return a specific unavailable state while real assets serve",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 2.15s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 1.55s\n",
       "return_code": 0
     },
     "partial_object": {
@@ -72,7 +72,7 @@
       "defect_node": "packages/ingestion/tests/test_acquisition.py::test_existing_download_rejects_wrong_size_and_digest",
       "intended_reason": "partial or changed final bytes fail size and digest verification",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.30s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.22s\n",
       "return_code": 0
     },
     "schema_drift": {
@@ -80,7 +80,7 @@
       "defect_node": "packages/ingestion/tests/test_vehicle.py::test_normalizer_rejects_missing_or_incompatible_physical_schema",
       "intended_reason": "missing, incompatible, and unknown columns fail while a supported optional type passes",
       "passed": true,
-      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.25s\n",
+      "pytest_output_tail": "..                                                                       [100%]\n2 passed in 0.31s\n",
       "return_code": 0
     }
   },

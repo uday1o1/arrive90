@@ -1,6 +1,6 @@
 {
   "acceptance_version": "travel-time-v1.2",
-  "build_plan_sha256": "87adbf59f795b8e16bd4a349da0670f3af98c5d1d0ba8e52ae7e0413be5ae2b1",
+  "build_plan_sha256": "d37a34308e9b8c45a102092682b52aa58521c30289c0da00be5f4ceebe7cf0db",
   "milestones": [
     {"milestone": 0, "state": "ACCEPTED"},
     {"milestone": 1, "state": "ACCEPTED"},

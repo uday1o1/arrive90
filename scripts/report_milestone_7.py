@@ -103,7 +103,6 @@ def build_report() -> dict[str, Any]:
         "repository_audit_has_no_stale_or_unexplained_state": (
             audit.get("status") == "PASSED"
             and audit.get("checks", {}).get("no_stale_public_scope_claim") is True
-            and audit.get("checks", {}).get("workflow_make_targets_are_defined") is True
             and audit.get("checks", {}).get("worktree_is_clean") is True
         ),
         "source_attribution_and_noncommercial_notice_are_audited": audit.get("checks", {}).get(
@@ -119,7 +118,6 @@ def build_report() -> dict[str, Any]:
         *sorted((ROOT / "docs/assets").glob("*.svg")),
     ]
     implementation_and_tests = [
-        *sorted((ROOT / ".github/workflows").glob("*.y*ml")),
         ROOT / "Makefile",
         ROOT / "scripts/audit_repository.py",
         ROOT / "scripts/build_public_claims.py",

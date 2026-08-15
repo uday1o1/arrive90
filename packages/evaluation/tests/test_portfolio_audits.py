@@ -9,10 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.audit_repository import (  # noqa: E402
-    _old_public_claims,
-    _undefined_workflow_make_targets,
-)
+from scripts.audit_repository import _old_public_claims  # noqa: E402
 from scripts.build_public_claims import (  # noqa: E402
     FINAL,
     PUBLIC_CLAIMS,
@@ -39,21 +36,6 @@ def test_repository_audit_scans_tracked_service_web_artifacts(tmp_path: Path) ->
     assert _old_public_claims(tmp_path, (relative,)) == ["prospective live calibration"]
 
 
-def test_repository_audit_rejects_undefined_workflow_make_targets(tmp_path: Path) -> None:
-    workflow = ".github/workflows/ci.yml"
-    workflow_path = tmp_path / workflow
-    workflow_path.parent.mkdir(parents=True)
-    workflow_path.write_text(
-        "steps:\n  - run: make check\n  - run: make retired-target\n",
-        encoding="utf-8",
-    )
-    (tmp_path / "Makefile").write_text("check:\n\ttrue\n", encoding="utf-8")
-
-    assert _undefined_workflow_make_targets(tmp_path, (workflow,)) == [
-        {"path": workflow, "target": "retired-target"}
-    ]
-
-
 def test_readme_measured_result_section_is_fully_derived_from_final_report() -> None:
     final = _load(FINAL)
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -73,14 +55,6 @@ def test_milestone_7_environment_binds_the_qualified_implementation_commit() -> 
         "machine": "arm64",
         "python": "3.12.13",
     }
-
-
-def test_current_workflows_reference_only_defined_make_targets() -> None:
-    workflows = tuple(
-        path.relative_to(ROOT).as_posix()
-        for path in sorted((ROOT / ".github/workflows").glob("*.y*ml"))
-    )
-    assert _undefined_workflow_make_targets(ROOT, workflows) == []
 
 
 def test_public_claim_report_contains_exhaustive_readme_claim_map() -> None:

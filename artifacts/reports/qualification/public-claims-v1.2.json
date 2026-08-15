@@ -1,6 +1,6 @@
 {
   "acceptance_version": "travel-time-v1.2",
-  "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+  "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
   "checks": {
     "accepted_full_year_reproduction_is_retained": true,
     "all_previous_milestone_reports_are_accepted": true,
@@ -15,7 +15,7 @@
   "claims": [
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/final/travel-time-v1.2.json",
@@ -34,7 +34,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/final/travel-time-v1.2.json",
@@ -49,7 +49,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/final/travel-time-v1.2.json",
@@ -72,7 +72,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/final/travel-time-v1.2.json",
@@ -95,7 +95,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/qualification/milestone-6-performance-v1.2.json",
@@ -109,7 +109,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/qualification/milestone-6-robustness-v1.2.json",
@@ -123,7 +123,7 @@
     },
     {
       "acceptance_version": "travel-time-v1.2",
-      "acceptance_version_sha256": "daa6f8f8f18988aeea2f4d5fc8cc68da18436788e8e3e0f83460379aabd60cb5",
+      "acceptance_version_sha256": "9dab2b8fdd088c0e7026b872f141ab832c6cbf640515a003cc1b73464ad69bf1",
       "artifacts": [
         {
           "path": "artifacts/reports/qualification/milestone-6-reproduction-v1.2.json",
