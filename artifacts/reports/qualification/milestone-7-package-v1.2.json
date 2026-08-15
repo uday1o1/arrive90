@@ -15,7 +15,7 @@
   },
   "failing_checks": [],
   "input_hashes": {
-    "clean_checkout": "8dac35c9d04ff2e87e9fc0a81bd1488b3adbc8e5d92b491a46e58ba9e79d38a3",
+    "clean_checkout": "19df84c5b67e085003e51eb05472e683743a68a5d86320135ceca1cab3a2467c",
     "documentation": "6b52612383e95563012982379f2f49328a39a0cdec8914f0683c954378b71431",
     "final_report": "8bdb9f6e63f284c00b23700096133848d021101dad5134fc34fbf819453ed453",
     "licenses": "68a2df5caffd3a418ffaf7c49e98ae0ba78e32a485bfb6964f28ca8276c577ee",
@@ -28,14 +28,14 @@
   },
   "observed": {
     "browser_tests_passed": 4,
-    "clean_checkout_commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+    "clean_checkout_commit": "e152928b434a52018110ddfda5f68b7e96e088b1",
     "final_test_anchor_count": 36600,
     "final_test_row_count": 199364,
     "final_test_service_day_count": 61,
     "promoted_bundle_id": "FULL-normal-scale-0p5",
     "promoted_interval_nll": 1.6470473269094874,
     "python_coverage_percent": 90.47,
-    "python_tests_passed": 294,
+    "python_tests_passed": 292,
     "robustness_pair_count": 9
   },
   "status": "PASSED",

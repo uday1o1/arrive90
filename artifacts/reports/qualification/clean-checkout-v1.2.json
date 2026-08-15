@@ -11,7 +11,7 @@
     "repository_and_license_audits_passed": true,
     "robustness_pairs_passed": true
   },
-  "commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+  "commit": "e152928b434a52018110ddfda5f68b7e96e088b1",
   "environment": {
     "machine": "arm64",
     "node": "v24.16.0",
@@ -28,7 +28,7 @@
     "demo_state": "PASSED",
     "licenses_status": "PASSED",
     "python_coverage_percent": 90.47,
-    "python_tests_passed": 294,
+    "python_tests_passed": 292,
     "repository_audit_status": "PASSED",
     "robustness_scenario_count": 9,
     "robustness_status": "PASSED",
@@ -40,21 +40,21 @@
       "command": "git clone --no-checkout <repository>",
       "name": "clone",
       "status": 0,
-      "stderr_sha256": "0d70382bb2427d4c7766c80f7002f5a919bf24f8b72accd04abe66a114ec8f9e",
+      "stderr_sha256": "eb35f58f426a5ac4de1133cc28b713f77960a737257dd704c340bc7859e0644d",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "command": "git checkout --detach <commit>",
       "name": "checkout",
       "status": 0,
-      "stderr_sha256": "69396009e7aab15326871fc52fb1314712bdaf8647112ab19bb6dd3863d16b5b",
+      "stderr_sha256": "d1d9b9b38ce944b1442fdead8a92c91233b157a2a281afa4e64a39e7a90e614e",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "command": "uv sync --frozen --all-groups",
       "name": "sync_python",
       "status": 0,
-      "stderr_sha256": "cdbba60deaa0347f1ded9a55f85bd24cb43d20068e6728312c49fd76c89eb463",
+      "stderr_sha256": "1237c8fc7e9a8314d1c6d7f77787d9164c83c2e57c9bef2ea775c859ca8c2cba",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
@@ -62,14 +62,14 @@
       "name": "network_free_demo",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "658826123ee4e0bc10ddac10569de41e6b7c1476c6b396221cd9e1e4c9b933a3"
+      "stdout_sha256": "dceddfdcc357e497c143e3a64d6bbdd3c66cfb15ba4bd81fbf453f696c8a887e"
     },
     {
       "command": "npm ci",
       "name": "install_node",
       "status": 0,
       "stderr_sha256": "22fea3d8962862848e6a89abeba43bc0f6ba764d05275bff8c49617d76610b9a",
-      "stdout_sha256": "95d23572d5361985487b816aee109178428fcc443bc57e42d1a9250dd8fffa6f"
+      "stdout_sha256": "f10d5fedf5fb94cba9c4b3a7ff32833af5f6995f7e348f76d91123508c16e6a3"
     },
     {
       "command": "npx playwright install chromium",
@@ -82,8 +82,8 @@
       "command": "make check-all",
       "name": "local_and_browser_checks",
       "status": 0,
-      "stderr_sha256": "c56da13215d8f3134603426e9ebbe360b7fdebbf866b49ac704bd4579b2be748",
-      "stdout_sha256": "a97f3c1187fdd7f624342693241ddb08305342b95e97a39f4ea3c2c44bb11866"
+      "stderr_sha256": "2db74d3e9c51bf52611504cd127cd34416b39892e9dcd6cface62f1ea4ff5984",
+      "stdout_sha256": "a7d2948b798567ca391ac71b69eb4bdd9777b5f5b7810b4526195b07f661ba03"
     },
     {
       "command": "uv run --no-sync python scripts/qualify_milestone_6_robustness.py --output artifacts/runtime/clean-checkout-robustness.json",
@@ -111,49 +111,49 @@
       "name": "milestone_0_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "bab432a5642ecd2b2f8c9ca09ec073a5e363ec58316a2c2ee2276a27e3f65b35"
+      "stdout_sha256": "f5c01d1db76180c4df548f403db1d98e630f900adbdd46ae5a16d1d448400aa4"
     },
     {
       "command": "make gate MILESTONE=1",
       "name": "milestone_1_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "d673175c116614241bf2b017fd79549b0bb5da1f3092b6e77551a39ae8dc28de"
+      "stdout_sha256": "efb9921e95ab32c6042afbf1fab2ee746c3c976a5c0541085441df1a4fe91f31"
     },
     {
       "command": "make gate MILESTONE=2",
       "name": "milestone_2_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "1a65c0d0b6b6744d747d568fa0ee33a5dd86f1b87d3fa36a2446b99ffab959e6"
+      "stdout_sha256": "31f6ac3cfaf289deac3a2273a6e2c737174374132020f48f1037eeb352422fe5"
     },
     {
       "command": "make gate MILESTONE=3",
       "name": "milestone_3_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "d19515326fb92ed6a7fd57df03ec4f201fd543d26d3a0840d6f43ce77a37383d"
+      "stdout_sha256": "d02c339a4721ac3d2539d1b4c37e84c2979e262f867dcc3cec469cb902d671c9"
     },
     {
       "command": "make gate MILESTONE=4",
       "name": "milestone_4_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "7911dc1ffa2ecbe651b78438099a36736ac31fae8efe8a165a7ff92f17e70b33"
+      "stdout_sha256": "8a4f597711c2576ce7825ac35b575992cf116c7a51dcf0a58336a572f345b1e7"
     },
     {
       "command": "make gate MILESTONE=5",
       "name": "milestone_5_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "53231f194536430b138b547a3e8395cad29a83ba89190da9e0dc1099ddf26245"
+      "stdout_sha256": "fad63457828b7b8c5d3aabb264c006668002c1d09e1ccf5c796f04cbbfe7797f"
     },
     {
       "command": "make gate MILESTONE=6",
       "name": "milestone_6_gate",
       "status": 0,
       "stderr_sha256": "392bea238c2af316ced82752ceb49f03cafae9eae130655cb549032cb1e89e36",
-      "stdout_sha256": "7d69e944f4d810a8ca810e25f3977264e585470fbeeb11ecf008e60dcde00b14"
+      "stdout_sha256": "15d0cf7a1527674138fd40448ea1ee53f595e8a27f08b465a3f658369ff0ab18"
     }
   ],
   "status": "PASSED",
