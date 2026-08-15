@@ -13,10 +13,9 @@
     "source_attribution_and_noncommercial_notice_present": true,
     "tracked_public_text_has_no_stale_markers": true,
     "untracked_required_source_is_absent": true,
-    "workflow_make_targets_are_defined": true,
     "worktree_is_clean": true
   },
-  "commit": "8da99ad09c5cf15c088859cc8021f7369b875b33",
+  "commit": "9d52c084a8acb347ab7e66be88a852b78c78b5a3",
   "failing_checks": [],
   "forbidden_tracked_paths": [],
   "missing_artifacts": [],
@@ -26,8 +25,7 @@
   "secret_findings": [],
   "stale_markers": [],
   "status": "PASSED",
-  "tracked_file_count": 201,
-  "undefined_workflow_make_targets": [],
+  "tracked_file_count": 204,
   "untracked_source": [],
   "version": "repository-audit-v1.2",
   "worktree_status": []

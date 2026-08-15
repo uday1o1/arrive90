@@ -113,7 +113,7 @@
       "artifacts": [
         {
           "path": "artifacts/reports/qualification/milestone-6-robustness-v1.2.json",
-          "sha256": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218"
+          "sha256": "3aff8763464d2e6eac9e761c1186eacf5af3ae0650fd846efa2644f4522ceff4"
         }
       ],
       "claim": "All nine seeded defects fail for their intended reason and controls pass.",
@@ -144,7 +144,7 @@
     "licenses": "68a2df5caffd3a418ffaf7c49e98ae0ba78e32a485bfb6964f28ca8276c577ee",
     "performance": "c26ffacb390fad526d5ea2fdf5786ab71694da04175f2e45bf56e675eb1d5484",
     "reproduction": "af72059fa91f797756ff41c8ccd08665fbcbfe9f45056e9e2f32f2463bf9b8c5",
-    "robustness": "023204f70fbd8aeed30a2c909a9dc3466d92a519bb61cc41d8c5fc4b54121218"
+    "robustness": "3aff8763464d2e6eac9e761c1186eacf5af3ae0650fd846efa2644f4522ceff4"
   },
   "readme_claims": [
     {
